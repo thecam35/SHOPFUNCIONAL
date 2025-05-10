@@ -1167,7 +1167,6 @@
   </style>
 </head>
 <body>
-  <!-- Resto del código HTML permanece exactamente igual -->
   <div id="auth-section" class="auth-section animate__animated animate__fadeIn">
     <h2>Iniciar Sesión</h2>
     <form id="authForm" class="auth-form">
@@ -1192,6 +1191,10 @@
       <div class="sidebar-item" id="profileButton">
         <span class="sidebar-icon">👤</span>
         <span>Mi Perfil</span>
+      </div>
+      <div class="sidebar-item" id="adminPanelButton" style="display: none;">
+        <span class="sidebar-icon">⚙️</span>
+        <span>Panel de Admin</span>
       </div>
       <div class="sidebar-item" id="logoutButton">
         <span class="sidebar-icon">×</span>
@@ -1371,6 +1374,43 @@
           <p><strong>Rol:</strong> <span id="profileRole"></span></p>
         </div>
       </div>
+
+      <!-- Sección de Administración -->
+      <div id="adminPanelSection" class="profile-section">
+        <h2>Panel de Administración</h2>
+        
+        <div class="search-section">
+          <div class="filter-group">
+            <label>Buscar Usuario:</label>
+            <input type="text" id="adminSearchUser" placeholder="Email del usuario">
+          </div>
+          <button class="go-button" id="adminSearchButton">Buscar</button>
+        </div>
+        
+        <div id="userInfoSection" style="display: none; margin-top: 20px;">
+          <div class="profile-info">
+            <p><strong>Email:</strong> <span id="adminUserEmail"></span></p>
+            <p><strong>Créditos Actuales:</strong> $<span id="adminUserCredits"></span></p>
+            <p><strong>ID:</strong> <span id="adminUserId"></span></p>
+          </div>
+          
+          <div class="form-group" style="margin-top: 20px;">
+            <label>Acción:</label>
+            <select id="adminActionType">
+              <option value="add">Agregar Créditos</option>
+              <option value="set">Establecer Créditos</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Cantidad:</label>
+            <input type="number" id="adminCreditAmount" placeholder="10.00" min="0" step="0.01">
+          </div>
+          
+          <button class="go-button" id="adminApplyAction">Aplicar Cambios</button>
+          <p id="adminMessage" style="margin-top: 10px;"></p>
+        </div>
+      </div>
     </div>
   </div>
     
@@ -1492,6 +1532,7 @@
     const logoutButton = document.getElementById("logoutButton");
     const buyCardsButton = document.getElementById("buyCardsButton");
     const profileButton = document.getElementById("profileButton");
+    const adminPanelButton = document.getElementById("adminPanelButton");
     
     const cardsTableBody = document.getElementById("cardsTableBody");
     const historyTableBody = document.getElementById("historyTableBody");
@@ -1541,6 +1582,19 @@
     const profileCredits = document.getElementById("profileCredits");
     const profileJoinDate = document.getElementById("profileJoinDate");
     const profileRole = document.getElementById("profileRole");
+
+    // Admin panel elements
+    const adminPanelSection = document.getElementById("adminPanelSection");
+    const adminSearchUser = document.getElementById("adminSearchUser");
+    const adminSearchButton = document.getElementById("adminSearchButton");
+    const userInfoSection = document.getElementById("userInfoSection");
+    const adminUserEmail = document.getElementById("adminUserEmail");
+    const adminUserCredits = document.getElementById("adminUserCredits");
+    const adminUserId = document.getElementById("adminUserId");
+    const adminActionType = document.getElementById("adminActionType");
+    const adminCreditAmount = document.getElementById("adminCreditAmount");
+    const adminApplyAction = document.getElementById("adminApplyAction");
+    const adminMessage = document.getElementById("adminMessage");
 
     // Telegram configuration
     let telegramConfigData = {
@@ -1609,6 +1663,7 @@
       mainCardsSection.style.display = "none";
       rechargeSection.style.display = "block";
       profileSection.style.display = "none";
+      adminPanelSection.style.display = "none";
       
       // Reset any active sidebar items
       document.querySelectorAll('.sidebar-item').forEach(item => {
@@ -1621,6 +1676,7 @@
       mainCardsSection.style.display = "none";
       rechargeSection.style.display = "none";
       profileSection.style.display = "block";
+      adminPanelSection.style.display = "none";
       
       // Reset any active sidebar items
       document.querySelectorAll('.sidebar-item').forEach(item => {
@@ -1642,11 +1698,30 @@
       }
     });
 
+    // Admin panel button click
+    adminPanelButton.addEventListener("click", () => {
+      mainCardsSection.style.display = "none";
+      rechargeSection.style.display = "none";
+      profileSection.style.display = "none";
+      adminPanelSection.style.display = "block";
+      
+      // Reset any active sidebar items
+      document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      adminPanelButton.classList.add('active');
+      
+      // Reset search
+      adminSearchUser.value = '';
+      userInfoSection.style.display = "none";
+    });
+
     // Show cards section
     function showCardsSection() {
       mainCardsSection.style.display = "block";
       rechargeSection.style.display = "none";
       profileSection.style.display = "none";
+      adminPanelSection.style.display = "none";
       
       // Reset any active sidebar items
       document.querySelectorAll('.sidebar-item').forEach(item => {
@@ -1723,6 +1798,19 @@
       }
     });
 
+    // Update admin visibility
+    function updateAdminVisibility() {
+      if (currentUserData?.isAdmin) {
+        adminPanelButton.style.display = 'flex';
+      } else {
+        adminPanelButton.style.display = 'none';
+        // If admin panel is open when privileges are removed, close it
+        if (adminPanelSection.style.display === 'block') {
+          showCardsSection();
+        }
+      }
+    }
+
     // Load user data
     async function loadUserData() {
       if (!currentUser) return;
@@ -1737,6 +1825,7 @@
           addCardButton.style.display = currentUserData.isAdmin ? "inline-block" : "none";
           importSection.style.display = currentUserData.isAdmin ? "block" : "none";
           telegramConfig.style.display = currentUserData.isAdmin ? 'block' : 'none';
+          updateAdminVisibility();
         } else {
           // Create user document if it doesn't exist (legacy users)
           setDoc(userDocRef, {
@@ -2159,6 +2248,93 @@
         // Restaurar botón en caso de error
         sendReceipt.disabled = false;
         sendReceiptText.textContent = 'Enviar Comprobante';
+      }
+    });
+
+    // Search user for admin
+    adminSearchButton.addEventListener('click', async () => {
+      const email = adminSearchUser.value.trim();
+      if (!email) {
+        adminMessage.textContent = 'Por favor ingresa un email';
+        adminMessage.style.color = 'var(--danger)';
+        return;
+      }
+      
+      try {
+        // Query users collection by email
+        const q = query(usersCollection, where("email", "==", email));
+        const querySnapshot = await getDocs(q);
+        
+        if (querySnapshot.empty) {
+          adminMessage.textContent = 'Usuario no encontrado';
+          adminMessage.style.color = 'var(--danger)';
+          userInfoSection.style.display = 'none';
+          return;
+        }
+        
+        // Get first matching user (emails should be unique)
+        const userDoc = querySnapshot.docs[0];
+        const userData = userDoc.data();
+        
+        // Display user info
+        adminUserEmail.textContent = userData.email;
+        adminUserCredits.textContent = userData.credits?.toFixed(2) || '0.00';
+        adminUserId.textContent = userDoc.id;
+        userInfoSection.style.display = 'block';
+        adminMessage.textContent = '';
+        
+      } catch (error) {
+        console.error('Error searching user:', error);
+        adminMessage.textContent = 'Error al buscar usuario';
+        adminMessage.style.color = 'var(--danger)';
+      }
+    });
+
+    // Apply admin action
+    adminApplyAction.addEventListener('click', async () => {
+      const userId = adminUserId.textContent;
+      if (!userId) {
+        adminMessage.textContent = 'Primero busca un usuario';
+        adminMessage.style.color = 'var(--danger)';
+        return;
+      }
+      
+      const amount = parseFloat(adminCreditAmount.value);
+      if (isNaN(amount) || amount < 0) {
+        adminMessage.textContent = 'Ingresa una cantidad válida';
+        adminMessage.style.color = 'var(--danger)';
+        return;
+      }
+      
+      const action = adminActionType.value;
+      const userRef = doc(db, "users", userId);
+      
+      try {
+        if (action === 'add') {
+          await updateDoc(userRef, {
+            credits: increment(amount)
+          });
+          adminMessage.textContent = `✅ Se agregaron $${amount.toFixed(2)} créditos al usuario`;
+        } else {
+          await updateDoc(userRef, {
+            credits: amount
+          });
+          adminMessage.textContent = `✅ Se establecieron $${amount.toFixed(2)} créditos al usuario`;
+        }
+        
+        adminMessage.style.color = 'var(--success)';
+        
+        // Refresh user info
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          adminUserCredits.textContent = userData.credits?.toFixed(2) || '0.00';
+        }
+        
+      } catch (error) {
+        console.error('Error updating credits:', error);
+        adminMessage.textContent = '❌ Error al actualizar créditos';
+        adminMessage.style.color = 'var(--danger)';
       }
     });
 
