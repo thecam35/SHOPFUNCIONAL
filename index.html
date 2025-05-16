@@ -37,7 +37,6 @@
       overflow-x: hidden;
     }
     
-    /* Efecto de partículas futuristas */
     body::before {
       content: "";
       position: fixed;
@@ -52,7 +51,6 @@
       z-index: -1;
     }
     
-    /* Animación de fondo */
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-20px); }
@@ -68,7 +66,6 @@
       50% { text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px var(--primary); }
     }
     
-    /* Auth Section - Diseño Futurista */
     #auth-section {
       max-width: 500px;
       margin: 50px auto;
@@ -217,13 +214,11 @@
       text-shadow: 0 0 10px var(--primary);
     }
     
-    /* Container */
     .container {
       display: flex;
       min-height: 100vh;
     }
     
-    /* Sidebar Futurista */
     .sidebar {
       width: 250px;
       background: rgba(5, 5, 16, 0.8);
@@ -296,7 +291,6 @@
       text-shadow: 0 0 10px var(--primary);
     }
     
-    /* Main Content */
     .main-content {
       flex: 1;
       padding: 30px;
@@ -305,7 +299,6 @@
       overflow-y: auto;
     }
     
-    /* Header */
     .header {
       display: flex;
       justify-content: space-between;
@@ -346,7 +339,6 @@
       color: var(--success);
     }
     
-    /* Search Section */
     .search-section {
       background: rgba(5, 5, 16, 0.6);
       padding: 20px;
@@ -406,7 +398,6 @@
       text-align: center;
     }
     
-    /* Cards Table */
     .cards-table {
       width: 100%;
       border-collapse: separate;
@@ -451,7 +442,6 @@
       letter-spacing: 1px;
     }
     
-    /* Action Buttons */
     .action-button {
       padding: 8px 15px;
       margin-right: 8px;
@@ -494,7 +484,6 @@
       color: var(--darker);
     }
     
-    /* Pagination */
     .pagination {
       display: flex;
       justify-content: space-between;
@@ -530,7 +519,6 @@
       transform: none;
     }
     
-    /* Modal Futurista */
     .modal {
       display: none;
       position: fixed;
@@ -680,7 +668,6 @@
       transform: translateY(-2px);
     }
     
-    /* Import Section */
     .import-section {
       background: rgba(5, 5, 16, 0.6);
       padding: 25px;
@@ -757,7 +744,6 @@
       line-height: 1.5;
     }
     
-    /* History Section */
     .history-section {
       margin-top: 40px;
       background: rgba(5, 5, 16, 0.6);
@@ -812,7 +798,6 @@
       background: rgba(0, 247, 255, 0.05);
     }
     
-    /* Recharge Section */
     .recharge-section {
       display: none;
       background: rgba(5, 5, 16, 0.6);
@@ -1010,7 +995,6 @@
       transform: none !important;
     }
     
-    /* Telegram Config */
     .telegram-config {
       margin-top: 40px;
       padding: 25px;
@@ -1070,7 +1054,6 @@
       box-shadow: 0 8px 20px rgba(123, 45, 255, 0.4);
     }
     
-    /* Profile Section */
     .profile-section {
       display: none;
       background: rgba(5, 5, 16, 0.6);
@@ -1107,7 +1090,6 @@
       font-weight: 500;
     }
     
-    /* Loading Animation */
     .loading {
       display: inline-block;
       width: 20px;
@@ -1124,7 +1106,6 @@
       to { transform: rotate(360deg); }
     }
     
-    /* Responsive Adjustments */
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
@@ -1399,6 +1380,7 @@
             <select id="adminActionType">
               <option value="add">Agregar Créditos</option>
               <option value="set">Establecer Créditos</option>
+              <option value="subtract">Restar Créditos</option>
             </select>
           </div>
           
@@ -1533,6 +1515,7 @@
     const buyCardsButton = document.getElementById("buyCardsButton");
     const profileButton = document.getElementById("profileButton");
     const adminPanelButton = document.getElementById("adminPanelButton");
+    const rechargeButton = document.getElementById("rechargeButton");
     
     const cardsTableBody = document.getElementById("cardsTableBody");
     const historyTableBody = document.getElementById("historyTableBody");
@@ -1559,7 +1542,6 @@
     const maxPrice = document.getElementById("maxPrice");
 
     // New elements for recharge
-    const rechargeButton = document.getElementById("rechargeButton");
     const mainCardsSection = document.getElementById("mainCardsSection");
     const rechargeSection = document.getElementById("rechargeSection");
     const rechargeAmount = document.getElementById("rechargeAmount");
@@ -1641,7 +1623,7 @@
           // Create user document with initial credits
           await setDoc(doc(db, "users", userCredential.user.uid), {
             email: email,
-            credits: 0, // Give new users 10 credits
+            credits: 0,
             isAdmin: false,
             createdAt: serverTimestamp()
           });
@@ -1665,7 +1647,6 @@
       profileSection.style.display = "none";
       adminPanelSection.style.display = "none";
       
-      // Reset any active sidebar items
       document.querySelectorAll('.sidebar-item').forEach(item => {
         item.classList.remove('active');
       });
@@ -1678,13 +1659,11 @@
       profileSection.style.display = "block";
       adminPanelSection.style.display = "none";
       
-      // Reset any active sidebar items
       document.querySelectorAll('.sidebar-item').forEach(item => {
         item.classList.remove('active');
       });
       profileButton.classList.add('active');
       
-      // Update profile info
       if (currentUser) {
         profileEmail.textContent = currentUser.email;
         profileCredits.textContent = currentUserData?.credits?.toFixed(2) || '0.00';
@@ -1705,13 +1684,11 @@
       profileSection.style.display = "none";
       adminPanelSection.style.display = "block";
       
-      // Reset any active sidebar items
       document.querySelectorAll('.sidebar-item').forEach(item => {
         item.classList.remove('active');
       });
       adminPanelButton.classList.add('active');
       
-      // Reset search
       adminSearchUser.value = '';
       userInfoSection.style.display = "none";
     });
@@ -1723,7 +1700,6 @@
       profileSection.style.display = "none";
       adminPanelSection.style.display = "none";
       
-      // Reset any active sidebar items
       document.querySelectorAll('.sidebar-item').forEach(item => {
         item.classList.remove('active');
       });
@@ -1737,13 +1713,11 @@
         authSection.style.display = "none";
         appContainer.style.display = "flex";
         
-        // Load user data and config
         await loadUserData();
         loadTelegramConfig();
         loadCards();
         loadPurchaseHistory();
         
-        // Show cards section by default
         showCardsSection();
       } else {
         currentUser = null;
@@ -1768,7 +1742,6 @@
           telegramBotToken.value = telegramConfigData.botToken || '';
           telegramChatId.value = telegramConfigData.chatId || '';
           
-          // Show config only for admin
           telegramConfig.style.display = currentUserData?.isAdmin ? 'block' : 'none';
         }
       });
@@ -1804,7 +1777,6 @@
         adminPanelButton.style.display = 'flex';
       } else {
         adminPanelButton.style.display = 'none';
-        // If admin panel is open when privileges are removed, close it
         if (adminPanelSection.style.display === 'block') {
           showCardsSection();
         }
@@ -1821,13 +1793,11 @@
           currentUserData = doc.data();
           userCreditsDisplay.textContent = currentUserData.credits.toFixed(2);
           
-          // Show admin controls if user is admin
           addCardButton.style.display = currentUserData.isAdmin ? "inline-block" : "none";
           importSection.style.display = currentUserData.isAdmin ? "block" : "none";
           telegramConfig.style.display = currentUserData.isAdmin ? 'block' : 'none';
           updateAdminVisibility();
         } else {
-          // Create user document if it doesn't exist (legacy users)
           setDoc(userDocRef, {
             email: currentUser.email,
             credits: 10.00,
@@ -1845,9 +1815,8 @@
       const q = query(cardsCollection, where("state", "==", "Active"));
       unsubscribeCards = onSnapshot(q, (snapshot) => {
         const cards = [];
-        allCountries = new Set(['All']); // Reset countries
+        allCountries = new Set(['All']);
         
-        // Guardar la selección actual antes de actualizar
         const currentSelectedCountry = filterCountry.value;
         
         snapshot.forEach(doc => {
@@ -1858,7 +1827,6 @@
           }
         });
         
-        // Update country dropdown preservando la selección si aún existe
         filterCountry.innerHTML = '';
         allCountries.forEach(country => {
           const option = document.createElement('option');
@@ -1867,11 +1835,10 @@
           filterCountry.appendChild(option);
         });
         
-        // Restaurar la selección anterior si todavía existe
         if (Array.from(allCountries).includes(currentSelectedCountry)) {
           filterCountry.value = currentSelectedCountry;
         } else {
-          filterCountry.value = 'All'; // Volver al valor por defecto si la selección ya no existe
+          filterCountry.value = 'All';
         }
         
         renderCards(cards);
@@ -1896,7 +1863,6 @@
     function renderCards(cards) {
       cardsTableBody.innerHTML = '';
       
-      // Apply filters
       let filteredCards = [...cards];
       const binFilter = filterBin.value.toLowerCase();
       const countryFilter = filterCountry.value;
@@ -1904,7 +1870,6 @@
       const minPriceValue = parseFloat(minPrice.value) || 1;
       const maxPriceValue = parseFloat(maxPrice.value) || 50;
       
-      // Filter by bin (exact or partial match)
       if (binFilter) {
         filteredCards = filteredCards.filter(card => 
           card.number.toLowerCase().includes(binFilter)
@@ -1919,34 +1884,28 @@
         filteredCards = filteredCards.filter(card => card.state === stateFilter);
       }
       
-      // Filter by price range
       filteredCards = filteredCards.filter(card => {
         const price = card.price || 0.5;
         return price >= minPriceValue && price <= maxPriceValue;
       });
       
-      // Pagination
       const totalCards = filteredCards.length;
       const totalPages = Math.ceil(totalCards / cardsPerPage);
       const startIndex = (currentPage - 1) * cardsPerPage;
       const endIndex = Math.min(startIndex + cardsPerPage, totalCards);
       const paginatedCards = filteredCards.slice(startIndex, endIndex);
       
-      // Update page info
       pageInfo.textContent = `Showing ${startIndex + 1} to ${endIndex} of ${totalCards} entries`;
       
-      // Enable/disable pagination buttons
       prevPageButton.disabled = currentPage === 1;
       nextPageButton.disabled = currentPage === totalPages || totalPages === 0;
       
-      // Render cards
       paginatedCards.forEach(card => {
         const row = document.createElement('tr');
         const displayedNumber = card.number.length > 6 
           ? card.number.substring(0, 6) + '******' 
           : card.number;
         
-        // Generate random price between 1 and 50 if not set
         const cardPrice = card.price || (Math.random() * 49 + 1).toFixed(2);
         
         row.innerHTML = `
@@ -1967,7 +1926,6 @@
         cardsTableBody.appendChild(row);
       });
 
-      // Add event listeners to buttons
       document.querySelectorAll('.edit-button').forEach(button => {
         button.addEventListener('click', (e) => {
           const cardId = e.target.getAttribute('data-id');
@@ -1982,14 +1940,12 @@
         });
       });
 
-      // Add event listeners for purchase
       document.querySelectorAll('.show-card-button').forEach(button => {
         button.addEventListener('click', async (e) => {
           try {
             const cardId = e.target.getAttribute('data-id');
             const cardPrice = parseFloat(e.target.getAttribute('data-price'));
             
-            // Verificar créditos
             if (currentUserData.credits < cardPrice) {
               alert(`Créditos insuficientes. Necesitas $${cardPrice.toFixed(2)} (Tienes $${currentUserData.credits.toFixed(2)})`);
               return;
@@ -1999,7 +1955,6 @@
               return;
             }
 
-            // Obtener los datos completos de la tarjeta desde Firestore
             const cardDoc = await getDoc(doc(db, "cards", cardId));
             if (!cardDoc.exists()) {
               throw new Error("La tarjeta no existe o ya fue comprada");
@@ -2012,16 +1967,13 @@
             const cardType = cardData.type;
             const country = cardData.country;
 
-            // Iniciar transacción
             const batch = writeBatch(db);
             
-            // 1. Descontar créditos
             const userRef = doc(db, "users", currentUser.uid);
             batch.update(userRef, {
               credits: increment(-cardPrice)
             });
             
-            // 2. Registrar en historial
             const historyRef = doc(collection(db, "purchaseHistory"));
             batch.set(historyRef, {
               userId: currentUser.uid,
@@ -2036,11 +1988,9 @@
               purchaseDate: serverTimestamp()
             });
             
-            // 3. Eliminar la tarjeta (en lugar de marcarla como comprada)
             const cardRef = doc(db, "cards", cardId);
             batch.delete(cardRef);
             
-            // Ejecutar transacción
             await batch.commit();
             
             alert(`✅ Compra exitosa! Tarjeta adquirida por $${cardPrice.toFixed(2)}`);
@@ -2057,7 +2007,6 @@
     function renderPurchaseHistory(history) {
       historyTableBody.innerHTML = '';
       
-      // Sort by date (newest first)
       history.sort((a, b) => {
         const dateA = a.purchaseDate?.seconds || 0;
         const dateB = b.purchaseDate?.seconds || 0;
@@ -2097,13 +2046,11 @@
         return;
       }
       
-      // Show payment details
       amountToSend.textContent = amount.toFixed(2);
       paymentDetails.style.display = 'block';
       receiptSection.style.display = 'block';
     });
 
-    // Función mejorada para enviar comprobantes a Telegram
     async function sendToTelegramBot(email, amount, fileBase64, fileType) {
       try {
         if (!telegramConfigData.botToken || !telegramConfigData.chatId) {
@@ -2120,13 +2067,11 @@
         let endpoint = `https://api.telegram.org/bot${telegramConfigData.botToken}/sendDocument`;
         let fileField = 'document';
         
-        // Si es una imagen, usamos el método sendPhoto
         if (fileType.startsWith('image/')) {
           endpoint = `https://api.telegram.org/bot${telegramConfigData.botToken}/sendPhoto`;
           fileField = 'photo';
         }
 
-        // Convertir base64 a Blob
         const byteCharacters = atob(fileBase64);
         const byteArrays = [];
         
@@ -2145,14 +2090,12 @@
         const blob = new Blob(byteArrays, { type: fileType });
         const fileName = `comprobante_${Date.now()}.${fileType.split('/')[1] || 'dat'}`;
 
-        // Crear FormData
         const formData = new FormData();
         formData.append('chat_id', telegramConfigData.chatId);
         formData.append('caption', caption);
         formData.append('parse_mode', 'Markdown');
         formData.append(fileField, blob, fileName);
 
-        // Enviar a Telegram
         const response = await fetch(endpoint, {
           method: 'POST',
           body: formData
@@ -2174,7 +2117,6 @@
       }
     }
 
-    // Modificación en el evento click del botón de enviar comprobante
     sendReceipt.addEventListener('click', async () => {
       const file = receiptFile.files[0];
       const amount = parseFloat(rechargeAmount.value);
@@ -2190,21 +2132,18 @@
       }
       
       try {
-        // Mostrar carga
         sendReceipt.disabled = true;
         sendReceiptText.innerHTML = '<span class="loading"></span> Enviando...';
         
-        // Convertir archivo a base64
         const reader = new FileReader();
         reader.onload = async function(e) {
           try {
             const base64File = e.target.result.split(',')[1];
             const fileType = file.type;
             
-            // Crear solicitud de recarga en Firestore
             await addDoc(rechargeCollection, {
               userId: currentUser.uid,
-              email: currentUser.email, // Asegurarse de incluir el email
+              email: currentUser.email,
               amount: amount,
               status: 'pending',
               receiptFile: base64File,
@@ -2212,7 +2151,6 @@
               createdAt: serverTimestamp()
             });
             
-            // Intentar enviar a Telegram
             if (telegramConfigData.botToken && telegramConfigData.chatId) {
               await sendToTelegramBot(currentUser.email, amount, base64File, fileType);
             }
@@ -2223,11 +2161,9 @@
             console.error('Error al procesar:', error);
             alert('❌ Error al enviar comprobante: ' + (error.message || 'Por favor intenta nuevamente'));
           } finally {
-            // Restaurar botón
             sendReceipt.disabled = false;
             sendReceiptText.textContent = 'Enviar Comprobante';
             
-            // Limpiar formulario
             receiptFile.value = '';
             paymentDetails.style.display = 'none';
             receiptSection.style.display = 'none';
@@ -2245,7 +2181,6 @@
         console.error('Error en el evento click:', error);
         alert('❌ Error: ' + (error.message || 'Ocurrió un error inesperado'));
         
-        // Restaurar botón en caso de error
         sendReceipt.disabled = false;
         sendReceiptText.textContent = 'Enviar Comprobante';
       }
@@ -2255,54 +2190,62 @@
     adminSearchButton.addEventListener('click', async () => {
       const email = adminSearchUser.value.trim();
       if (!email) {
-        adminMessage.textContent = 'Por favor ingresa un email';
-        adminMessage.style.color = 'var(--danger)';
+        showAdminMessage('Por favor ingresa un email', 'error');
         return;
       }
       
       try {
-        // Query users collection by email
+        adminSearchButton.disabled = true;
+        adminSearchButton.innerHTML = '<span class="loading"></span> Buscando...';
+        
         const q = query(usersCollection, where("email", "==", email));
         const querySnapshot = await getDocs(q);
         
         if (querySnapshot.empty) {
-          adminMessage.textContent = 'Usuario no encontrado';
-          adminMessage.style.color = 'var(--danger)';
+          showAdminMessage('Usuario no encontrado', 'error');
           userInfoSection.style.display = 'none';
           return;
         }
         
-        // Get first matching user (emails should be unique)
         const userDoc = querySnapshot.docs[0];
         const userData = userDoc.data();
         
-        // Display user info
         adminUserEmail.textContent = userData.email;
         adminUserCredits.textContent = userData.credits?.toFixed(2) || '0.00';
         adminUserId.textContent = userDoc.id;
         userInfoSection.style.display = 'block';
         adminMessage.textContent = '';
         
+        if (currentUserData?.isAdmin) {
+          showAdminMessage('Usuario encontrado. Puedes modificar sus créditos.', 'success');
+        }
+        
       } catch (error) {
         console.error('Error searching user:', error);
-        adminMessage.textContent = 'Error al buscar usuario';
-        adminMessage.style.color = 'var(--danger)';
+        showAdminMessage('Error al buscar usuario', 'error');
+      } finally {
+        adminSearchButton.disabled = false;
+        adminSearchButton.textContent = 'Buscar';
       }
     });
+
+    // Función para mostrar mensajes en el panel admin
+    function showAdminMessage(message, type) {
+      adminMessage.textContent = message;
+      adminMessage.style.color = type === 'error' ? 'var(--danger)' : 'var(--success)';
+    }
 
     // Apply admin action
     adminApplyAction.addEventListener('click', async () => {
       const userId = adminUserId.textContent;
       if (!userId) {
-        adminMessage.textContent = 'Primero busca un usuario';
-        adminMessage.style.color = 'var(--danger)';
+        showAdminMessage('Primero busca un usuario', 'error');
         return;
       }
       
       const amount = parseFloat(adminCreditAmount.value);
       if (isNaN(amount) || amount < 0) {
-        adminMessage.textContent = 'Ingresa una cantidad válida';
-        adminMessage.style.color = 'var(--danger)';
+        showAdminMessage('Ingresa una cantidad válida', 'error');
         return;
       }
       
@@ -2310,21 +2253,41 @@
       const userRef = doc(db, "users", userId);
       
       try {
+        adminApplyAction.disabled = true;
+        adminApplyAction.innerHTML = '<span class="loading"></span> Procesando...';
+        
+        if (!currentUserData?.isAdmin) {
+          throw new Error('Solo los administradores pueden realizar esta acción');
+        }
+        
+        let message = '';
         if (action === 'add') {
           await updateDoc(userRef, {
             credits: increment(amount)
           });
-          adminMessage.textContent = `✅ Se agregaron $${amount.toFixed(2)} créditos al usuario`;
-        } else {
+          message = `✅ Se agregaron $${amount.toFixed(2)} créditos al usuario`;
+        } 
+        else if (action === 'subtract') {
+          const userDoc = await getDoc(userRef);
+          const currentCredits = userDoc.data()?.credits || 0;
+          if (currentCredits < amount) {
+            throw new Error('No se puede restar más créditos de los que tiene el usuario');
+          }
+          
+          await updateDoc(userRef, {
+            credits: increment(-amount)
+          });
+          message = `✅ Se restaron $${amount.toFixed(2)} créditos al usuario`;
+        }
+        else {
           await updateDoc(userRef, {
             credits: amount
           });
-          adminMessage.textContent = `✅ Se establecieron $${amount.toFixed(2)} créditos al usuario`;
+          message = `✅ Se establecieron $${amount.toFixed(2)} créditos al usuario`;
         }
         
-        adminMessage.style.color = 'var(--success)';
+        showAdminMessage(message, 'success');
         
-        // Refresh user info
         const userDoc = await getDoc(userRef);
         if (userDoc.exists()) {
           const userData = userDoc.data();
@@ -2333,8 +2296,10 @@
         
       } catch (error) {
         console.error('Error updating credits:', error);
-        adminMessage.textContent = '❌ Error al actualizar créditos';
-        adminMessage.style.color = 'var(--danger)';
+        showAdminMessage(`❌ Error: ${error.message}`, 'error');
+      } finally {
+        adminApplyAction.disabled = false;
+        adminApplyAction.textContent = 'Aplicar Cambios';
       }
     });
 
@@ -2343,7 +2308,6 @@
       modalTitle.textContent = 'Add New Card';
       cardForm.reset();
       cardIdInput.value = '';
-      // Set random price between 1 and 50
       document.getElementById('modalPrice').value = (Math.random() * 49 + 1).toFixed(2);
       cardModal.style.display = 'flex';
     });
@@ -2396,10 +2360,8 @@
 
       try {
         if (id) {
-          // Update existing card
           await updateDoc(doc(db, "cards", id), cardData);
         } else {
-          // Add new card
           await addDoc(cardsCollection, cardData);
         }
         cardModal.style.display = 'none';
@@ -2434,13 +2396,11 @@
             if (line) {
               const parts = line.split('|').map(part => part.trim());
               if (parts.length >= 7) {
-                // Basic validation
                 if (parts[1].length < 16 || isNaN(parts[1])) {
                   errors++;
                   return;
                 }
                 
-                // Generate random price between 1 and 50 if not provided
                 const price = parts.length >= 8 ? parseFloat(parts[7]) || (Math.random() * 49 + 1) : (Math.random() * 49 + 1);
                 
                 importedCards.push({
@@ -2486,17 +2446,15 @@
           return;
         }
         
-        // Add cards to Firestore
         for (const card of importedCards) {
           await addDoc(cardsCollection, card);
         }
         
-        // Show summary
         const message = `Se importaron ${importedCards.length} tarjetas correctamente`;
         const errorMessage = errors > 0 ? ` (${errors} líneas con errores)` : '';
         alert(message + errorMessage);
         
-        fileInput.value = ''; // Clear input
+        fileInput.value = '';
       } catch (error) {
         console.error('Error al importar:', error);
         alert('Error al procesar el archivo. Verifica el formato.');
