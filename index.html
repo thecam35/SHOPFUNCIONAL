@@ -1458,1067 +1458,1082 @@
   <!-- Firebase SDK -->
   <script type="module">
     // Firebase imports
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { 
-      getAuth, 
-      createUserWithEmailAndPassword, 
-      signInWithEmailAndPassword, 
-      signOut,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    import { 
-      getFirestore, 
-      collection, 
-      addDoc, 
-      getDocs, 
-      deleteDoc, 
-      doc, 
-      updateDoc, 
-      onSnapshot,
-      query,
-      where,
-      serverTimestamp,
-      increment,
-      getDoc,
-      setDoc,
-      writeBatch
-    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyCbAICRiZiKgMhW73DFwD75LTO2K05ABKY",
-      authDomain: "shopersatan.firebaseapp.com",
-      projectId: "shopersatan",
-      storageBucket: "shopersatan.appspot.com",
-      messagingSenderId: "514655940895",
-      appId: "1:514655940895:web:f99487e57fac4645f4802a",
-      measurementId: "G-9MWBLF29W8"
+    const firebaseImports = {
+      app: "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js",
+      auth: "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js",
+      firestore: "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"
     };
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const cardsCollection = collection(db, "cards");
-    const historyCollection = collection(db, "purchaseHistory");
-    const usersCollection = collection(db, "users");
-    const rechargeCollection = collection(db, "rechargeRequests");
-    const configCollection = collection(db, "config");
+    // Cargar dinámicamente los módulos de Firebase
+    async function loadFirebase() {
+      const { initializeApp } = await import(firebaseImports.app);
+      const { 
+        getAuth, 
+        createUserWithEmailAndPassword, 
+        signInWithEmailAndPassword, 
+        signOut,
+        onAuthStateChanged
+      } = await import(firebaseImports.auth);
+      const { 
+        getFirestore, 
+        collection, 
+        addDoc, 
+        getDocs, 
+        deleteDoc, 
+        doc, 
+        updateDoc, 
+        onSnapshot,
+        query,
+        where,
+        serverTimestamp,
+        increment,
+        getDoc,
+        setDoc,
+        writeBatch
+      } = await import(firebaseImports.firestore);
 
-    // DOM elements
-    const authSection = document.getElementById("auth-section");
-    const appContainer = document.getElementById("app-container");
-    const authForm = document.getElementById("authForm");
-    const authMessage = document.getElementById("auth-message");
-    const toggleAuth = document.getElementById("toggleAuth");
-    const logoutButton = document.getElementById("logoutButton");
-    const buyCardsButton = document.getElementById("buyCardsButton");
-    const profileButton = document.getElementById("profileButton");
-    const adminPanelButton = document.getElementById("adminPanelButton");
-    const rechargeButton = document.getElementById("rechargeButton");
-    
-    const cardsTableBody = document.getElementById("cardsTableBody");
-    const historyTableBody = document.getElementById("historyTableBody");
-    const cardModal = document.getElementById("cardModal");
-    const modalTitle = document.getElementById("modalTitle");
-    const cardForm = document.getElementById("cardForm");
-    const closeModal = document.getElementById("closeModal");
-    const cancelModal = document.getElementById("cancelModal");
-    const cardIdInput = document.getElementById("cardId");
-    const addCardButton = document.getElementById("addCardButton");
-    const importButton = document.getElementById("importButton");
-    const importSection = document.getElementById("importSection");
-    const fileInput = document.getElementById("txtFileInput");
-    const downloadTemplate = document.getElementById("downloadTemplate");
-    const prevPageButton = document.getElementById("prevPage");
-    const nextPageButton = document.getElementById("nextPage");
-    const pageInfo = document.getElementById("pageInfo");
-    const cardsPerPageSelect = document.getElementById("cardsPerPage");
-    const userCreditsDisplay = document.getElementById("userCredits");
-    const filterBin = document.getElementById("filterBin");
-    const filterCountry = document.getElementById("filterCountry");
-    const filterState = document.getElementById("filterState");
-    const minPrice = document.getElementById("minPrice");
-    const maxPrice = document.getElementById("maxPrice");
-
-    // New elements for recharge
-    const mainCardsSection = document.getElementById("mainCardsSection");
-    const rechargeSection = document.getElementById("rechargeSection");
-    const rechargeAmount = document.getElementById("rechargeAmount");
-    const confirmRecharge = document.getElementById("confirmRecharge");
-    const paymentDetails = document.getElementById("paymentDetails");
-    const amountToSend = document.getElementById("amountToSend");
-    const walletAddress = document.getElementById("walletAddress");
-    const receiptSection = document.getElementById("receiptSection");
-    const receiptFile = document.getElementById("receiptFile");
-    const sendReceipt = document.getElementById("sendReceipt");
-    const sendReceiptText = document.getElementById("sendReceiptText");
-    const telegramConfig = document.getElementById("telegramConfig");
-    const telegramBotToken = document.getElementById("telegramBotToken");
-    const telegramChatId = document.getElementById("telegramChatId");
-    const saveTelegramConfig = document.getElementById("saveTelegramConfig");
-
-    // Profile section elements
-    const profileSection = document.getElementById("profileSection");
-    const profileEmail = document.getElementById("profileEmail");
-    const profileCredits = document.getElementById("profileCredits");
-    const profileJoinDate = document.getElementById("profileJoinDate");
-    const profileRole = document.getElementById("profileRole");
-
-    // Admin panel elements
-    const adminPanelSection = document.getElementById("adminPanelSection");
-    const adminSearchUser = document.getElementById("adminSearchUser");
-    const adminSearchButton = document.getElementById("adminSearchButton");
-    const userInfoSection = document.getElementById("userInfoSection");
-    const adminUserEmail = document.getElementById("adminUserEmail");
-    const adminUserCredits = document.getElementById("adminUserCredits");
-    const adminUserId = document.getElementById("adminUserId");
-    const adminActionType = document.getElementById("adminActionType");
-    const adminCreditAmount = document.getElementById("adminCreditAmount");
-    const adminApplyAction = document.getElementById("adminApplyAction");
-    const adminMessage = document.getElementById("adminMessage");
-
-    // Telegram configuration
-    let telegramConfigData = {
-      botToken: '',
-      chatId: ''
-    };
-
-    // Auth state
-    let isLogin = true;
-    let currentUser = null;
-    let currentUserData = null;
-
-    // Pagination
-    let currentPage = 1;
-    let cardsPerPage = parseInt(cardsPerPageSelect.value);
-    let unsubscribeCards;
-    let unsubscribeHistory;
-    let unsubscribeUser;
-    let unsubscribeConfig;
-
-    // Countries
-    let allCountries = new Set(['All']);
-
-    // Toggle between login and register
-    toggleAuth.addEventListener("click", () => {
-      isLogin = !isLogin;
-      document.querySelector("#auth-section h2").textContent = isLogin ? "Iniciar Sesión" : "Registro";
-      document.querySelector("#authForm button").textContent = isLogin ? "Ingresar" : "Registrarse";
-      toggleAuth.textContent = isLogin ? "¿No tienes cuenta? Regístrate" : "¿Ya tienes cuenta? Inicia sesión";
-      authMessage.textContent = "";
-    });
-
-    // Auth form submission
-    authForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      try {
-        if (isLogin) {
-          await signInWithEmailAndPassword(auth, email, password);
-        } else {
-          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-          // Create user document with initial credits
-          await setDoc(doc(db, "users", userCredential.user.uid), {
-            email: email,
-            credits: 0,
-            isAdmin: false,
-            createdAt: serverTimestamp()
-          });
-        }
-      } catch (err) {
-        authMessage.textContent = err.message;
-      }
-    });
-
-    // Logout
-    logoutButton.addEventListener("click", () => {
-      signOut(auth);
-    });
-
-    // Toggle between sections
-    buyCardsButton.addEventListener("click", showCardsSection);
-    
-    rechargeButton.addEventListener("click", () => {
-      mainCardsSection.style.display = "none";
-      rechargeSection.style.display = "block";
-      profileSection.style.display = "none";
-      adminPanelSection.style.display = "none";
-      
-      document.querySelectorAll('.sidebar-item').forEach(item => {
-        item.classList.remove('active');
-      });
-      rechargeButton.classList.add('active');
-    });
-    
-    profileButton.addEventListener("click", () => {
-      mainCardsSection.style.display = "none";
-      rechargeSection.style.display = "none";
-      profileSection.style.display = "block";
-      adminPanelSection.style.display = "none";
-      
-      document.querySelectorAll('.sidebar-item').forEach(item => {
-        item.classList.remove('active');
-      });
-      profileButton.classList.add('active');
-      
-      if (currentUser) {
-        profileEmail.textContent = currentUser.email;
-        profileCredits.textContent = currentUserData?.credits?.toFixed(2) || '0.00';
-        profileRole.textContent = currentUserData?.isAdmin ? 'Administrador' : 'Usuario';
-        
-        if (currentUserData?.createdAt?.toDate) {
-          profileJoinDate.textContent = currentUserData.createdAt.toDate().toLocaleDateString();
-        } else {
-          profileJoinDate.textContent = 'Fecha no disponible';
-        }
-      }
-    });
-
-    // Admin panel button click
-    adminPanelButton.addEventListener("click", () => {
-      mainCardsSection.style.display = "none";
-      rechargeSection.style.display = "none";
-      profileSection.style.display = "none";
-      adminPanelSection.style.display = "block";
-      
-      document.querySelectorAll('.sidebar-item').forEach(item => {
-        item.classList.remove('active');
-      });
-      adminPanelButton.classList.add('active');
-      
-      adminSearchUser.value = '';
-      userInfoSection.style.display = "none";
-    });
-
-    // Show cards section
-    function showCardsSection() {
-      mainCardsSection.style.display = "block";
-      rechargeSection.style.display = "none";
-      profileSection.style.display = "none";
-      adminPanelSection.style.display = "none";
-      
-      document.querySelectorAll('.sidebar-item').forEach(item => {
-        item.classList.remove('active');
-      });
-      buyCardsButton.classList.add('active');
-    }
-
-    // Auth state change handler
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        currentUser = user;
-        authSection.style.display = "none";
-        appContainer.style.display = "flex";
-        
-        await loadUserData();
-        loadTelegramConfig();
-        loadCards();
-        loadPurchaseHistory();
-        
-        showCardsSection();
-      } else {
-        currentUser = null;
-        currentUserData = null;
-        authSection.style.display = "block";
-        appContainer.style.display = "none";
-        if (unsubscribeCards) unsubscribeCards();
-        if (unsubscribeHistory) unsubscribeHistory();
-        if (unsubscribeUser) unsubscribeUser();
-        if (unsubscribeConfig) unsubscribeConfig();
-      }
-    });
-
-    // Load Telegram configuration
-    function loadTelegramConfig() {
-      if (!currentUser) return;
-      
-      const configDocRef = doc(db, "config", "telegram");
-      unsubscribeConfig = onSnapshot(configDocRef, (doc) => {
-        if (doc.exists()) {
-          telegramConfigData = doc.data();
-          telegramBotToken.value = telegramConfigData.botToken || '';
-          telegramChatId.value = telegramConfigData.chatId || '';
-          
-          telegramConfig.style.display = currentUserData?.isAdmin ? 'block' : 'none';
-        }
-      });
-    }
-
-    // Save Telegram configuration
-    saveTelegramConfig.addEventListener('click', async () => {
-      if (!currentUserData?.isAdmin) {
-        alert('Solo los administradores pueden configurar esto');
-        return;
-      }
-      
-      try {
-        await setDoc(doc(db, "config", "telegram"), {
-          botToken: telegramBotToken.value,
-          chatId: telegramChatId.value,
-          updatedAt: serverTimestamp(),
-          updatedBy: currentUser.uid
-        });
-        
-        telegramConfigData.botToken = telegramBotToken.value;
-        telegramConfigData.chatId = telegramChatId.value;
-        alert('Configuración de Telegram guardada correctamente');
-      } catch (error) {
-        console.error('Error al guardar configuración:', error);
-        alert('Error al guardar la configuración');
-      }
-    });
-
-    // Update admin visibility
-    function updateAdminVisibility() {
-      if (currentUserData?.isAdmin) {
-        adminPanelButton.style.display = 'flex';
-      } else {
-        adminPanelButton.style.display = 'none';
-        if (adminPanelSection.style.display === 'block') {
-          showCardsSection();
-        }
-      }
-    }
-
-    // Load user data
-    async function loadUserData() {
-      if (!currentUser) return;
-      
-      const userDocRef = doc(db, "users", currentUser.uid);
-      unsubscribeUser = onSnapshot(userDocRef, (doc) => {
-        if (doc.exists()) {
-          currentUserData = doc.data();
-          userCreditsDisplay.textContent = currentUserData.credits.toFixed(2);
-          
-          addCardButton.style.display = currentUserData.isAdmin ? "inline-block" : "none";
-          importSection.style.display = currentUserData.isAdmin ? "block" : "none";
-          telegramConfig.style.display = currentUserData.isAdmin ? 'block' : 'none';
-          updateAdminVisibility();
-        } else {
-          setDoc(userDocRef, {
-            email: currentUser.email,
-            credits: 10.00,
-            isAdmin: false,
-            createdAt: serverTimestamp()
-          });
-        }
-      });
-    }
-
-    // Load cards from Firestore
-    function loadCards() {
-      if (!currentUser) return;
-      
-      const q = query(cardsCollection, where("state", "==", "Active"));
-      unsubscribeCards = onSnapshot(q, (snapshot) => {
-        const cards = [];
-        allCountries = new Set(['All']);
-        
-        const currentSelectedCountry = filterCountry.value;
-        
-        snapshot.forEach(doc => {
-          const cardData = { id: doc.id, ...doc.data() };
-          cards.push(cardData);
-          if (cardData.country) {
-            allCountries.add(cardData.country);
-          }
-        });
-        
-        filterCountry.innerHTML = '';
-        allCountries.forEach(country => {
-          const option = document.createElement('option');
-          option.value = country;
-          option.textContent = country;
-          filterCountry.appendChild(option);
-        });
-        
-        if (Array.from(allCountries).includes(currentSelectedCountry)) {
-          filterCountry.value = currentSelectedCountry;
-        } else {
-          filterCountry.value = 'All';
-        }
-        
-        renderCards(cards);
-      });
-    }
-
-    // Load purchase history
-    function loadPurchaseHistory() {
-      if (!currentUser) return;
-      
-      const q = query(historyCollection, where("userId", "==", currentUser.uid));
-      unsubscribeHistory = onSnapshot(q, (snapshot) => {
-        const history = [];
-        snapshot.forEach(doc => {
-          history.push({ id: doc.id, ...doc.data() });
-        });
-        renderPurchaseHistory(history);
-      });
-    }
-
-    // Render cards to the table
-    function renderCards(cards) {
-      cardsTableBody.innerHTML = '';
-      
-      let filteredCards = [...cards];
-      const binFilter = filterBin.value.toLowerCase();
-      const countryFilter = filterCountry.value;
-      const stateFilter = filterState.value;
-      const minPriceValue = parseFloat(minPrice.value) || 1;
-      const maxPriceValue = parseFloat(maxPrice.value) || 50;
-      
-      if (binFilter) {
-        filteredCards = filteredCards.filter(card => 
-          card.number.toLowerCase().includes(binFilter)
-        );
-      }
-      
-      if (countryFilter !== "All") {
-        filteredCards = filteredCards.filter(card => card.country === countryFilter);
-      }
-      
-      if (stateFilter !== "All") {
-        filteredCards = filteredCards.filter(card => card.state === stateFilter);
-      }
-      
-      filteredCards = filteredCards.filter(card => {
-        const price = card.price || 0.5;
-        return price >= minPriceValue && price <= maxPriceValue;
-      });
-      
-      const totalCards = filteredCards.length;
-      const totalPages = Math.ceil(totalCards / cardsPerPage);
-      const startIndex = (currentPage - 1) * cardsPerPage;
-      const endIndex = Math.min(startIndex + cardsPerPage, totalCards);
-      const paginatedCards = filteredCards.slice(startIndex, endIndex);
-      
-      pageInfo.textContent = `Showing ${startIndex + 1} to ${endIndex} of ${totalCards} entries`;
-      
-      prevPageButton.disabled = currentPage === 1;
-      nextPageButton.disabled = currentPage === totalPages || totalPages === 0;
-      
-      paginatedCards.forEach(card => {
-        const row = document.createElement('tr');
-        const displayedNumber = card.number.length > 6 
-          ? card.number.substring(0, 6) + '******' 
-          : card.number;
-        
-        const cardPrice = card.price || (Math.random() * 49 + 1).toFixed(2);
-        
-        row.innerHTML = `
-          <td>${card.type}</td>
-          <td class="card-number">${displayedNumber}</td>
-          <td>${card.expDate}</td>
-          <td>${card.country}</td>
-          <td>$${parseFloat(cardPrice).toFixed(2)}</td>
-          <td>${card.state}</td>
-          <td>
-            <button class="action-button show-card-button" data-id="${card.id}" data-price="${cardPrice}">Buy</button>
-            ${currentUserData?.isAdmin ? `
-              <button class="action-button edit-button" data-id="${card.id}">Edit</button>
-              <button class="action-button delete-button" data-id="${card.id}">Delete</button>
-            ` : ''}
-          </td>
-        `;
-        cardsTableBody.appendChild(row);
-      });
-
-      document.querySelectorAll('.edit-button').forEach(button => {
-        button.addEventListener('click', (e) => {
-          const cardId = e.target.getAttribute('data-id');
-          editCard(cardId);
-        });
-      });
-
-      document.querySelectorAll('.delete-button').forEach(button => {
-        button.addEventListener('click', (e) => {
-          const cardId = e.target.getAttribute('data-id');
-          deleteCard(cardId);
-        });
-      });
-
-      document.querySelectorAll('.show-card-button').forEach(button => {
-        button.addEventListener('click', async (e) => {
-          try {
-            const cardId = e.target.getAttribute('data-id');
-            const cardPrice = parseFloat(e.target.getAttribute('data-price'));
-            
-            if (currentUserData.credits < cardPrice) {
-              alert(`Créditos insuficientes. Necesitas $${cardPrice.toFixed(2)} (Tienes $${currentUserData.credits.toFixed(2)})`);
-              return;
-            }
-            
-            if (!confirm(`¿Confirmas la compra de esta tarjeta por $${cardPrice.toFixed(2)}?`)) {
-              return;
-            }
-
-            const cardDoc = await getDoc(doc(db, "cards", cardId));
-            if (!cardDoc.exists()) {
-              throw new Error("La tarjeta no existe o ya fue comprada");
-            }
-            
-            const cardData = cardDoc.data();
-            const fullNumber = cardData.number;
-            const cvv = cardData.cvv;
-            const expDate = cardData.expDate;
-            const cardType = cardData.type;
-            const country = cardData.country;
-
-            const batch = writeBatch(db);
-            
-            const userRef = doc(db, "users", currentUser.uid);
-            batch.update(userRef, {
-              credits: increment(-cardPrice)
-            });
-            
-            const historyRef = doc(collection(db, "purchaseHistory"));
-            batch.set(historyRef, {
-              userId: currentUser.uid,
-              cardId: cardId,
-              type: cardType,
-              number: fullNumber,
-              cvv: cvv,
-              expDate: expDate,
-              country: country,
-              price: cardPrice,
-              state: "Purchased",
-              purchaseDate: serverTimestamp()
-            });
-            
-            const cardRef = doc(db, "cards", cardId);
-            batch.delete(cardRef);
-            
-            await batch.commit();
-            
-            alert(`✅ Compra exitosa! Tarjeta adquirida por $${cardPrice.toFixed(2)}`);
-            
-          } catch (error) {
-            console.error("Error detallado en la compra:", error);
-            alert(`❌ Error en la compra: ${error.message || "Por favor intenta nuevamente. Si persiste, contacta al soporte."}`);
-          }
-        });
-      });
-    }
-
-    // Render purchase history
-    function renderPurchaseHistory(history) {
-      historyTableBody.innerHTML = '';
-      
-      history.sort((a, b) => {
-        const dateA = a.purchaseDate?.seconds || 0;
-        const dateB = b.purchaseDate?.seconds || 0;
-        return dateB - dateA;
-      });
-      
-      history.forEach(item => {
-        const row = document.createElement('tr');
-        const date = item.purchaseDate?.toDate ? item.purchaseDate.toDate() : new Date();
-        const formattedDate = date.toLocaleString();
-        
-        row.innerHTML = `
-          <td>${formattedDate}</td>
-          <td>${item.type}</td>
-          <td>${item.number}</td>
-          <td>${item.cvv || 'N/A'}</td>
-          <td>${item.expDate || 'N/A'}</td>
-          <td>${item.country}</td>
-          <td>$${item.price?.toFixed(2) || '0.50'}</td>
-          <td>${item.state}</td>
-        `;
-        historyTableBody.appendChild(row);
-      });
-    }
-
-    // Recharge functionality
-    confirmRecharge.addEventListener('click', () => {
-      const amount = parseFloat(rechargeAmount.value);
-      
-      if (isNaN(amount)) {
-        alert('Por favor ingresa un monto válido');
-        return;
-      }
-      
-      if (amount < 10) {
-        alert('El monto mínimo de recarga es $10 USD');
-        return;
-      }
-      
-      amountToSend.textContent = amount.toFixed(2);
-      paymentDetails.style.display = 'block';
-      receiptSection.style.display = 'block';
-    });
-
-    async function sendToTelegramBot(email, amount, fileBase64, fileType) {
-      try {
-        if (!telegramConfigData.botToken || !telegramConfigData.chatId) {
-          console.log('Configuración de Telegram incompleta. No se enviará notificación.');
-          return;
-        }
-
-        const caption = `📌 *Nueva solicitud de recarga* 📌\n\n` +
-                       `✉️ *Email:* ${email}\n` +
-                       `💰 *Monto:* $${amount.toFixed(2)} USD\n` +
-                       `🕒 *Fecha:* ${new Date().toLocaleString()}\n\n` +
-                       `_ID Usuario: ${currentUser.uid}_`;
-
-        let endpoint = `https://api.telegram.org/bot${telegramConfigData.botToken}/sendDocument`;
-        let fileField = 'document';
-        
-        if (fileType.startsWith('image/')) {
-          endpoint = `https://api.telegram.org/bot${telegramConfigData.botToken}/sendPhoto`;
-          fileField = 'photo';
-        }
-
-        const byteCharacters = atob(fileBase64);
-        const byteArrays = [];
-        
-        for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-          const slice = byteCharacters.slice(offset, offset + 512);
-          const byteNumbers = new Array(slice.length);
-          
-          for (let i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
-          }
-          
-          const byteArray = new Uint8Array(byteNumbers);
-          byteArrays.push(byteArray);
-        }
-        
-        const blob = new Blob(byteArrays, { type: fileType });
-        const fileName = `comprobante_${Date.now()}.${fileType.split('/')[1] || 'dat'}`;
-
-        const formData = new FormData();
-        formData.append('chat_id', telegramConfigData.chatId);
-        formData.append('caption', caption);
-        formData.append('parse_mode', 'Markdown');
-        formData.append(fileField, blob, fileName);
-
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          body: formData
-        });
-
-        const result = await response.json();
-        
-        if (!result.ok) {
-          console.error('Error en la respuesta de Telegram:', result);
-          throw new Error(result.description || 'Error al enviar a Telegram');
-        }
-
-        console.log('Comprobante enviado a Telegram correctamente');
-        return true;
-        
-      } catch (error) {
-        console.error('Error detallado en sendToTelegramBot:', error);
-        throw error;
-      }
-    }
-
-    sendReceipt.addEventListener('click', async () => {
-      const file = receiptFile.files[0];
-      const amount = parseFloat(rechargeAmount.value);
-      
-      if (!file) {
-        alert('Por favor selecciona un comprobante');
-        return;
-      }
-      
-      if (!currentUser) {
-        alert('No hay usuario autenticado');
-        return;
-      }
-      
-      try {
-        sendReceipt.disabled = true;
-        sendReceiptText.innerHTML = '<span class="loading"></span> Enviando...';
-        
-        const reader = new FileReader();
-        reader.onload = async function(e) {
-          try {
-            const base64File = e.target.result.split(',')[1];
-            const fileType = file.type;
-            
-            await addDoc(rechargeCollection, {
-              userId: currentUser.uid,
-              email: currentUser.email,
-              amount: amount,
-              status: 'pending',
-              receiptFile: base64File,
-              fileType: fileType,
-              createdAt: serverTimestamp()
-            });
-            
-            if (telegramConfigData.botToken && telegramConfigData.chatId) {
-              await sendToTelegramBot(currentUser.email, amount, base64File, fileType);
-            }
-            
-            alert('✅ Comprobante enviado correctamente. Tu recarga será procesada en breve.');
-            
-          } catch (error) {
-            console.error('Error al procesar:', error);
-            alert('❌ Error al enviar comprobante: ' + (error.message || 'Por favor intenta nuevamente'));
-          } finally {
-            sendReceipt.disabled = false;
-            sendReceiptText.textContent = 'Enviar Comprobante';
-            
-            receiptFile.value = '';
-            paymentDetails.style.display = 'none';
-            receiptSection.style.display = 'none';
-            rechargeAmount.value = '';
-          }
-        };
-        
-        reader.onerror = () => {
-          throw new Error('Error al leer el archivo');
-        };
-        
-        reader.readAsDataURL(file);
-        
-      } catch (error) {
-        console.error('Error en el evento click:', error);
-        alert('❌ Error: ' + (error.message || 'Ocurrió un error inesperado'));
-        
-        sendReceipt.disabled = false;
-        sendReceiptText.textContent = 'Enviar Comprobante';
-      }
-    });
-
-    // Search user for admin
-    adminSearchButton.addEventListener('click', async () => {
-      const email = adminSearchUser.value.trim();
-      if (!email) {
-        showAdminMessage('Por favor ingresa un email', 'error');
-        return;
-      }
-      
-      try {
-        adminSearchButton.disabled = true;
-        adminSearchButton.innerHTML = '<span class="loading"></span> Buscando...';
-        
-        const q = query(usersCollection, where("email", "==", email));
-        const querySnapshot = await getDocs(q);
-        
-        if (querySnapshot.empty) {
-          showAdminMessage('Usuario no encontrado', 'error');
-          userInfoSection.style.display = 'none';
-          return;
-        }
-        
-        const userDoc = querySnapshot.docs[0];
-        const userData = userDoc.data();
-        
-        adminUserEmail.textContent = userData.email;
-        adminUserCredits.textContent = userData.credits?.toFixed(2) || '0.00';
-        adminUserId.textContent = userDoc.id;
-        userInfoSection.style.display = 'block';
-        adminMessage.textContent = '';
-        
-        if (currentUserData?.isAdmin) {
-          showAdminMessage('Usuario encontrado. Puedes modificar sus créditos.', 'success');
-        }
-        
-      } catch (error) {
-        console.error('Error searching user:', error);
-        showAdminMessage('Error al buscar usuario', 'error');
-      } finally {
-        adminSearchButton.disabled = false;
-        adminSearchButton.textContent = 'Buscar';
-      }
-    });
-
-    // Función para mostrar mensajes en el panel admin
-    function showAdminMessage(message, type) {
-      adminMessage.textContent = message;
-      adminMessage.style.color = type === 'error' ? 'var(--danger)' : 'var(--success)';
-    }
-
-    // Apply admin action
-    adminApplyAction.addEventListener('click', async () => {
-      const userId = adminUserId.textContent;
-      if (!userId) {
-        showAdminMessage('Primero busca un usuario', 'error');
-        return;
-      }
-      
-      const amount = parseFloat(adminCreditAmount.value);
-      if (isNaN(amount) || amount < 0) {
-        showAdminMessage('Ingresa una cantidad válida', 'error');
-        return;
-      }
-      
-      const action = adminActionType.value;
-      const userRef = doc(db, "users", userId);
-      
-      try {
-        adminApplyAction.disabled = true;
-        adminApplyAction.innerHTML = '<span class="loading"></span> Procesando...';
-        
-        if (!currentUserData?.isAdmin) {
-          throw new Error('Solo los administradores pueden realizar esta acción');
-        }
-        
-        let message = '';
-        if (action === 'add') {
-          await updateDoc(userRef, {
-            credits: increment(amount)
-          });
-          message = `✅ Se agregaron $${amount.toFixed(2)} créditos al usuario`;
-        } 
-        else if (action === 'subtract') {
-          const userDoc = await getDoc(userRef);
-          const currentCredits = userDoc.data()?.credits || 0;
-          if (currentCredits < amount) {
-            throw new Error('No se puede restar más créditos de los que tiene el usuario');
-          }
-          
-          await updateDoc(userRef, {
-            credits: increment(-amount)
-          });
-          message = `✅ Se restaron $${amount.toFixed(2)} créditos al usuario`;
-        }
-        else {
-          await updateDoc(userRef, {
-            credits: amount
-          });
-          message = `✅ Se establecieron $${amount.toFixed(2)} créditos al usuario`;
-        }
-        
-        showAdminMessage(message, 'success');
-        
-        const userDoc = await getDoc(userRef);
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          adminUserCredits.textContent = userData.credits?.toFixed(2) || '0.00';
-        }
-        
-      } catch (error) {
-        console.error('Error updating credits:', error);
-        showAdminMessage(`❌ Error: ${error.message}`, 'error');
-      } finally {
-        adminApplyAction.disabled = false;
-        adminApplyAction.textContent = 'Aplicar Cambios';
-      }
-    });
-
-    // Add new card
-    addCardButton.addEventListener('click', () => {
-      modalTitle.textContent = 'Add New Card';
-      cardForm.reset();
-      cardIdInput.value = '';
-      document.getElementById('modalPrice').value = (Math.random() * 49 + 1).toFixed(2);
-      cardModal.style.display = 'flex';
-    });
-
-    // Edit card
-    async function editCard(id) {
-      const cardDoc = await getDoc(doc(db, "cards", id));
-      
-      if (cardDoc.exists()) {
-        const card = cardDoc.data();
-        modalTitle.textContent = 'Edit Card';
-        cardIdInput.value = id;
-        document.getElementById('modalType').value = card.type;
-        document.getElementById('modalNumber').value = card.number;
-        document.getElementById('modalExpDate').value = card.expDate;
-        document.getElementById('modalCvv').value = card.cvv;
-        document.getElementById('modalName').value = card.name;
-        document.getElementById('modalCountry').value = card.country;
-        document.getElementById('modalZip').value = card.zip;
-        document.getElementById('modalPrice').value = card.price?.toFixed(2) || (Math.random() * 49 + 1).toFixed(2);
-        cardModal.style.display = 'flex';
-      }
-    }
-
-    // Delete card
-    async function deleteCard(id) {
-      if (confirm('Are you sure you want to delete this card?')) {
-        await deleteDoc(doc(db, "cards", id));
-      }
-    }
-
-    // Save card (add or update)
-    cardForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const id = cardIdInput.value;
-      const cardData = {
-        type: document.getElementById('modalType').value,
-        number: document.getElementById('modalNumber').value,
-        expDate: document.getElementById('modalExpDate').value,
-        cvv: document.getElementById('modalCvv').value,
-        name: document.getElementById('modalName').value,
-        country: document.getElementById('modalCountry').value,
-        zip: document.getElementById('modalZip').value,
-        price: parseFloat(document.getElementById('modalPrice').value) || (Math.random() * 49 + 1),
-        state: "Active",
-        result: "Success",
-        createdAt: serverTimestamp()
+      // Configuración ofuscada
+      const config = {
+        apiKey: atob("QUl6YVN5Q2JBQUNSaVppS2dNaFc3M0RGd0Q3NUxUTzJLMDU1QUJL"),
+        authDomain: "shopersatan.firebaseapp.com",
+        projectId: "shopersatan",
+        storageBucket: "shopersatan.appspot.com",
+        messagingSenderId: "514655940895",
+        appId: "1:514655940895:web:f99487e57fac4645f4802a",
+        measurementId: "G-9MWBLF29W8"
       };
 
-      try {
-        if (id) {
-          await updateDoc(doc(db, "cards", id), cardData);
-        } else {
-          await addDoc(cardsCollection, cardData);
-        }
-        cardModal.style.display = 'none';
-      } catch (error) {
-        console.error("Error saving card:", error);
-        alert("Error saving card. Please try again.");
-      }
-    });
+      // Initialize Firebase
+      const app = initializeApp(config);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+      const cardsCollection = collection(db, "cards");
+      const historyCollection = collection(db, "purchaseHistory");
+      const usersCollection = collection(db, "users");
+      const rechargeCollection = collection(db, "rechargeRequests");
+      const configCollection = collection(db, "config");
 
-    // Close modal
-    closeModal.addEventListener('click', () => {
-      cardModal.style.display = 'none';
-    });
+      // DOM elements
+      const authSection = document.getElementById("auth-section");
+      const appContainer = document.getElementById("app-container");
+      const authForm = document.getElementById("authForm");
+      const authMessage = document.getElementById("auth-message");
+      const toggleAuth = document.getElementById("toggleAuth");
+      const logoutButton = document.getElementById("logoutButton");
+      const buyCardsButton = document.getElementById("buyCardsButton");
+      const profileButton = document.getElementById("profileButton");
+      const adminPanelButton = document.getElementById("adminPanelButton");
+      const rechargeButton = document.getElementById("rechargeButton");
+      
+      const cardsTableBody = document.getElementById("cardsTableBody");
+      const historyTableBody = document.getElementById("historyTableBody");
+      const cardModal = document.getElementById("cardModal");
+      const modalTitle = document.getElementById("modalTitle");
+      const cardForm = document.getElementById("cardForm");
+      const closeModal = document.getElementById("closeModal");
+      const cancelModal = document.getElementById("cancelModal");
+      const cardIdInput = document.getElementById("cardId");
+      const addCardButton = document.getElementById("addCardButton");
+      const importButton = document.getElementById("importButton");
+      const importSection = document.getElementById("importSection");
+      const fileInput = document.getElementById("txtFileInput");
+      const downloadTemplate = document.getElementById("downloadTemplate");
+      const prevPageButton = document.getElementById("prevPage");
+      const nextPageButton = document.getElementById("nextPage");
+      const pageInfo = document.getElementById("pageInfo");
+      const cardsPerPageSelect = document.getElementById("cardsPerPage");
+      const userCreditsDisplay = document.getElementById("userCredits");
+      const filterBin = document.getElementById("filterBin");
+      const filterCountry = document.getElementById("filterCountry");
+      const filterState = document.getElementById("filterState");
+      const minPrice = document.getElementById("minPrice");
+      const maxPrice = document.getElementById("maxPrice");
 
-    cancelModal.addEventListener('click', () => {
-      cardModal.style.display = 'none';
-    });
+      // New elements for recharge
+      const mainCardsSection = document.getElementById("mainCardsSection");
+      const rechargeSection = document.getElementById("rechargeSection");
+      const rechargeAmount = document.getElementById("rechargeAmount");
+      const confirmRecharge = document.getElementById("confirmRecharge");
+      const paymentDetails = document.getElementById("paymentDetails");
+      const amountToSend = document.getElementById("amountToSend");
+      const walletAddress = document.getElementById("walletAddress");
+      const receiptSection = document.getElementById("receiptSection");
+      const receiptFile = document.getElementById("receiptFile");
+      const sendReceipt = document.getElementById("sendReceipt");
+      const sendReceiptText = document.getElementById("sendReceiptText");
+      const telegramConfig = document.getElementById("telegramConfig");
+      const telegramBotToken = document.getElementById("telegramBotToken");
+      const telegramChatId = document.getElementById("telegramChatId");
+      const saveTelegramConfig = document.getElementById("saveTelegramConfig");
 
-    // Process TXT file
-    async function processTxtFile(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-          const content = e.target.result;
-          const lines = content.split('\n');
-          const importedCards = [];
-          let errors = 0;
-          
-          lines.forEach((line, index) => {
-            line = line.trim();
-            if (line) {
-              const parts = line.split('|').map(part => part.trim());
-              if (parts.length >= 7) {
-                if (parts[1].length < 16 || isNaN(parts[1])) {
-                  errors++;
-                  return;
-                }
-                
-                const price = parts.length >= 8 ? parseFloat(parts[7]) || (Math.random() * 49 + 1) : (Math.random() * 49 + 1);
-                
-                importedCards.push({
-                  type: parts[0],
-                  number: parts[1],
-                  expDate: parts[2],
-                  cvv: parts[3],
-                  name: parts[4],
-                  country: parts[5],
-                  zip: parts[6],
-                  price: price,
-                  state: "Active",
-                  result: "Imported",
-                  createdAt: serverTimestamp()
-                });
-              } else {
-                errors++;
-              }
-            }
-          });
-          
-          resolve({ cards: importedCards, errors });
-        };
-        
-        reader.onerror = reject;
-        reader.readAsText(file);
+      // Profile section elements
+      const profileSection = document.getElementById("profileSection");
+      const profileEmail = document.getElementById("profileEmail");
+      const profileCredits = document.getElementById("profileCredits");
+      const profileJoinDate = document.getElementById("profileJoinDate");
+      const profileRole = document.getElementById("profileRole");
+
+      // Admin panel elements
+      const adminPanelSection = document.getElementById("adminPanelSection");
+      const adminSearchUser = document.getElementById("adminSearchUser");
+      const adminSearchButton = document.getElementById("adminSearchButton");
+      const userInfoSection = document.getElementById("userInfoSection");
+      const adminUserEmail = document.getElementById("adminUserEmail");
+      const adminUserCredits = document.getElementById("adminUserCredits");
+      const adminUserId = document.getElementById("adminUserId");
+      const adminActionType = document.getElementById("adminActionType");
+      const adminCreditAmount = document.getElementById("adminCreditAmount");
+      const adminApplyAction = document.getElementById("adminApplyAction");
+      const adminMessage = document.getElementById("adminMessage");
+
+      // Telegram configuration
+      let telegramConfigData = {
+        botToken: '',
+        chatId: ''
+      };
+
+      // Auth state
+      let isLogin = true;
+      let currentUser = null;
+      let currentUserData = null;
+
+      // Pagination
+      let currentPage = 1;
+      let cardsPerPage = parseInt(cardsPerPageSelect.value);
+      let unsubscribeCards;
+      let unsubscribeHistory;
+      let unsubscribeUser;
+      let unsubscribeConfig;
+
+      // Countries
+      let allCountries = new Set(['All']);
+
+      // Toggle between login and register
+      toggleAuth.addEventListener("click", () => {
+        isLogin = !isLogin;
+        document.querySelector("#auth-section h2").textContent = isLogin ? "Iniciar Sesión" : "Registro";
+        document.querySelector("#authForm button").textContent = isLogin ? "Ingresar" : "Registrarse";
+        toggleAuth.textContent = isLogin ? "¿No tienes cuenta? Regístrate" : "¿Ya tienes cuenta? Inicia sesión";
+        authMessage.textContent = "";
       });
-    }
 
-    // Import cards from TXT
-    importButton.addEventListener('click', async () => {
-      const file = fileInput.files[0];
-      if (!file) {
-        alert('Por favor selecciona un archivo TXT');
-        return;
+      // Auth form submission
+      authForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+          if (isLogin) {
+            await signInWithEmailAndPassword(auth, email, password);
+          } else {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            // Create user document with initial credits
+            await setDoc(doc(db, "users", userCredential.user.uid), {
+              email: email,
+              credits: 0,
+              isAdmin: false,
+              createdAt: serverTimestamp()
+            });
+          }
+        } catch (err) {
+          authMessage.textContent = err.message;
+        }
+      });
+
+      // Logout
+      logoutButton.addEventListener("click", () => {
+        signOut(auth);
+      });
+
+      // Toggle between sections
+      buyCardsButton.addEventListener("click", showCardsSection);
+      
+      rechargeButton.addEventListener("click", () => {
+        mainCardsSection.style.display = "none";
+        rechargeSection.style.display = "block";
+        profileSection.style.display = "none";
+        adminPanelSection.style.display = "none";
+        
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        rechargeButton.classList.add('active');
+      });
+      
+      profileButton.addEventListener("click", () => {
+        mainCardsSection.style.display = "none";
+        rechargeSection.style.display = "none";
+        profileSection.style.display = "block";
+        adminPanelSection.style.display = "none";
+        
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        profileButton.classList.add('active');
+        
+        if (currentUser) {
+          profileEmail.textContent = currentUser.email;
+          profileCredits.textContent = currentUserData?.credits?.toFixed(2) || '0.00';
+          profileRole.textContent = currentUserData?.isAdmin ? 'Administrador' : 'Usuario';
+          
+          if (currentUserData?.createdAt?.toDate) {
+            profileJoinDate.textContent = currentUserData.createdAt.toDate().toLocaleDateString();
+          } else {
+            profileJoinDate.textContent = 'Fecha no disponible';
+          }
+        }
+      });
+
+      // Admin panel button click
+      adminPanelButton.addEventListener("click", () => {
+        mainCardsSection.style.display = "none";
+        rechargeSection.style.display = "none";
+        profileSection.style.display = "none";
+        adminPanelSection.style.display = "block";
+        
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        adminPanelButton.classList.add('active');
+        
+        adminSearchUser.value = '';
+        userInfoSection.style.display = "none";
+      });
+
+      // Show cards section
+      function showCardsSection() {
+        mainCardsSection.style.display = "block";
+        rechargeSection.style.display = "none";
+        profileSection.style.display = "none";
+        adminPanelSection.style.display = "none";
+        
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        buyCardsButton.classList.add('active');
       }
 
-      try {
-        const { cards: importedCards, errors } = await processTxtFile(file);
+      // Auth state change handler
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          currentUser = user;
+          authSection.style.display = "none";
+          appContainer.style.display = "flex";
+          
+          await loadUserData();
+          loadTelegramConfig();
+          loadCards();
+          loadPurchaseHistory();
+          
+          showCardsSection();
+        } else {
+          currentUser = null;
+          currentUserData = null;
+          authSection.style.display = "block";
+          appContainer.style.display = "none";
+          if (unsubscribeCards) unsubscribeCards();
+          if (unsubscribeHistory) unsubscribeHistory();
+          if (unsubscribeUser) unsubscribeUser();
+          if (unsubscribeConfig) unsubscribeConfig();
+        }
+      });
+
+      // Load Telegram configuration
+      function loadTelegramConfig() {
+        if (!currentUser) return;
         
-        if (importedCards.length === 0 && errors > 0) {
-          alert('No se pudieron importar tarjetas. Verifica el formato del archivo.');
+        const configDocRef = doc(db, "config", "telegram");
+        unsubscribeConfig = onSnapshot(configDocRef, (doc) => {
+          if (doc.exists()) {
+            telegramConfigData = doc.data();
+            telegramBotToken.value = telegramConfigData.botToken || '';
+            telegramChatId.value = telegramConfigData.chatId || '';
+            
+            telegramConfig.style.display = currentUserData?.isAdmin ? 'block' : 'none';
+          }
+        });
+      }
+
+      // Save Telegram configuration
+      saveTelegramConfig.addEventListener('click', async () => {
+        if (!currentUserData?.isAdmin) {
+          alert('Solo los administradores pueden configurar esto');
           return;
         }
         
-        for (const card of importedCards) {
-          await addDoc(cardsCollection, card);
+        try {
+          await setDoc(doc(db, "config", "telegram"), {
+            botToken: telegramBotToken.value,
+            chatId: telegramChatId.value,
+            updatedAt: serverTimestamp(),
+            updatedBy: currentUser.uid
+          });
+          
+          telegramConfigData.botToken = telegramBotToken.value;
+          telegramConfigData.chatId = telegramChatId.value;
+          alert('Configuración de Telegram guardada correctamente');
+        } catch (error) {
+          console.error('Error al guardar configuración:', error);
+          alert('Error al guardar la configuración');
+        }
+      });
+
+      // Update admin visibility
+      function updateAdminVisibility() {
+        if (currentUserData?.isAdmin) {
+          adminPanelButton.style.display = 'flex';
+        } else {
+          adminPanelButton.style.display = 'none';
+          if (adminPanelSection.style.display === 'block') {
+            showCardsSection();
+          }
+        }
+      }
+
+      // Load user data
+      async function loadUserData() {
+        if (!currentUser) return;
+        
+        const userDocRef = doc(db, "users", currentUser.uid);
+        unsubscribeUser = onSnapshot(userDocRef, (doc) => {
+          if (doc.exists()) {
+            currentUserData = doc.data();
+            userCreditsDisplay.textContent = currentUserData.credits.toFixed(2);
+            
+            addCardButton.style.display = currentUserData.isAdmin ? "inline-block" : "none";
+            importSection.style.display = currentUserData.isAdmin ? "block" : "none";
+            telegramConfig.style.display = currentUserData.isAdmin ? 'block' : 'none';
+            updateAdminVisibility();
+          } else {
+            setDoc(userDocRef, {
+              email: currentUser.email,
+              credits: 10.00,
+              isAdmin: false,
+              createdAt: serverTimestamp()
+            });
+          }
+        });
+      }
+
+      // Load cards from Firestore
+      function loadCards() {
+        if (!currentUser) return;
+        
+        const q = query(cardsCollection, where("state", "==", "Active"));
+        unsubscribeCards = onSnapshot(q, (snapshot) => {
+          const cards = [];
+          allCountries = new Set(['All']);
+          
+          const currentSelectedCountry = filterCountry.value;
+          
+          snapshot.forEach(doc => {
+            const cardData = { id: doc.id, ...doc.data() };
+            cards.push(cardData);
+            if (cardData.country) {
+              allCountries.add(cardData.country);
+            }
+          });
+          
+          filterCountry.innerHTML = '';
+          allCountries.forEach(country => {
+            const option = document.createElement('option');
+            option.value = country;
+            option.textContent = country;
+            filterCountry.appendChild(option);
+          });
+          
+          if (Array.from(allCountries).includes(currentSelectedCountry)) {
+            filterCountry.value = currentSelectedCountry;
+          } else {
+            filterCountry.value = 'All';
+          }
+          
+          renderCards(cards);
+        });
+      }
+
+      // Load purchase history
+      function loadPurchaseHistory() {
+        if (!currentUser) return;
+        
+        const q = query(historyCollection, where("userId", "==", currentUser.uid));
+        unsubscribeHistory = onSnapshot(q, (snapshot) => {
+          const history = [];
+          snapshot.forEach(doc => {
+            history.push({ id: doc.id, ...doc.data() });
+          });
+          renderPurchaseHistory(history);
+        });
+      }
+
+      // Render cards to the table
+      function renderCards(cards) {
+        cardsTableBody.innerHTML = '';
+        
+        let filteredCards = [...cards];
+        const binFilter = filterBin.value.toLowerCase();
+        const countryFilter = filterCountry.value;
+        const stateFilter = filterState.value;
+        const minPriceValue = parseFloat(minPrice.value) || 1;
+        const maxPriceValue = parseFloat(maxPrice.value) || 50;
+        
+        if (binFilter) {
+          filteredCards = filteredCards.filter(card => 
+            card.number.toLowerCase().includes(binFilter)
+          );
         }
         
-        const message = `Se importaron ${importedCards.length} tarjetas correctamente`;
-        const errorMessage = errors > 0 ? ` (${errors} líneas con errores)` : '';
-        alert(message + errorMessage);
+        if (countryFilter !== "All") {
+          filteredCards = filteredCards.filter(card => card.country === countryFilter);
+        }
         
-        fileInput.value = '';
-      } catch (error) {
-        console.error('Error al importar:', error);
-        alert('Error al procesar el archivo. Verifica el formato.');
+        if (stateFilter !== "All") {
+          filteredCards = filteredCards.filter(card => card.state === stateFilter);
+        }
+        
+        filteredCards = filteredCards.filter(card => {
+          const price = card.price || 0.5;
+          return price >= minPriceValue && price <= maxPriceValue;
+        });
+        
+        const totalCards = filteredCards.length;
+        const totalPages = Math.ceil(totalCards / cardsPerPage);
+        const startIndex = (currentPage - 1) * cardsPerPage;
+        const endIndex = Math.min(startIndex + cardsPerPage, totalCards);
+        const paginatedCards = filteredCards.slice(startIndex, endIndex);
+        
+        pageInfo.textContent = `Showing ${startIndex + 1} to ${endIndex} of ${totalCards} entries`;
+        
+        prevPageButton.disabled = currentPage === 1;
+        nextPageButton.disabled = currentPage === totalPages || totalPages === 0;
+        
+        paginatedCards.forEach(card => {
+          const row = document.createElement('tr');
+          const displayedNumber = card.number.length > 6 
+            ? card.number.substring(0, 6) + '******' 
+            : card.number;
+          
+          const cardPrice = card.price || (Math.random() * 49 + 1).toFixed(2);
+          
+          row.innerHTML = `
+            <td>${card.type}</td>
+            <td class="card-number">${displayedNumber}</td>
+            <td>${card.expDate}</td>
+            <td>${card.country}</td>
+            <td>$${parseFloat(cardPrice).toFixed(2)}</td>
+            <td>${card.state}</td>
+            <td>
+              <button class="action-button show-card-button" data-id="${card.id}" data-price="${cardPrice}">Buy</button>
+              ${currentUserData?.isAdmin ? `
+                <button class="action-button edit-button" data-id="${card.id}">Edit</button>
+                <button class="action-button delete-button" data-id="${card.id}">Delete</button>
+              ` : ''}
+            </td>
+          `;
+          cardsTableBody.appendChild(row);
+        });
+
+        document.querySelectorAll('.edit-button').forEach(button => {
+          button.addEventListener('click', (e) => {
+            const cardId = e.target.getAttribute('data-id');
+            editCard(cardId);
+          });
+        });
+
+        document.querySelectorAll('.delete-button').forEach(button => {
+          button.addEventListener('click', (e) => {
+            const cardId = e.target.getAttribute('data-id');
+            deleteCard(cardId);
+          });
+        });
+
+        document.querySelectorAll('.show-card-button').forEach(button => {
+          button.addEventListener('click', async (e) => {
+            try {
+              const cardId = e.target.getAttribute('data-id');
+              const cardPrice = parseFloat(e.target.getAttribute('data-price'));
+              
+              if (currentUserData.credits < cardPrice) {
+                alert(`Créditos insuficientes. Necesitas $${cardPrice.toFixed(2)} (Tienes $${currentUserData.credits.toFixed(2)})`);
+                return;
+              }
+              
+              if (!confirm(`¿Confirmas la compra de esta tarjeta por $${cardPrice.toFixed(2)}?`)) {
+                return;
+              }
+
+              const cardDoc = await getDoc(doc(db, "cards", cardId));
+              if (!cardDoc.exists()) {
+                throw new Error("La tarjeta no existe o ya fue comprada");
+              }
+              
+              const cardData = cardDoc.data();
+              const fullNumber = cardData.number;
+              const cvv = cardData.cvv;
+              const expDate = cardData.expDate;
+              const cardType = cardData.type;
+              const country = cardData.country;
+
+              const batch = writeBatch(db);
+              
+              const userRef = doc(db, "users", currentUser.uid);
+              batch.update(userRef, {
+                credits: increment(-cardPrice)
+              });
+              
+              const historyRef = doc(collection(db, "purchaseHistory"));
+              batch.set(historyRef, {
+                userId: currentUser.uid,
+                cardId: cardId,
+                type: cardType,
+                number: fullNumber,
+                cvv: cvv,
+                expDate: expDate,
+                country: country,
+                price: cardPrice,
+                state: "Purchased",
+                purchaseDate: serverTimestamp()
+              });
+              
+              const cardRef = doc(db, "cards", cardId);
+              batch.delete(cardRef);
+              
+              await batch.commit();
+              
+              alert(`✅ Compra exitosa! Tarjeta adquirida por $${cardPrice.toFixed(2)}`);
+              
+            } catch (error) {
+              console.error("Error detallado en la compra:", error);
+              alert(`❌ Error en la compra: ${error.message || "Por favor intenta nuevamente. Si persiste, contacta al soporte."}`);
+            }
+          });
+        });
       }
-    });
 
-    // Download template
-    downloadTemplate.addEventListener('click', (e) => {
-      e.preventDefault();
-      const content = "VISA|4111111111111111|12/2025|123|Nombre|País|Zip|1.50\nMasterCard|5555555555554444|06/2024|456|Nombre|País|Zip|25.00";
-      const blob = new Blob([content], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'plantilla_tarjetas.txt';
-      a.click();
-      URL.revokeObjectURL(url);
-    });
+      // Render purchase history
+      function renderPurchaseHistory(history) {
+        historyTableBody.innerHTML = '';
+        
+        history.sort((a, b) => {
+          const dateA = a.purchaseDate?.seconds || 0;
+          const dateB = b.purchaseDate?.seconds || 0;
+          return dateB - dateA;
+        });
+        
+        history.forEach(item => {
+          const row = document.createElement('tr');
+          const date = item.purchaseDate?.toDate ? item.purchaseDate.toDate() : new Date();
+          const formattedDate = date.toLocaleString();
+          
+          row.innerHTML = `
+            <td>${formattedDate}</td>
+            <td>${item.type}</td>
+            <td>${item.number}</td>
+            <td>${item.cvv || 'N/A'}</td>
+            <td>${item.expDate || 'N/A'}</td>
+            <td>${item.country}</td>
+            <td>$${item.price?.toFixed(2) || '0.50'}</td>
+            <td>${item.state}</td>
+          `;
+          historyTableBody.appendChild(row);
+        });
+      }
 
-    // Pagination controls
-    prevPageButton.addEventListener('click', () => {
-      if (currentPage > 1) {
-        currentPage--;
+      // Recharge functionality
+      confirmRecharge.addEventListener('click', () => {
+        const amount = parseFloat(rechargeAmount.value);
+        
+        if (isNaN(amount)) {
+          alert('Por favor ingresa un monto válido');
+          return;
+        }
+        
+        if (amount < 10) {
+          alert('El monto mínimo de recarga es $10 USD');
+          return;
+        }
+        
+        amountToSend.textContent = amount.toFixed(2);
+        paymentDetails.style.display = 'block';
+        receiptSection.style.display = 'block';
+      });
+
+      async function sendToTelegramBot(email, amount, fileBase64, fileType) {
+        try {
+          if (!telegramConfigData.botToken || !telegramConfigData.chatId) {
+            console.log('Configuración de Telegram incompleta. No se enviará notificación.');
+            return;
+          }
+
+          const caption = `📌 *Nueva solicitud de recarga* 📌\n\n` +
+                         `✉️ *Email:* ${email}\n` +
+                         `💰 *Monto:* $${amount.toFixed(2)} USD\n` +
+                         `🕒 *Fecha:* ${new Date().toLocaleString()}\n\n` +
+                         `_ID Usuario: ${currentUser.uid}_`;
+
+          let endpoint = `https://api.telegram.org/bot${telegramConfigData.botToken}/sendDocument`;
+          let fileField = 'document';
+          
+          if (fileType.startsWith('image/')) {
+            endpoint = `https://api.telegram.org/bot${telegramConfigData.botToken}/sendPhoto`;
+            fileField = 'photo';
+          }
+
+          const byteCharacters = atob(fileBase64);
+          const byteArrays = [];
+          
+          for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+            const slice = byteCharacters.slice(offset, offset + 512);
+            const byteNumbers = new Array(slice.length);
+            
+            for (let i = 0; i < slice.length; i++) {
+              byteNumbers[i] = slice.charCodeAt(i);
+            }
+            
+            const byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+          }
+          
+          const blob = new Blob(byteArrays, { type: fileType });
+          const fileName = `comprobante_${Date.now()}.${fileType.split('/')[1] || 'dat'}`;
+
+          const formData = new FormData();
+          formData.append('chat_id', telegramConfigData.chatId);
+          formData.append('caption', caption);
+          formData.append('parse_mode', 'Markdown');
+          formData.append(fileField, blob, fileName);
+
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            body: formData
+          });
+
+          const result = await response.json();
+          
+          if (!result.ok) {
+            console.error('Error en la respuesta de Telegram:', result);
+            throw new Error(result.description || 'Error al enviar a Telegram');
+          }
+
+          console.log('Comprobante enviado a Telegram correctamente');
+          return true;
+          
+        } catch (error) {
+          console.error('Error detallado en sendToTelegramBot:', error);
+          throw error;
+        }
+      }
+
+      sendReceipt.addEventListener('click', async () => {
+        const file = receiptFile.files[0];
+        const amount = parseFloat(rechargeAmount.value);
+        
+        if (!file) {
+          alert('Por favor selecciona un comprobante');
+          return;
+        }
+        
+        if (!currentUser) {
+          alert('No hay usuario autenticado');
+          return;
+        }
+        
+        try {
+          sendReceipt.disabled = true;
+          sendReceiptText.innerHTML = '<span class="loading"></span> Enviando...';
+          
+          const reader = new FileReader();
+          reader.onload = async function(e) {
+            try {
+              const base64File = e.target.result.split(',')[1];
+              const fileType = file.type;
+              
+              await addDoc(rechargeCollection, {
+                userId: currentUser.uid,
+                email: currentUser.email,
+                amount: amount,
+                status: 'pending',
+                receiptFile: base64File,
+                fileType: fileType,
+                createdAt: serverTimestamp()
+              });
+              
+              if (telegramConfigData.botToken && telegramConfigData.chatId) {
+                await sendToTelegramBot(currentUser.email, amount, base64File, fileType);
+              }
+              
+              alert('✅ Comprobante enviado correctamente. Tu recarga será procesada en breve.');
+              
+            } catch (error) {
+              console.error('Error al procesar:', error);
+              alert('❌ Error al enviar comprobante: ' + (error.message || 'Por favor intenta nuevamente'));
+            } finally {
+              sendReceipt.disabled = false;
+              sendReceiptText.textContent = 'Enviar Comprobante';
+              
+              receiptFile.value = '';
+              paymentDetails.style.display = 'none';
+              receiptSection.style.display = 'none';
+              rechargeAmount.value = '';
+            }
+          };
+          
+          reader.onerror = () => {
+            throw new Error('Error al leer el archivo');
+          };
+          
+          reader.readAsDataURL(file);
+          
+        } catch (error) {
+          console.error('Error en el evento click:', error);
+          alert('❌ Error: ' + (error.message || 'Ocurrió un error inesperado'));
+          
+          sendReceipt.disabled = false;
+          sendReceiptText.textContent = 'Enviar Comprobante';
+        }
+      });
+
+      // Search user for admin
+      adminSearchButton.addEventListener('click', async () => {
+        const email = adminSearchUser.value.trim();
+        if (!email) {
+          showAdminMessage('Por favor ingresa un email', 'error');
+          return;
+        }
+        
+        try {
+          adminSearchButton.disabled = true;
+          adminSearchButton.innerHTML = '<span class="loading"></span> Buscando...';
+          
+          const q = query(usersCollection, where("email", "==", email));
+          const querySnapshot = await getDocs(q);
+          
+          if (querySnapshot.empty) {
+            showAdminMessage('Usuario no encontrado', 'error');
+            userInfoSection.style.display = 'none';
+            return;
+          }
+          
+          const userDoc = querySnapshot.docs[0];
+          const userData = userDoc.data();
+          
+          adminUserEmail.textContent = userData.email;
+          adminUserCredits.textContent = userData.credits?.toFixed(2) || '0.00';
+          adminUserId.textContent = userDoc.id;
+          userInfoSection.style.display = 'block';
+          adminMessage.textContent = '';
+          
+          if (currentUserData?.isAdmin) {
+            showAdminMessage('Usuario encontrado. Puedes modificar sus créditos.', 'success');
+          }
+          
+        } catch (error) {
+          console.error('Error searching user:', error);
+          showAdminMessage('Error al buscar usuario', 'error');
+        } finally {
+          adminSearchButton.disabled = false;
+          adminSearchButton.textContent = 'Buscar';
+        }
+      });
+
+      // Función para mostrar mensajes en el panel admin
+      function showAdminMessage(message, type) {
+        adminMessage.textContent = message;
+        adminMessage.style.color = type === 'error' ? 'var(--danger)' : 'var(--success)';
+      }
+
+      // Apply admin action
+      adminApplyAction.addEventListener('click', async () => {
+        const userId = adminUserId.textContent;
+        if (!userId) {
+          showAdminMessage('Primero busca un usuario', 'error');
+          return;
+        }
+        
+        const amount = parseFloat(adminCreditAmount.value);
+        if (isNaN(amount) || amount < 0) {
+          showAdminMessage('Ingresa una cantidad válida', 'error');
+          return;
+        }
+        
+        const action = adminActionType.value;
+        const userRef = doc(db, "users", userId);
+        
+        try {
+          adminApplyAction.disabled = true;
+          adminApplyAction.innerHTML = '<span class="loading"></span> Procesando...';
+          
+          if (!currentUserData?.isAdmin) {
+            throw new Error('Solo los administradores pueden realizar esta acción');
+          }
+          
+          let message = '';
+          if (action === 'add') {
+            await updateDoc(userRef, {
+              credits: increment(amount)
+            });
+            message = `✅ Se agregaron $${amount.toFixed(2)} créditos al usuario`;
+          } 
+          else if (action === 'subtract') {
+            const userDoc = await getDoc(userRef);
+            const currentCredits = userDoc.data()?.credits || 0;
+            if (currentCredits < amount) {
+              throw new Error('No se puede restar más créditos de los que tiene el usuario');
+            }
+            
+            await updateDoc(userRef, {
+              credits: increment(-amount)
+            });
+            message = `✅ Se restaron $${amount.toFixed(2)} créditos al usuario`;
+          }
+          else {
+            await updateDoc(userRef, {
+              credits: amount
+            });
+            message = `✅ Se establecieron $${amount.toFixed(2)} créditos al usuario`;
+          }
+          
+          showAdminMessage(message, 'success');
+          
+          const userDoc = await getDoc(userRef);
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            adminUserCredits.textContent = userData.credits?.toFixed(2) || '0.00';
+          }
+          
+        } catch (error) {
+          console.error('Error updating credits:', error);
+          showAdminMessage(`❌ Error: ${error.message}`, 'error');
+        } finally {
+          adminApplyAction.disabled = false;
+          adminApplyAction.textContent = 'Aplicar Cambios';
+        }
+      });
+
+      // Add new card
+      addCardButton.addEventListener('click', () => {
+        modalTitle.textContent = 'Add New Card';
+        cardForm.reset();
+        cardIdInput.value = '';
+        document.getElementById('modalPrice').value = (Math.random() * 49 + 1).toFixed(2);
+        cardModal.style.display = 'flex';
+      });
+
+      // Edit card
+      async function editCard(id) {
+        const cardDoc = await getDoc(doc(db, "cards", id));
+        
+        if (cardDoc.exists()) {
+          const card = cardDoc.data();
+          modalTitle.textContent = 'Edit Card';
+          cardIdInput.value = id;
+          document.getElementById('modalType').value = card.type;
+          document.getElementById('modalNumber').value = card.number;
+          document.getElementById('modalExpDate').value = card.expDate;
+          document.getElementById('modalCvv').value = card.cvv;
+          document.getElementById('modalName').value = card.name;
+          document.getElementById('modalCountry').value = card.country;
+          document.getElementById('modalZip').value = card.zip;
+          document.getElementById('modalPrice').value = card.price?.toFixed(2) || (Math.random() * 49 + 1).toFixed(2);
+          cardModal.style.display = 'flex';
+        }
+      }
+
+      // Delete card
+      async function deleteCard(id) {
+        if (confirm('Are you sure you want to delete this card?')) {
+          await deleteDoc(doc(db, "cards", id));
+        }
+      }
+
+      // Save card (add or update)
+      cardForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const id = cardIdInput.value;
+        const cardData = {
+          type: document.getElementById('modalType').value,
+          number: document.getElementById('modalNumber').value,
+          expDate: document.getElementById('modalExpDate').value,
+          cvv: document.getElementById('modalCvv').value,
+          name: document.getElementById('modalName').value,
+          country: document.getElementById('modalCountry').value,
+          zip: document.getElementById('modalZip').value,
+          price: parseFloat(document.getElementById('modalPrice').value) || (Math.random() * 49 + 1),
+          state: "Active",
+          result: "Success",
+          createdAt: serverTimestamp()
+        };
+
+        try {
+          if (id) {
+            await updateDoc(doc(db, "cards", id), cardData);
+          } else {
+            await addDoc(cardsCollection, cardData);
+          }
+          cardModal.style.display = 'none';
+        } catch (error) {
+          console.error("Error saving card:", error);
+          alert("Error saving card. Please try again.");
+        }
+      });
+
+      // Close modal
+      closeModal.addEventListener('click', () => {
+        cardModal.style.display = 'none';
+      });
+
+      cancelModal.addEventListener('click', () => {
+        cardModal.style.display = 'none';
+      });
+
+      // Process TXT file
+      async function processTxtFile(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            const content = e.target.result;
+            const lines = content.split('\n');
+            const importedCards = [];
+            let errors = 0;
+            
+            lines.forEach((line, index) => {
+              line = line.trim();
+              if (line) {
+                const parts = line.split('|').map(part => part.trim());
+                if (parts.length >= 7) {
+                  if (parts[1].length < 16 || isNaN(parts[1])) {
+                    errors++;
+                    return;
+                  }
+                  
+                  const price = parts.length >= 8 ? parseFloat(parts[7]) || (Math.random() * 49 + 1) : (Math.random() * 49 + 1);
+                  
+                  importedCards.push({
+                    type: parts[0],
+                    number: parts[1],
+                    expDate: parts[2],
+                    cvv: parts[3],
+                    name: parts[4],
+                    country: parts[5],
+                    zip: parts[6],
+                    price: price,
+                    state: "Active",
+                    result: "Imported",
+                    createdAt: serverTimestamp()
+                  });
+                } else {
+                  errors++;
+                }
+              }
+            });
+            
+            resolve({ cards: importedCards, errors });
+          };
+          
+          reader.onerror = reject;
+          reader.readAsText(file);
+        });
+      }
+
+      // Import cards from TXT
+      importButton.addEventListener('click', async () => {
+        const file = fileInput.files[0];
+        if (!file) {
+          alert('Por favor selecciona un archivo TXT');
+          return;
+        }
+
+        try {
+          const { cards: importedCards, errors } = await processTxtFile(file);
+          
+          if (importedCards.length === 0 && errors > 0) {
+            alert('No se pudieron importar tarjetas. Verifica el formato del archivo.');
+            return;
+          }
+          
+          for (const card of importedCards) {
+            await addDoc(cardsCollection, card);
+          }
+          
+          const message = `Se importaron ${importedCards.length} tarjetas correctamente`;
+          const errorMessage = errors > 0 ? ` (${errors} líneas con errores)` : '';
+          alert(message + errorMessage);
+          
+          fileInput.value = '';
+        } catch (error) {
+          console.error('Error al importar:', error);
+          alert('Error al procesar el archivo. Verifica el formato.');
+        }
+      });
+
+      // Download template
+      downloadTemplate.addEventListener('click', (e) => {
+        e.preventDefault();
+        const content = "VISA|4111111111111111|12/2025|123|Nombre|País|Zip|1.50\nMasterCard|5555555555554444|06/2024|456|Nombre|País|Zip|25.00";
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'plantilla_tarjetas.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      // Pagination controls
+      prevPageButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          loadCards();
+        }
+      });
+
+      nextPageButton.addEventListener('click', () => {
+        currentPage++;
         loadCards();
-      }
-    });
+      });
 
-    nextPageButton.addEventListener('click', () => {
-      currentPage++;
-      loadCards();
-    });
+      // Cards per page change
+      cardsPerPageSelect.addEventListener('change', () => {
+        cardsPerPage = parseInt(cardsPerPageSelect.value);
+        currentPage = 1;
+        loadCards();
+      });
 
-    // Cards per page change
-    cardsPerPageSelect.addEventListener('change', () => {
-      cardsPerPage = parseInt(cardsPerPageSelect.value);
-      currentPage = 1;
-      loadCards();
-    });
+      // Automatic search when filters change
+      filterBin.addEventListener('input', () => {
+        currentPage = 1;
+        loadCards();
+      });
 
-    // Automatic search when filters change
-    filterBin.addEventListener('input', () => {
-      currentPage = 1;
-      loadCards();
-    });
+      filterCountry.addEventListener('change', () => {
+        currentPage = 1;
+        loadCards();
+      });
 
-    filterCountry.addEventListener('change', () => {
-      currentPage = 1;
-      loadCards();
-    });
+      filterState.addEventListener('change', () => {
+        currentPage = 1;
+        loadCards();
+      });
 
-    filterState.addEventListener('change', () => {
-      currentPage = 1;
-      loadCards();
-    });
+      // Price filter changes
+      minPrice.addEventListener('input', () => {
+        currentPage = 1;
+        loadCards();
+      });
 
-    // Price filter changes
-    minPrice.addEventListener('input', () => {
-      currentPage = 1;
-      loadCards();
-    });
+      maxPrice.addEventListener('input', () => {
+        currentPage = 1;
+        loadCards();
+      });
+    }
 
-    maxPrice.addEventListener('input', () => {
-      currentPage = 1;
-      loadCards();
+    // Iniciar la aplicación
+    loadFirebase().catch(error => {
+      console.error("Error al cargar Firebase:", error);
+      document.getElementById("auth-message").textContent = "Error al cargar la aplicación. Por favor recarga la página.";
     });
   </script>
 </body>
