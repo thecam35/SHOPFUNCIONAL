@@ -1105,6 +1105,213 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+
+    /* New styles for recharge requests section */
+    .recharge-requests-section {
+      margin-top: 40px;
+      background: rgba(5, 5, 16, 0.6);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(0, 247, 255, 0.1);
+      display: none;
+    }
+
+    .recharge-requests-section h3 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-weight: 300;
+      font-size: 1.3rem;
+      letter-spacing: 1px;
+    }
+
+    .recharge-requests-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: rgba(5, 5, 16, 0.6);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .recharge-requests-table th {
+      background: linear-gradient(to right, rgba(123, 45, 255, 0.2), rgba(0, 247, 255, 0.2));
+      color: var(--primary);
+      font-weight: 500;
+      padding: 15px;
+      text-align: left;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+    }
+
+    .recharge-requests-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid rgba(0, 247, 255, 0.05);
+      color: var(--light);
+      font-size: 0.9rem;
+    }
+
+    .recharge-requests-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .recharge-requests-table tr:hover td {
+      background: rgba(0, 247, 255, 0.05);
+    }
+
+    .recharge-status-pending {
+      color: var(--warning);
+    }
+
+    .recharge-status-approved {
+      color: var(--success);
+    }
+
+    .recharge-status-rejected {
+      color: var(--danger);
+    }
+
+    .approve-recharge-btn {
+      background: linear-gradient(135deg, var(--success), #00cc88);
+      color: var(--darker);
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-right: 5px;
+    }
+
+    .reject-recharge-btn {
+      background: linear-gradient(135deg, var(--danger), #ff2d7b);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    /* Double Recharge Loader Styles */
+    #doubleRechargeLoader {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(5, 5, 16, 0.95);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .double-recharge-content {
+      background: rgba(10, 10, 26, 0.95);
+      padding: 40px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+      box-shadow: 0 0 50px rgba(0, 247, 255, 0.3);
+      border: 2px solid var(--primary);
+      position: relative;
+      animation: pulseGlow 2s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 30px rgba(0, 247, 255, 0.3); }
+      100% { box-shadow: 0 0 50px rgba(0, 247, 255, 0.7); }
+    }
+
+    .double-recharge-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: var(--light);
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .double-recharge-close:hover {
+      color: var(--primary);
+      transform: rotate(90deg);
+    }
+
+    .double-recharge-title {
+      color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      animation: neon-glow 3s ease-in-out infinite;
+    }
+
+    .double-recharge-subtitle {
+      color: var(--light);
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+
+    .double-recharge-highlight {
+      color: var(--success);
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+
+    .double-recharge-date {
+      color: var(--warning);
+      font-weight: bold;
+      margin: 20px 0;
+      font-size: 1.3rem;
+    }
+
+    .double-recharge-loader {
+      width: 80px;
+      height: 80px;
+      margin: 30px auto;
+      border: 8px solid rgba(0, 247, 255, 0.2);
+      border-top: 8px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1.5s linear infinite;
+    }
+
+    .double-recharge-button {
+      background: linear-gradient(135deg, var(--success), #00cc88);
+      color: var(--darker);
+      border: none;
+      padding: 15px 40px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 5px 20px rgba(0, 255, 157, 0.4);
+      margin-top: 20px;
+    }
+
+    .double-recharge-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 255, 157, 0.6);
+    }
+
+    .double-recharge-note {
+      color: rgba(224, 224, 255, 0.7);
+      font-size: 0.9rem;
+      margin-top: 30px;
+      font-style: italic;
+    }
     
     @media (max-width: 768px) {
       .container {
@@ -1144,10 +1351,43 @@
         display: block;
         overflow-x: auto;
       }
+
+      .double-recharge-content {
+        padding: 30px 20px;
+      }
+
+      .double-recharge-title {
+        font-size: 1.5rem;
+      }
+
+      .double-recharge-subtitle {
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Double Recharge Loader -->
+  <div id="doubleRechargeLoader">
+    <div class="double-recharge-content">
+      <button class="double-recharge-close" id="closeDoubleRecharge">&times;</button>
+      <h2 class="double-recharge-title">OFERTA ESPECIAL</h2>
+      <p class="double-recharge-subtitle">Recarga tu wallet y recibe el <span class="double-recharge-highlight">DOBLE</span> de lo recargado</p>
+      
+      <div class="double-recharge-loader"></div>
+      
+      <p class="double-recharge-date">Válido hasta el 30 de Diciembre 2025</p>
+      
+      <p>Recarga mínima: <span class="double-recharge-highlight">$30 USD</span></p>
+      <p>Recarga $50 y obtén $100 en créditos</p>
+      <p>Recarga $100 y obtén $200 en créditos</p>
+      
+      <button class="double-recharge-button" id="continueToRecharge">Deseo Recarga Doble</button>
+      
+      <p class="double-recharge-note">* Oferta válida solo para recargas de $30 USD o más</p>
+    </div>
+  </div>
+
   <div id="auth-section" class="auth-section animate__animated animate__fadeIn">
     <h2>Iniciar Sesión</h2>
     <form id="authForm" class="auth-form">
@@ -1176,6 +1416,10 @@
       <div class="sidebar-item" id="adminPanelButton" style="display: none;">
         <span class="sidebar-icon">⚙️</span>
         <span>Panel de Admin</span>
+      </div>
+      <div class="sidebar-item" id="rechargeRequestsButton" style="display: none;">
+        <span class="sidebar-icon">📋</span>
+        <span>Solicitudes de Recarga</span>
       </div>
       <div class="sidebar-item" id="logoutButton">
         <span class="sidebar-icon">×</span>
@@ -1393,6 +1637,26 @@
           <p id="adminMessage" style="margin-top: 10px;"></p>
         </div>
       </div>
+
+      <!-- Nueva sección para solicitudes de recarga -->
+      <div id="rechargeRequestsSection" class="recharge-requests-section">
+        <h3>Solicitudes de Recarga Recientes</h3>
+        <table class="recharge-requests-table">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Email</th>
+              <th>Monto</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="rechargeRequestsTableBody">
+            <!-- Las solicitudes de recarga se cargarán aquí -->
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
     
@@ -1481,7 +1745,9 @@
       increment,
       getDoc,
       setDoc,
-      writeBatch
+      writeBatch,
+      orderBy,
+      limit
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
     // Firebase configuration
@@ -1516,6 +1782,7 @@
     const profileButton = document.getElementById("profileButton");
     const adminPanelButton = document.getElementById("adminPanelButton");
     const rechargeButton = document.getElementById("rechargeButton");
+    const rechargeRequestsButton = document.getElementById("rechargeRequestsButton");
     
     const cardsTableBody = document.getElementById("cardsTableBody");
     const historyTableBody = document.getElementById("historyTableBody");
@@ -1578,6 +1845,15 @@
     const adminApplyAction = document.getElementById("adminApplyAction");
     const adminMessage = document.getElementById("adminMessage");
 
+    // Recharge requests elements
+    const rechargeRequestsSection = document.getElementById("rechargeRequestsSection");
+    const rechargeRequestsTableBody = document.getElementById("rechargeRequestsTableBody");
+
+    // Double recharge elements
+    const doubleRechargeLoader = document.getElementById("doubleRechargeLoader");
+    const closeDoubleRecharge = document.getElementById("closeDoubleRecharge");
+    const continueToRecharge = document.getElementById("continueToRecharge");
+
     // Telegram configuration
     let telegramConfigData = {
       botToken: '',
@@ -1596,9 +1872,38 @@
     let unsubscribeHistory;
     let unsubscribeUser;
     let unsubscribeConfig;
+    let unsubscribeRechargeRequests;
 
     // Countries
     let allCountries = new Set(['All']);
+
+    // Show double recharge loader
+    function showDoubleRechargeLoader() {
+      doubleRechargeLoader.style.display = 'flex';
+    }
+
+    // Hide double recharge loader
+    function hideDoubleRechargeLoader() {
+      doubleRechargeLoader.style.display = 'none';
+    }
+
+    // Close double recharge loader
+    closeDoubleRecharge.addEventListener('click', hideDoubleRechargeLoader);
+
+    // Continue to recharge page
+    continueToRecharge.addEventListener('click', () => {
+      hideDoubleRechargeLoader();
+      mainCardsSection.style.display = "none";
+      rechargeSection.style.display = "block";
+      profileSection.style.display = "none";
+      adminPanelSection.style.display = "none";
+      rechargeRequestsSection.style.display = "none";
+      
+      document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      rechargeButton.classList.add('active');
+    });
 
     // Toggle between login and register
     toggleAuth.addEventListener("click", () => {
@@ -1642,15 +1947,7 @@
     buyCardsButton.addEventListener("click", showCardsSection);
     
     rechargeButton.addEventListener("click", () => {
-      mainCardsSection.style.display = "none";
-      rechargeSection.style.display = "block";
-      profileSection.style.display = "none";
-      adminPanelSection.style.display = "none";
-      
-      document.querySelectorAll('.sidebar-item').forEach(item => {
-        item.classList.remove('active');
-      });
-      rechargeButton.classList.add('active');
+      showDoubleRechargeLoader();
     });
     
     profileButton.addEventListener("click", () => {
@@ -1658,6 +1955,7 @@
       rechargeSection.style.display = "none";
       profileSection.style.display = "block";
       adminPanelSection.style.display = "none";
+      rechargeRequestsSection.style.display = "none";
       
       document.querySelectorAll('.sidebar-item').forEach(item => {
         item.classList.remove('active');
@@ -1683,6 +1981,7 @@
       rechargeSection.style.display = "none";
       profileSection.style.display = "none";
       adminPanelSection.style.display = "block";
+      rechargeRequestsSection.style.display = "none";
       
       document.querySelectorAll('.sidebar-item').forEach(item => {
         item.classList.remove('active');
@@ -1693,12 +1992,29 @@
       userInfoSection.style.display = "none";
     });
 
+    // Recharge requests button click
+    rechargeRequestsButton.addEventListener("click", () => {
+      mainCardsSection.style.display = "none";
+      rechargeSection.style.display = "none";
+      profileSection.style.display = "none";
+      adminPanelSection.style.display = "none";
+      rechargeRequestsSection.style.display = "block";
+      
+      document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      rechargeRequestsButton.classList.add('active');
+      
+      loadRechargeRequests();
+    });
+
     // Show cards section
     function showCardsSection() {
       mainCardsSection.style.display = "block";
       rechargeSection.style.display = "none";
       profileSection.style.display = "none";
       adminPanelSection.style.display = "none";
+      rechargeRequestsSection.style.display = "none";
       
       document.querySelectorAll('.sidebar-item').forEach(item => {
         item.classList.remove('active');
@@ -1728,6 +2044,7 @@
         if (unsubscribeHistory) unsubscribeHistory();
         if (unsubscribeUser) unsubscribeUser();
         if (unsubscribeConfig) unsubscribeConfig();
+        if (unsubscribeRechargeRequests) unsubscribeRechargeRequests();
       }
     });
 
@@ -1775,9 +2092,11 @@
     function updateAdminVisibility() {
       if (currentUserData?.isAdmin) {
         adminPanelButton.style.display = 'flex';
+        rechargeRequestsButton.style.display = 'flex';
       } else {
         adminPanelButton.style.display = 'none';
-        if (adminPanelSection.style.display === 'block') {
+        rechargeRequestsButton.style.display = 'none';
+        if (adminPanelSection.style.display === 'block' || rechargeRequestsSection.style.display === 'block') {
           showCardsSection();
         }
       }
@@ -1842,6 +2161,111 @@
         }
         
         renderCards(cards);
+      });
+    }
+
+    // Load recharge requests
+    function loadRechargeRequests() {
+      if (!currentUser || !currentUserData?.isAdmin) return;
+      
+      const q = query(rechargeCollection, orderBy("createdAt", "desc"), limit(50));
+      unsubscribeRechargeRequests = onSnapshot(q, (snapshot) => {
+        const requests = [];
+        snapshot.forEach(doc => {
+          requests.push({ id: doc.id, ...doc.data() });
+        });
+        renderRechargeRequests(requests);
+      });
+    }
+
+    // Render recharge requests to the table
+    function renderRechargeRequests(requests) {
+      rechargeRequestsTableBody.innerHTML = '';
+      
+      requests.forEach(request => {
+        const row = document.createElement('tr');
+        const date = request.createdAt?.toDate ? request.createdAt.toDate() : new Date();
+        const formattedDate = date.toLocaleString();
+        
+        let statusClass = '';
+        if (request.status === 'pending') {
+          statusClass = 'recharge-status-pending';
+        } else if (request.status === 'approved') {
+          statusClass = 'recharge-status-approved';
+        } else if (request.status === 'rejected') {
+          statusClass = 'recharge-status-rejected';
+        }
+        
+        row.innerHTML = `
+          <td>${request.userId}</td>
+          <td>${request.email}</td>
+          <td>$${request.amount?.toFixed(2) || '0.00'}</td>
+          <td>${formattedDate}</td>
+          <td class="${statusClass}">${request.status || 'pending'}</td>
+          <td>
+            ${request.status === 'pending' ? `
+              <button class="approve-recharge-btn" data-id="${request.id}" data-user-id="${request.userId}" data-amount="${request.amount}">Aprobar</button>
+              <button class="reject-recharge-btn" data-id="${request.id}">Rechazar</button>
+            ` : ''}
+          </td>
+        `;
+        rechargeRequestsTableBody.appendChild(row);
+      });
+
+      // Add event listeners to approve buttons
+      document.querySelectorAll('.approve-recharge-btn').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const requestId = e.target.getAttribute('data-id');
+          const userId = e.target.getAttribute('data-user-id');
+          const amount = parseFloat(e.target.getAttribute('data-amount'));
+          
+          try {
+            const batch = writeBatch(db);
+            
+            // Update the request status
+            const requestRef = doc(db, "rechargeRequests", requestId);
+            batch.update(requestRef, {
+              status: 'approved',
+              processedAt: serverTimestamp(),
+              processedBy: currentUser.uid
+            });
+            
+            // Add credits to user
+            const userRef = doc(db, "users", userId);
+            batch.update(userRef, {
+              credits: increment(amount)
+            });
+            
+            await batch.commit();
+            
+            alert(`Recarga aprobada y $${amount.toFixed(2)} créditos añadidos al usuario`);
+          } catch (error) {
+            console.error('Error al aprobar recarga:', error);
+            alert('Error al aprobar la recarga: ' + error.message);
+          }
+        });
+      });
+
+      // Add event listeners to reject buttons
+      document.querySelectorAll('.reject-recharge-btn').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const requestId = e.target.getAttribute('data-id');
+          
+          if (confirm('¿Estás seguro de que deseas rechazar esta solicitud de recarga?')) {
+            try {
+              await updateDoc(doc(db, "rechargeRequests", requestId), {
+                status: 'rejected',
+                processedAt: serverTimestamp(),
+                processedBy: currentUser.uid
+              });
+              
+              alert('Solicitud de recarga rechazada');
+            } catch (error) {
+              console.error('Error al rechazar recarga:', error);
+              alert('Error al rechazar la recarga: ' + error.message);
+            }
+          }
+        });
       });
     }
 
@@ -2520,8 +2944,17 @@
       currentPage = 1;
       loadCards();
     });
+
+    // Show double recharge loader on page load
+    window.addEventListener('load', () => {
+      // Show the loader only if it's the first visit or based on some condition
+      // For now, we'll show it on every page load for demonstration
+      // In a real app, you might want to use localStorage to track if it's been shown
+      showDoubleRechargeLoader();
+    });
   </script>
 </body>
 </html>
+
 
 
