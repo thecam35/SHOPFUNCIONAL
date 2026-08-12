@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QUATUM SHOP 2 015.2000</title>
+  <title>QUATUM SHOP 2.01.2</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -118,7 +118,7 @@
     
     .auth-card .brand .logo-icon {
       display: inline-block;
-      font-size: 2.4rem;
+      font-size: 1.8rem;
       font-weight: 800;
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       -webkit-background-clip: text;
@@ -552,7 +552,7 @@
       color: var(--success);
     }
     
-    .vercel-badge {
+    .badge {
       display: inline-block;
       background: rgba(0, 0, 0, 0.6);
       color: #fff;
@@ -723,6 +723,11 @@
       color: var(--success);
     }
     
+    .report-button {
+      background: rgba(255, 204, 0, 0.15);
+      color: var(--warning);
+    }
+    
     .pagination {
       display: flex;
       justify-content: space-between;
@@ -811,7 +816,7 @@
       background: rgba(0, 247, 255, 0.02);
     }
     
-    .recharge-section, .profile-section, .admin-panel-section, .recharge-requests-section {
+    .recharge-section, .profile-section, .admin-panel-section, .recharge-requests-section, .tickets-section {
       display: none;
       background: rgba(5, 5, 16, 0.5);
       padding: 30px;
@@ -820,7 +825,7 @@
       border: 1px solid rgba(0, 247, 255, 0.06);
     }
     
-    .recharge-section h2, .profile-section h2, .admin-panel-section h2 {
+    .recharge-section h2, .profile-section h2, .admin-panel-section h2, .tickets-section h2 {
       color: var(--primary);
       margin-bottom: 25px;
       font-weight: 300;
@@ -1083,7 +1088,7 @@
       to { transform: rotate(360deg); }
     }
     
-    .recharge-requests-table {
+    .recharge-requests-table, .tickets-table {
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
@@ -1092,7 +1097,7 @@
       overflow: hidden;
     }
     
-    .recharge-requests-table th {
+    .recharge-requests-table th, .tickets-table th {
       background: rgba(123, 45, 255, 0.06);
       color: var(--gray);
       font-weight: 600;
@@ -1104,7 +1109,7 @@
       border-bottom: 1px solid rgba(0, 247, 255, 0.06);
     }
     
-    .recharge-requests-table td {
+    .recharge-requests-table td, .tickets-table td {
       padding: 12px 16px;
       text-align: left;
       border-bottom: 1px solid rgba(0, 247, 255, 0.04);
@@ -1112,21 +1117,17 @@
       font-size: 0.85rem;
     }
     
-    .recharge-requests-table tr:last-child td {
+    .recharge-requests-table tr:last-child td, .tickets-table tr:last-child td {
       border-bottom: none;
     }
     
-    .recharge-status-pending {
-      color: var(--warning);
-    }
+    .recharge-status-pending { color: var(--warning); }
+    .recharge-status-approved { color: var(--success); }
+    .recharge-status-rejected { color: var(--danger); }
     
-    .recharge-status-approved {
-      color: var(--success);
-    }
-    
-    .recharge-status-rejected {
-      color: var(--danger);
-    }
+    .ticket-status-open { color: var(--warning); }
+    .ticket-status-resolved { color: var(--success); }
+    .ticket-status-rejected { color: var(--danger); }
     
     .approve-recharge-btn {
       background: rgba(0, 255, 157, 0.15);
@@ -1155,7 +1156,34 @@
       transition: all 0.3s ease;
     }
     
-    .reject-recharge-btn:hover {
+    .resolve-ticket-btn {
+      background: rgba(0, 255, 157, 0.15);
+      color: var(--success);
+      border: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-right: 4px;
+    }
+    
+    .resolve-ticket-btn:hover {
+      background: rgba(0, 255, 157, 0.25);
+    }
+    
+    .reject-ticket-btn {
+      background: rgba(255, 56, 96, 0.15);
+      color: var(--danger);
+      border: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .reject-ticket-btn:hover {
       background: rgba(255, 56, 96, 0.25);
     }
     
@@ -1369,7 +1397,8 @@
     }
     
     .form-group input,
-    .form-group select {
+    .form-group select,
+    .form-group textarea {
       width: 100%;
       padding: 12px 16px;
       background: rgba(5, 5, 16, 0.7);
@@ -1378,10 +1407,17 @@
       color: var(--light);
       font-size: 0.9rem;
       transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
     }
     
     .form-group input:focus,
-    .form-group select:focus {
+    .form-group select:focus,
+    .form-group textarea:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(0, 247, 255, 0.08);
       outline: none;
@@ -1502,6 +1538,18 @@
       font-size: 0.9rem;
     }
     
+    .ticket-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    
+    .ticket-badge.open { background: rgba(255, 204, 0, 0.2); color: var(--warning); }
+    .ticket-badge.resolved { background: rgba(0, 255, 157, 0.2); color: var(--success); }
+    .ticket-badge.rejected { background: rgba(255, 56, 96, 0.2); color: var(--danger); }
+    
     @media (max-width: 768px) {
       .sidebar {
         width: 100%;
@@ -1540,7 +1588,7 @@
         width: 100%;
       }
       
-      .cards-table, .history-table, .recharge-requests-table {
+      .cards-table, .history-table, .recharge-requests-table, .tickets-table {
         display: block;
         overflow-x: auto;
       }
@@ -1583,36 +1631,32 @@
     </div>
   </div>
 
-  <!-- AUTH SECTION - PROFESSIONAL -->
+  <!-- AUTH SECTION -->
   <div id="auth-section" class="auth-section animate__animated animate__fadeIn">
     <div class="auth-card">
       <div class="brand">
-        <span class="logo-icon">QUATUM SHOP CC 2.01.2</span>
-        <span class="logo-sub">Cards Market</span>
+        <span class="logo-icon">⚡ QUATUM SHOP</span>
+        <span class="logo-sub">Cards Market v2.01.2</span>
         <h2 id="authTitle">Bienvenido</h2>
         <p id="authSubtitle">Inicia sesión para acceder a tu cuenta</p>
       </div>
       
       <form id="authForm" class="auth-form">
-        <!-- Username / Email -->
         <div class="form-group">
           <label>Correo electrónico</label>
           <input type="email" id="email" placeholder="tu@email.com" required>
         </div>
         
-        <!-- Password -->
         <div class="form-group">
           <label>Contraseña</label>
           <input type="password" id="password" placeholder="••••••••" required>
         </div>
         
-        <!-- Password confirmation (solo registro) -->
         <div class="form-group" id="passwordConfirmGroup" style="display: none;">
           <label>Confirmar Contraseña</label>
           <input type="password" id="passwordConfirm" placeholder="••••••••">
         </div>
         
-        <!-- Options row -->
         <div class="form-options">
           <label>
             <input type="checkbox" id="rememberMe"> Recordarme
@@ -1620,22 +1664,18 @@
           <a href="#" id="forgotPassword">¿Olvidaste tu contraseña?</a>
         </div>
         
-        <!-- Captcha -->
         <div class="captcha-row">
           <span class="captcha-box" id="captchaDisplay">9 + 1</span>
           <input type="text" id="captchaInput" placeholder="Resultado" autocomplete="off">
           <button type="button" class="refresh-captcha" id="refreshCaptcha">⟳</button>
         </div>
         
-        <!-- Submit Button -->
         <button type="submit" class="btn-primary" id="authSubmitBtn">Iniciar Sesión</button>
         
-        <!-- Divider -->
         <div class="divider">
           <span>o</span>
         </div>
         
-        <!-- Switch between login/register -->
         <div class="auth-switch">
           <span id="authSwitchText">¿No tienes cuenta?</span>
           <a id="toggleAuthLink">Regístrate</a>
@@ -1650,7 +1690,7 @@
   <div id="app-container" class="container" style="display: none;">
     <div class="sidebar">
       <div class="sidebar-brand">
-        <span>QUATUM SHOP</span>
+        <span>⚡ QUATUM</span>
         <small>Cards Market</small>
       </div>
       
@@ -1666,13 +1706,21 @@
         <span class="sidebar-icon">👤</span>
         <span>Mi Perfil</span>
       </div>
+      <div class="sidebar-item" id="ticketsButton">
+        <span class="sidebar-icon">🎫</span>
+        <span>Mis Tickets</span>
+      </div>
       <div class="sidebar-item" id="adminPanelButton" style="display: none;">
         <span class="sidebar-icon">⚙️</span>
-        <span>Panel de Admin</span>
+        <span>Panel Admin</span>
       </div>
       <div class="sidebar-item" id="rechargeRequestsButton" style="display: none;">
         <span class="sidebar-icon">📋</span>
-        <span>Solicitudes</span>
+        <span>Recargas</span>
+      </div>
+      <div class="sidebar-item" id="adminTicketsButton" style="display: none;">
+        <span class="sidebar-icon">🎫</span>
+        <span>Tickets <span id="ticketBadge" style="background: var(--danger); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 0.6rem; margin-left: 6px; display: none;">0</span></span>
       </div>
       <div class="sidebar-item" id="logoutButton" style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 16px; border-radius: 0;">
         <span class="sidebar-icon">🚪</span>
@@ -1684,7 +1732,7 @@
       <!-- MAIN CARDS SECTION -->
       <div id="mainCardsSection">
         <div class="header">
-          <h2>🃏 Cards Market <span class="vercel-badge">QUATUM SHOP</span></h2>
+          <h2>🃏 Cards Market <span class="badge">QUATUM SHOP</span></h2>
           <div>
             <span class="credits-display">
               <span class="credits-icon">$</span>
@@ -1761,7 +1809,6 @@
             </tr>
           </thead>
           <tbody id="cardsTableBody">
-            <!-- Cards loaded here -->
           </tbody>
         </table>
         
@@ -1789,7 +1836,6 @@
               </tr>
             </thead>
             <tbody id="historyTableBody">
-              <!-- History loaded here -->
             </tbody>
           </table>
         </div>
@@ -1850,6 +1896,63 @@
         </div>
       </div>
 
+      <!-- TICKETS SECTION (USER) -->
+      <div id="ticketsSection" class="tickets-section">
+        <h2>🎫 Mis Tickets</h2>
+        
+        <div style="margin-bottom: 20px;">
+          <button class="go-button" id="createTicketBtn">📝 Crear Ticket</button>
+        </div>
+        
+        <table class="tickets-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tarjeta</th>
+              <th>Motivo</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Respuesta</th>
+            </tr>
+          </thead>
+          <tbody id="ticketsTableBody">
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ADMIN TICKETS SECTION -->
+      <div id="adminTicketsSection" class="tickets-section" style="display: none;">
+        <h2>🎫 Gestión de Tickets</h2>
+        
+        <div class="filter-row" style="margin-bottom: 16px;">
+          <div class="filter-group">
+            <label>Filtrar por Estado</label>
+            <select id="adminTicketFilter">
+              <option value="all">Todos</option>
+              <option value="open">Abiertos</option>
+              <option value="resolved">Resueltos</option>
+              <option value="rejected">Rechazados</option>
+            </select>
+          </div>
+        </div>
+        
+        <table class="tickets-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Usuario</th>
+              <th>Tarjeta</th>
+              <th>Motivo</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="adminTicketsTableBody">
+          </tbody>
+        </table>
+      </div>
+
       <!-- ADMIN PANEL -->
       <div id="adminPanelSection" class="admin-panel-section">
         <h2>⚙️ Panel de Administración</h2>
@@ -1903,7 +2006,6 @@
             </tr>
           </thead>
           <tbody id="rechargeRequestsTableBody">
-            <!-- Requests loaded here -->
           </tbody>
         </table>
       </div>
@@ -1971,6 +2073,44 @@
     </div>
   </div>
 
+  <!-- TICKET MODAL -->
+  <div class="modal" id="ticketModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="ticketModalTitle">📝 Crear Ticket</h3>
+        <button class="close-button" id="closeTicketModal">&times;</button>
+      </div>
+      <form id="ticketForm">
+        <input type="hidden" id="ticketCardId">
+        <div class="form-group">
+          <label>Tarjeta</label>
+          <select id="ticketCardSelect" required>
+            <option value="">Selecciona una tarjeta</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Motivo del Reporte</label>
+          <select id="ticketReason" required>
+            <option value="">Selecciona un motivo</option>
+            <option value="Declinada">❌ Tarjeta declinada</option>
+            <option value="Saldo insuficiente">💳 Saldo insuficiente</option>
+            <option value="Datos incorrectos">📝 Datos incorrectos</option>
+            <option value="Ya expirada">⏰ Ya expirada</option>
+            <option value="Otro">🔧 Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Descripción detallada</label>
+          <textarea id="ticketDescription" placeholder="Describe el problema con la tarjeta..." required></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="cancel-button" id="cancelTicketModal">Cancelar</button>
+          <button type="submit" class="save-button">📤 Enviar Reporte</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { 
@@ -2018,6 +2158,7 @@
     const usersCollection = collection(db, "users");
     const rechargeCollection = collection(db, "rechargeRequests");
     const configCollection = collection(db, "config");
+    const ticketsCollection = collection(db, "tickets");
 
     // DOM Elements
     const authSection = document.getElementById("auth-section");
@@ -2033,7 +2174,6 @@
     const passwordConfirm = document.getElementById("passwordConfirm");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
-    const rememberMe = document.getElementById("rememberMe");
     const forgotPassword = document.getElementById("forgotPassword");
     const captchaDisplay = document.getElementById("captchaDisplay");
     const captchaInput = document.getElementById("captchaInput");
@@ -2044,6 +2184,9 @@
     const adminPanelButton = document.getElementById("adminPanelButton");
     const rechargeButton = document.getElementById("rechargeButton");
     const rechargeRequestsButton = document.getElementById("rechargeRequestsButton");
+    const ticketsButton = document.getElementById("ticketsButton");
+    const adminTicketsButton = document.getElementById("adminTicketsButton");
+    const ticketBadge = document.getElementById("ticketBadge");
     
     const cardsTableBody = document.getElementById("cardsTableBody");
     const historyTableBody = document.getElementById("historyTableBody");
@@ -2091,6 +2234,23 @@
     const profileJoinDate = document.getElementById("profileJoinDate");
     const profileRole = document.getElementById("profileRole");
 
+    const ticketsSection = document.getElementById("ticketsSection");
+    const ticketsTableBody = document.getElementById("ticketsTableBody");
+    const createTicketBtn = document.getElementById("createTicketBtn");
+    const ticketModal = document.getElementById("ticketModal");
+    const ticketModalTitle = document.getElementById("ticketModalTitle");
+    const ticketForm = document.getElementById("ticketForm");
+    const closeTicketModal = document.getElementById("closeTicketModal");
+    const cancelTicketModal = document.getElementById("cancelTicketModal");
+    const ticketCardSelect = document.getElementById("ticketCardSelect");
+    const ticketCardId = document.getElementById("ticketCardId");
+    const ticketReason = document.getElementById("ticketReason");
+    const ticketDescription = document.getElementById("ticketDescription");
+
+    const adminTicketsSection = document.getElementById("adminTicketsSection");
+    const adminTicketsTableBody = document.getElementById("adminTicketsTableBody");
+    const adminTicketFilter = document.getElementById("adminTicketFilter");
+
     const adminPanelSection = document.getElementById("adminPanelSection");
     const adminSearchUser = document.getElementById("adminSearchUser");
     const adminSearchButton = document.getElementById("adminSearchButton");
@@ -2121,8 +2281,11 @@
     let unsubscribeUser;
     let unsubscribeConfig;
     let unsubscribeRechargeRequests;
+    let unsubscribeTickets;
+    let unsubscribeAdminTickets;
     let allCountries = new Set(['All']);
     let captchaAnswer = 0;
+    let userPurchaseHistory = [];
 
     // Captcha
     function generateCaptcha() {
@@ -2237,6 +2400,8 @@
       profileSection.style.display = "block";
       adminPanelSection.style.display = "none";
       rechargeRequestsSection.style.display = "none";
+      ticketsSection.style.display = "none";
+      adminTicketsSection.style.display = "none";
       
       document.querySelectorAll('.sidebar-item').forEach(item => {
         item.classList.remove('active');
@@ -2255,12 +2420,49 @@
       }
     });
 
+    ticketsButton.addEventListener("click", () => {
+      mainCardsSection.style.display = "none";
+      rechargeSection.style.display = "none";
+      profileSection.style.display = "none";
+      adminPanelSection.style.display = "none";
+      rechargeRequestsSection.style.display = "none";
+      ticketsSection.style.display = "block";
+      adminTicketsSection.style.display = "none";
+      
+      document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      ticketsButton.classList.add('active');
+      
+      loadUserTickets();
+      loadUserHistoryForTickets();
+    });
+
+    adminTicketsButton.addEventListener("click", () => {
+      mainCardsSection.style.display = "none";
+      rechargeSection.style.display = "none";
+      profileSection.style.display = "none";
+      adminPanelSection.style.display = "none";
+      rechargeRequestsSection.style.display = "none";
+      ticketsSection.style.display = "none";
+      adminTicketsSection.style.display = "block";
+      
+      document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      adminTicketsButton.classList.add('active');
+      
+      loadAdminTickets();
+    });
+
     adminPanelButton.addEventListener("click", () => {
       mainCardsSection.style.display = "none";
       rechargeSection.style.display = "none";
       profileSection.style.display = "none";
       adminPanelSection.style.display = "block";
       rechargeRequestsSection.style.display = "none";
+      ticketsSection.style.display = "none";
+      adminTicketsSection.style.display = "none";
       
       document.querySelectorAll('.sidebar-item').forEach(item => {
         item.classList.remove('active');
@@ -2276,6 +2478,8 @@
       profileSection.style.display = "none";
       adminPanelSection.style.display = "none";
       rechargeRequestsSection.style.display = "block";
+      ticketsSection.style.display = "none";
+      adminTicketsSection.style.display = "none";
       
       document.querySelectorAll('.sidebar-item').forEach(item => {
         item.classList.remove('active');
@@ -2290,6 +2494,8 @@
       profileSection.style.display = "none";
       adminPanelSection.style.display = "none";
       rechargeRequestsSection.style.display = "none";
+      ticketsSection.style.display = "none";
+      adminTicketsSection.style.display = "none";
       
       document.querySelectorAll('.sidebar-item').forEach(item => {
         item.classList.remove('active');
@@ -2314,6 +2520,8 @@
       profileSection.style.display = "none";
       adminPanelSection.style.display = "none";
       rechargeRequestsSection.style.display = "none";
+      ticketsSection.style.display = "none";
+      adminTicketsSection.style.display = "none";
       
       document.querySelectorAll('.sidebar-item').forEach(item => {
         item.classList.remove('active');
@@ -2342,8 +2550,9 @@
         if (unsubscribeUser) unsubscribeUser();
         if (unsubscribeConfig) unsubscribeConfig();
         if (unsubscribeRechargeRequests) unsubscribeRechargeRequests();
+        if (unsubscribeTickets) unsubscribeTickets();
+        if (unsubscribeAdminTickets) unsubscribeAdminTickets();
         
-        // Reset auth form
         authSubmitBtn.disabled = false;
         authSubmitBtn.innerHTML = isLogin ? 'Iniciar Sesión' : 'Registrarse';
       }
@@ -2387,10 +2596,12 @@
       if (currentUserData?.isAdmin) {
         adminPanelButton.style.display = 'flex';
         rechargeRequestsButton.style.display = 'flex';
+        adminTicketsButton.style.display = 'flex';
       } else {
         adminPanelButton.style.display = 'none';
         rechargeRequestsButton.style.display = 'none';
-        if (adminPanelSection.style.display === 'block' || rechargeRequestsSection.style.display === 'block') {
+        adminTicketsButton.style.display = 'none';
+        if (adminPanelSection.style.display === 'block' || rechargeRequestsSection.style.display === 'block' || adminTicketsSection.style.display === 'block') {
           showCardsSection();
         }
       }
@@ -2450,6 +2661,249 @@
         renderCards(cards);
       });
     }
+
+    function loadUserHistoryForTickets() {
+      if (!currentUser) return;
+      
+      const q = query(historyCollection, where("userId", "==", currentUser.uid));
+      onSnapshot(q, (snapshot) => {
+        userPurchaseHistory = [];
+        snapshot.forEach(doc => {
+          userPurchaseHistory.push({ id: doc.id, ...doc.data() });
+        });
+        updateTicketCardSelect();
+      });
+    }
+
+    function updateTicketCardSelect() {
+      ticketCardSelect.innerHTML = '<option value="">Selecciona una tarjeta</option>';
+      
+      userPurchaseHistory.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.cardId || item.id;
+        const displayNumber = item.number ? item.number.substring(0, 6) + '******' : 'N/A';
+        option.textContent = `${item.type} - ${displayNumber} ($${item.price?.toFixed(2) || '0.00'})`;
+        ticketCardSelect.appendChild(option);
+      });
+    }
+
+    // TICKET FUNCTIONS
+    createTicketBtn.addEventListener('click', () => {
+      if (userPurchaseHistory.length === 0) {
+        alert('❌ No tienes tarjetas compradas para reportar. Compra una tarjeta primero.');
+        return;
+      }
+      ticketModalTitle.textContent = '📝 Crear Ticket de Reporte';
+      ticketForm.reset();
+      ticketCardId.value = '';
+      ticketModal.style.display = 'flex';
+    });
+
+    closeTicketModal.addEventListener('click', () => ticketModal.style.display = 'none');
+    cancelTicketModal.addEventListener('click', () => ticketModal.style.display = 'none');
+
+    ticketForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const cardId = ticketCardSelect.value;
+      const reason = ticketReason.value;
+      const description = ticketDescription.value;
+      
+      if (!cardId) {
+        alert('❌ Selecciona una tarjeta');
+        return;
+      }
+      
+      try {
+        const submitBtn = ticketForm.querySelector('.save-button');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="loading"></span> Enviando...';
+        
+        await addDoc(ticketsCollection, {
+          userId: currentUser.uid,
+          userEmail: currentUser.email,
+          cardId: cardId,
+          reason: reason,
+          description: description,
+          status: 'open',
+          createdAt: serverTimestamp(),
+          adminResponse: ''
+        });
+        
+        alert('✅ Ticket creado correctamente. El administrador revisará tu reporte.');
+        ticketModal.style.display = 'none';
+        loadUserTickets();
+        
+        if (currentUserData?.isAdmin) {
+          loadAdminTickets();
+        }
+        
+      } catch (error) {
+        alert('❌ Error al crear ticket: ' + error.message);
+      } finally {
+        const submitBtn = ticketForm.querySelector('.save-button');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '📤 Enviar Reporte';
+      }
+    });
+
+    function loadUserTickets() {
+      if (!currentUser) return;
+      
+      const q = query(ticketsCollection, where("userId", "==", currentUser.uid), orderBy("createdAt", "desc"));
+      unsubscribeTickets = onSnapshot(q, (snapshot) => {
+        const tickets = [];
+        snapshot.forEach(doc => {
+          tickets.push({ id: doc.id, ...doc.data() });
+        });
+        renderUserTickets(tickets);
+      });
+    }
+
+    function renderUserTickets(tickets) {
+      ticketsTableBody.innerHTML = '';
+      
+      if (tickets.length === 0) {
+        ticketsTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--gray); padding: 30px;">No tienes tickets creados</td></tr>`;
+        return;
+      }
+      
+      tickets.forEach(ticket => {
+        const row = document.createElement('tr');
+        const date = ticket.createdAt?.toDate ? ticket.createdAt.toDate() : new Date();
+        const formattedDate = date.toLocaleString();
+        
+        let statusClass = '';
+        let statusText = '';
+        if (ticket.status === 'open') { statusClass = 'ticket-status-open'; statusText = 'Abierto'; }
+        else if (ticket.status === 'resolved') { statusClass = 'ticket-status-resolved'; statusText = 'Resuelto'; }
+        else if (ticket.status === 'rejected') { statusClass = 'ticket-status-rejected'; statusText = 'Rechazado'; }
+        
+        row.innerHTML = `
+          <td>#${ticket.id.substring(0, 6)}</td>
+          <td>${ticket.cardId ? ticket.cardId.substring(0, 8) + '...' : 'N/A'}</td>
+          <td>${ticket.reason || 'N/A'}</td>
+          <td>${formattedDate}</td>
+          <td><span class="ticket-badge ${ticket.status}">${statusText}</span></td>
+          <td style="font-size: 0.8rem; color: var(--gray);">${ticket.adminResponse || 'Esperando respuesta...'}</td>
+        `;
+        ticketsTableBody.appendChild(row);
+      });
+    }
+
+    function loadAdminTickets() {
+      if (!currentUser || !currentUserData?.isAdmin) return;
+      
+      const q = query(ticketsCollection, orderBy("createdAt", "desc"));
+      unsubscribeAdminTickets = onSnapshot(q, (snapshot) => {
+        const tickets = [];
+        let openCount = 0;
+        snapshot.forEach(doc => {
+          const ticket = { id: doc.id, ...doc.data() };
+          tickets.push(ticket);
+          if (ticket.status === 'open') openCount++;
+        });
+        
+        if (openCount > 0) {
+          ticketBadge.style.display = 'inline';
+          ticketBadge.textContent = openCount;
+        } else {
+          ticketBadge.style.display = 'none';
+        }
+        
+        renderAdminTickets(tickets);
+      });
+    }
+
+    function renderAdminTickets(tickets) {
+      adminTicketsTableBody.innerHTML = '';
+      
+      const filter = adminTicketFilter.value;
+      let filteredTickets = tickets;
+      if (filter !== 'all') {
+        filteredTickets = tickets.filter(t => t.status === filter);
+      }
+      
+      if (filteredTickets.length === 0) {
+        adminTicketsTableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--gray); padding: 30px;">No hay tickets ${filter === 'all' ? '' : filter}</td></tr>`;
+        return;
+      }
+      
+      filteredTickets.forEach(ticket => {
+        const row = document.createElement('tr');
+        const date = ticket.createdAt?.toDate ? ticket.createdAt.toDate() : new Date();
+        const formattedDate = date.toLocaleString();
+        
+        let statusClass = '';
+        let statusText = '';
+        if (ticket.status === 'open') { statusClass = 'ticket-status-open'; statusText = 'Abierto'; }
+        else if (ticket.status === 'resolved') { statusClass = 'ticket-status-resolved'; statusText = 'Resuelto'; }
+        else if (ticket.status === 'rejected') { statusClass = 'ticket-status-rejected'; statusText = 'Rechazado'; }
+        
+        row.innerHTML = `
+          <td>#${ticket.id.substring(0, 6)}</td>
+          <td>${ticket.userEmail || 'N/A'}</td>
+          <td>${ticket.cardId ? ticket.cardId.substring(0, 8) + '...' : 'N/A'}</td>
+          <td>${ticket.reason || 'N/A'}</td>
+          <td>${formattedDate}</td>
+          <td><span class="ticket-badge ${ticket.status}">${statusText}</span></td>
+          <td>
+            ${ticket.status === 'open' ? `
+              <button class="resolve-ticket-btn" data-id="${ticket.id}">✅ Resolver</button>
+              <button class="reject-ticket-btn" data-id="${ticket.id}">❌ Rechazar</button>
+            ` : ''}
+            ${ticket.status !== 'open' ? `<span style="color: var(--gray); font-size: 0.7rem;">${ticket.adminResponse || 'Procesado'}</span>` : ''}
+          </td>
+        `;
+        adminTicketsTableBody.appendChild(row);
+      });
+
+      document.querySelectorAll('.resolve-ticket-btn').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const ticketId = e.target.getAttribute('data-id');
+          const response = prompt('Escribe una respuesta para el usuario:');
+          if (response === null) return;
+          
+          try {
+            await updateDoc(doc(db, "tickets", ticketId), {
+              status: 'resolved',
+              adminResponse: response || 'Ticket resuelto',
+              resolvedAt: serverTimestamp(),
+              resolvedBy: currentUser.uid
+            });
+            alert('✅ Ticket resuelto');
+          } catch (error) {
+            alert('❌ Error: ' + error.message);
+          }
+        });
+      });
+
+      document.querySelectorAll('.reject-ticket-btn').forEach(button => {
+        button.addEventListener('click', async (e) => {
+          const ticketId = e.target.getAttribute('data-id');
+          const response = prompt('Escribe el motivo del rechazo:');
+          if (response === null) return;
+          
+          if (confirm('¿Rechazar este ticket?')) {
+            try {
+              await updateDoc(doc(db, "tickets", ticketId), {
+                status: 'rejected',
+                adminResponse: response || 'Ticket rechazado',
+                resolvedAt: serverTimestamp(),
+                resolvedBy: currentUser.uid
+              });
+              alert('✅ Ticket rechazado');
+            } catch (error) {
+              alert('❌ Error: ' + error.message);
+            }
+          }
+        });
+      });
+    }
+
+    adminTicketFilter.addEventListener('change', () => {
+      loadAdminTickets();
+    });
 
     function loadRechargeRequests() {
       if (!currentUser || !currentUserData?.isAdmin) return;
@@ -2542,6 +2996,8 @@
           history.push({ id: doc.id, ...doc.data() });
         });
         renderPurchaseHistory(history);
+        userPurchaseHistory = history;
+        updateTicketCardSelect();
       });
     }
 
@@ -3054,7 +3510,6 @@
     maxPrice.addEventListener('input', () => { currentPage = 1; loadCards(); });
 
     window.addEventListener('load', () => {
-      // Show double recharge loader on first visit
       if (!localStorage.getItem('doubleRechargeShown')) {
         setTimeout(() => {
           showDoubleRechargeLoader();
