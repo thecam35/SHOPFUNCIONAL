@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QUANTUM SHOP</title>
+  <title>Vercel - Cards Market</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #00f7ff;
@@ -16,6 +17,9 @@
       --success: #00ff9d;
       --warning: #ffcc00;
       --danger: #ff3860;
+      --gray: #8a8a9a;
+      --card-bg: rgba(15, 15, 35, 0.9);
+      --border-color: rgba(255, 255, 255, 0.08);
     }
     
     * {
@@ -25,14 +29,19 @@
     }
     
     body {
-      font-family: 'Segoe UI', 'Roboto', sans-serif;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: var(--dark);
+      background: var(--dark);
       color: var(--light);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background-image: 
-        radial-gradient(circle at 25% 25%, rgba(123, 45, 255, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(0, 247, 255, 0.15) 0%, transparent 50%);
+        radial-gradient(circle at 20% 30%, rgba(0, 247, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(123, 45, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(0, 247, 255, 0.03) 0%, transparent 70%);
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -45,130 +54,272 @@
       width: 100%;
       height: 100%;
       background: 
-        radial-gradient(circle at 20% 30%, rgba(0, 247, 255, 0.1) 0%, transparent 20%),
-        radial-gradient(circle at 80% 70%, rgba(123, 45, 255, 0.1) 0%, transparent 20%);
+        radial-gradient(circle at 20% 30%, rgba(0, 247, 255, 0.05) 0%, transparent 20%),
+        radial-gradient(circle at 80% 70%, rgba(123, 45, 255, 0.05) 0%, transparent 20%);
       pointer-events: none;
       z-index: -1;
     }
     
     @keyframes float {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
+      50% { transform: translateY(-10px); }
     }
     
-    @keyframes pulse {
+    @keyframes pulse-glow {
       0%, 100% { opacity: 0.6; }
       50% { opacity: 1; }
     }
     
-    @keyframes neon-glow {
-      0%, 100% { text-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary), 0 0 20px var(--primary); }
-      50% { text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px var(--primary); }
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
     }
     
+    /* AUTH SECTION - PROFESSIONAL */
     #auth-section {
-      max-width: 500px;
-      margin: 50px auto;
-      padding: 40px;
-      background: rgba(10, 10, 26, 0.8);
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(0, 247, 255, 0.2);
+      width: 100%;
+      max-width: 460px;
+      margin: 20px auto;
+      padding: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      backdrop-filter: none;
+      position: relative;
+    }
+    
+    .auth-card {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 48px 40px 40px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+      backdrop-filter: blur(20px);
       position: relative;
       overflow: hidden;
-      transform-style: preserve-3d;
-      transition: all 0.5s ease;
     }
     
-    #auth-section::before {
+    .auth-card::before {
       content: "";
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        45deg,
-        transparent 65%,
-        rgba(0, 247, 255, 0.1) 65%,
-        rgba(0, 247, 255, 0.1) 70%,
-        transparent 70%
-      );
-      transform: rotate(45deg);
-      animation: slide 6s linear infinite;
-      z-index: -1;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent);
+      background-size: 200% 100%;
+      animation: shimmer 4s linear infinite;
     }
     
-    @keyframes slide {
-      0% { transform: translateX(-50%) rotate(45deg); }
-      100% { transform: translateX(50%) rotate(45deg); }
-    }
-    
-    #auth-section h2 {
+    .auth-card .brand {
       text-align: center;
-      margin-bottom: 30px;
-      color: var(--primary);
-      font-size: 2rem;
-      font-weight: 300;
-      letter-spacing: 2px;
+      margin-bottom: 32px;
+    }
+    
+    .auth-card .brand .logo-icon {
+      display: inline-block;
+      font-size: 2.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+    
+    .auth-card .brand .logo-sub {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--gray);
+      letter-spacing: 4px;
       text-transform: uppercase;
-      animation: neon-glow 3s ease-in-out infinite;
+      margin-top: 4px;
+      -webkit-text-fill-color: var(--gray);
+    }
+    
+    .auth-card .brand h2 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #fff;
+      margin-top: 8px;
+      letter-spacing: -0.5px;
+      -webkit-text-fill-color: #fff;
+    }
+    
+    .auth-card .brand p {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-top: 4px;
+      font-weight: 400;
     }
     
     .auth-form {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 16px;
     }
     
-    .auth-form input {
-      background: rgba(5, 5, 16, 0.7);
-      border: 1px solid rgba(0, 247, 255, 0.3);
-      border-radius: 8px;
-      padding: 15px 20px;
-      color: var(--light);
-      font-size: 1rem;
+    .auth-form .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .auth-form .form-group label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    
+    .auth-form .form-group input {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
       transition: all 0.3s ease;
       outline: none;
     }
     
-    .auth-form input:focus {
+    .auth-form .form-group input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 10px rgba(0, 247, 255, 0.5);
+      box-shadow: 0 0 0 3px rgba(0, 247, 255, 0.12);
+      background: rgba(255, 255, 255, 0.06);
     }
     
-    .auth-form input::placeholder {
-      color: rgba(224, 224, 255, 0.5);
+    .auth-form .form-group input::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+      font-weight: 400;
     }
     
-    .go-button {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: var(--darker);
-      border: none;
-      padding: 15px;
+    .auth-form .form-row {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .auth-form .form-row .form-group {
+      flex: 1;
+    }
+    
+    .auth-form .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 4px 0 8px;
+    }
+    
+    .auth-form .form-options label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--gray);
+      cursor: pointer;
+    }
+    
+    .auth-form .form-options label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+    
+    .auth-form .form-options a {
+      color: var(--primary);
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .auth-form .form-options a:hover {
+      color: #fff;
+    }
+    
+    .auth-form .captcha-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 6px 16px 6px 6px;
+      border: 1px solid var(--border-color);
+    }
+    
+    .auth-form .captcha-row .captcha-box {
+      background: rgba(255, 255, 255, 0.06);
       border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--primary);
+      font-family: 'Courier New', monospace;
+      letter-spacing: 2px;
+      user-select: none;
+    }
+    
+    .auth-form .captcha-row input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 10px 0;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .auth-form .captcha-row input::placeholder {
+      color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .auth-form .captcha-row .refresh-captcha {
+      background: none;
+      border: none;
+      color: var(--gray);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 4px;
+    }
+    
+    .auth-form .captcha-row .refresh-captcha:hover {
+      color: var(--primary);
+      transform: rotate(45deg);
+    }
+    
+    .auth-form .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      border: none;
+      padding: 16px;
+      border-radius: 12px;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
       text-transform: uppercase;
       letter-spacing: 1px;
-      box-shadow: 0 4px 15px rgba(0, 247, 255, 0.3);
+      margin-top: 4px;
+      font-family: 'Inter', sans-serif;
       position: relative;
       overflow: hidden;
     }
     
-    .go-button:hover {
+    .auth-form .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 247, 255, 0.4);
+      box-shadow: 0 8px 30px rgba(0, 247, 255, 0.25);
     }
     
-    .go-button:active {
+    .auth-form .btn-primary:active {
       transform: translateY(0);
     }
     
-    .go-button::after {
+    .auth-form .btn-primary::after {
       content: "";
       position: absolute;
       top: -50%;
@@ -177,12 +328,12 @@
       height: 200%;
       background: linear-gradient(
         to bottom right,
-        transparent 45%,
-        rgba(255, 255, 255, 0.3) 50%,
-        transparent 55%
+        transparent 40%,
+        rgba(255, 255, 255, 0.15) 50%,
+        transparent 60%
       );
       transform: rotate(45deg);
-      animation: shine 3s infinite;
+      animation: shine 4s infinite;
     }
     
     @keyframes shine {
@@ -190,105 +341,165 @@
       100% { transform: translateX(100%) rotate(45deg); }
     }
     
+    .auth-form .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      border: 1px solid var(--border-color);
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .auth-form .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .auth-form .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 8px 0 4px;
+    }
+    
+    .auth-form .divider::before,
+    .auth-form .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border-color);
+    }
+    
+    .auth-form .divider span {
+      color: var(--gray);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 500;
+    }
+    
+    .auth-form .auth-switch {
+      text-align: center;
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
+    
+    .auth-form .auth-switch a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .auth-form .auth-switch a:hover {
+      color: #fff;
+    }
+    
     #auth-message {
       text-align: center;
-      margin-top: 20px;
-      color: var(--accent);
-      font-size: 0.9rem;
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: var(--danger);
+      min-height: 24px;
     }
     
-    .toggle-auth {
-      text-align: center;
-      margin-top: 20px;
-      color: var(--primary);
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
-      position: relative;
-      display: inline-block;
-      width: 100%;
+    #auth-message.success {
+      color: var(--success);
     }
     
-    .toggle-auth:hover {
-      color: var(--light);
-      text-shadow: 0 0 10px var(--primary);
-    }
-    
+    /* APP CONTAINER */
     .container {
-      display: flex;
+      display: none;
+      width: 100%;
       min-height: 100vh;
     }
     
     .sidebar {
       width: 250px;
-      background: rgba(5, 5, 16, 0.8);
+      background: rgba(5, 5, 16, 0.85);
       color: var(--light);
       padding: 20px 0;
-      border-right: 1px solid rgba(0, 247, 255, 0.1);
+      border-right: 1px solid rgba(0, 247, 255, 0.08);
       backdrop-filter: blur(10px);
       box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
-      position: relative;
+      position: fixed;
+      height: 100vh;
       z-index: 10;
+      overflow-y: auto;
     }
     
-    .sidebar::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        135deg,
-        transparent 0%,
-        rgba(0, 247, 255, 0.05) 100%
-      );
-      pointer-events: none;
+    .sidebar-brand {
+      padding: 0 24px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 16px;
+    }
+    
+    .sidebar-brand span {
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .sidebar-brand small {
+      display: block;
+      font-size: 0.6rem;
+      color: var(--gray);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 2px;
+      -webkit-text-fill-color: var(--gray);
     }
     
     .sidebar-item {
-      padding: 15px 25px;
+      padding: 14px 24px;
       cursor: pointer;
       display: flex;
       align-items: center;
       transition: all 0.3s ease;
       position: relative;
-      overflow: hidden;
-      margin: 5px 10px;
-      border-radius: 8px;
+      margin: 2px 10px;
+      border-radius: 10px;
+      color: var(--gray);
+      font-weight: 500;
     }
     
     .sidebar-item:hover {
-      background: rgba(0, 247, 255, 0.1);
-      transform: translateX(5px);
+      background: rgba(0, 247, 255, 0.06);
+      color: #fff;
     }
     
     .sidebar-item.active {
-      background: linear-gradient(90deg, rgba(0, 247, 255, 0.2), transparent);
-      border-left: 3px solid var(--primary);
+      background: rgba(0, 247, 255, 0.1);
       color: var(--primary);
     }
     
     .sidebar-item.active::before {
       content: "";
       position: absolute;
-      top: 0;
       left: 0;
+      top: 20%;
+      height: 60%;
       width: 3px;
-      height: 100%;
       background: var(--primary);
-      box-shadow: 0 0 10px var(--primary);
+      border-radius: 0 4px 4px 0;
+      box-shadow: 0 0 15px var(--primary);
     }
     
     .sidebar-icon {
-      margin-right: 15px;
-      font-size: 1.2rem;
-      transition: all 0.3s ease;
-    }
-    
-    .sidebar-item.active .sidebar-icon {
-      color: var(--primary);
-      text-shadow: 0 0 10px var(--primary);
+      margin-right: 14px;
+      font-size: 1.1rem;
+      width: 24px;
+      text-align: center;
     }
     
     .main-content {
@@ -297,6 +508,8 @@
       background: rgba(10, 10, 26, 0.7);
       backdrop-filter: blur(10px);
       overflow-y: auto;
+      margin-left: 250px;
+      min-height: 100vh;
     }
     
     .header {
@@ -305,7 +518,7 @@
       align-items: center;
       margin-bottom: 30px;
       padding-bottom: 20px;
-      border-bottom: 1px solid rgba(0, 247, 255, 0.1);
+      border-bottom: 1px solid rgba(0, 247, 255, 0.08);
     }
     
     .header h2 {
@@ -324,14 +537,14 @@
       font-weight: bold;
       display: flex;
       align-items: center;
-      border: 1px solid rgba(0, 255, 157, 0.3);
-      box-shadow: 0 0 15px rgba(0, 255, 157, 0.1);
+      border: 1px solid rgba(0, 255, 157, 0.2);
+      box-shadow: 0 0 15px rgba(0, 255, 157, 0.05);
       transition: all 0.3s ease;
     }
     
     .credits-display:hover {
       transform: translateY(-2px);
-      box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+      box-shadow: 0 0 25px rgba(0, 255, 157, 0.1);
     }
     
     .credits-icon {
@@ -339,42 +552,78 @@
       color: var(--success);
     }
     
+    .vercel-badge {
+      display: inline-block;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-left: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      vertical-align: middle;
+    }
+    
+    .go-button {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(0, 247, 255, 0.15);
+    }
+    
+    .go-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(0, 247, 255, 0.25);
+    }
+    
     .search-section {
-      background: rgba(5, 5, 16, 0.6);
+      background: rgba(5, 5, 16, 0.5);
       padding: 20px;
-      border-radius: 12px;
+      border-radius: 14px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
       margin-bottom: 30px;
-      border: 1px solid rgba(0, 247, 255, 0.1);
+      border: 1px solid rgba(0, 247, 255, 0.06);
     }
     
     .filter-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 15px;
+      gap: 16px;
+      margin-bottom: 12px;
     }
     
     .filter-group {
       flex: 1;
-      min-width: 180px;
+      min-width: 160px;
     }
     
     .filter-group label {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       font-weight: 500;
-      color: var(--primary);
-      font-size: 0.9rem;
+      color: var(--gray);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     
     .filter-group select, 
     .filter-group input {
       width: 100%;
-      padding: 12px 15px;
-      background: rgba(5, 5, 16, 0.8);
-      border: 1px solid rgba(0, 247, 255, 0.3);
-      border-radius: 8px;
+      padding: 10px 14px;
+      background: rgba(5, 5, 16, 0.7);
+      border: 1px solid rgba(0, 247, 255, 0.1);
+      border-radius: 10px;
       color: var(--light);
       font-size: 0.9rem;
       transition: all 0.3s ease;
@@ -383,18 +632,18 @@
     .filter-group select:focus, 
     .filter-group input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+      box-shadow: 0 0 0 3px rgba(0, 247, 255, 0.08);
       outline: none;
     }
     
     .price-filter {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       align-items: center;
     }
     
     .price-filter input {
-      width: 80px;
+      width: 70px;
       text-align: center;
     }
     
@@ -402,31 +651,32 @@
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
-      background: rgba(5, 5, 16, 0.6);
-      border-radius: 12px;
+      background: rgba(5, 5, 16, 0.5);
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(0, 247, 255, 0.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(0, 247, 255, 0.06);
     }
     
     .cards-table th {
-      background: linear-gradient(to right, rgba(0, 247, 255, 0.2), rgba(123, 45, 255, 0.2));
-      color: var(--primary);
-      font-weight: 500;
-      padding: 15px;
+      background: rgba(0, 247, 255, 0.05);
+      color: var(--gray);
+      font-weight: 600;
+      padding: 14px 16px;
       text-align: left;
       text-transform: uppercase;
-      font-size: 0.8rem;
-      letter-spacing: 1px;
-      border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+      font-size: 0.7rem;
+      letter-spacing: 0.8px;
+      border-bottom: 1px solid rgba(0, 247, 255, 0.06);
     }
     
     .cards-table td {
-      padding: 15px;
+      padding: 14px 16px;
       text-align: left;
-      border-bottom: 1px solid rgba(0, 247, 255, 0.05);
+      border-bottom: 1px solid rgba(0, 247, 255, 0.04);
       color: var(--light);
       transition: all 0.3s ease;
+      font-size: 0.9rem;
     }
     
     .cards-table tr:last-child td {
@@ -434,26 +684,20 @@
     }
     
     .cards-table tr:hover td {
-      background: rgba(0, 247, 255, 0.05);
-    }
-    
-    .card-number {
-      font-family: 'Courier New', monospace;
-      letter-spacing: 1px;
+      background: rgba(0, 247, 255, 0.03);
     }
     
     .action-button {
-      padding: 8px 15px;
-      margin-right: 8px;
+      padding: 6px 14px;
+      margin-right: 6px;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       font-weight: 600;
       transition: all 0.3s ease;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      letter-spacing: 0.3px;
     }
     
     .action-button:last-child {
@@ -461,333 +705,102 @@
     }
     
     .action-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
-    
-    .action-button:active {
-      transform: translateY(0);
+      transform: translateY(-1px);
     }
     
     .edit-button {
-      background: linear-gradient(135deg, var(--primary), #00b4ff);
-      color: var(--darker);
+      background: rgba(0, 247, 255, 0.15);
+      color: var(--primary);
     }
     
     .delete-button {
-      background: linear-gradient(135deg, var(--danger), #ff2d7b);
-      color: white;
+      background: rgba(255, 56, 96, 0.15);
+      color: var(--danger);
     }
     
     .show-card-button {
-      background: linear-gradient(135deg, var(--success), #00cc88);
-      color: var(--darker);
+      background: rgba(0, 255, 157, 0.15);
+      color: var(--success);
     }
     
     .pagination {
       display: flex;
       justify-content: space-between;
-      margin-top: 25px;
+      margin-top: 20px;
       align-items: center;
-      padding: 15px 0;
+      padding: 12px 0;
     }
     
     .page-info {
-      font-size: 0.9rem;
-      color: rgba(224, 224, 255, 0.7);
+      font-size: 0.85rem;
+      color: var(--gray);
     }
     
     .page-buttons button {
-      padding: 8px 15px;
-      margin: 0 5px;
-      background: rgba(0, 247, 255, 0.1);
-      color: var(--primary);
-      border: 1px solid rgba(0, 247, 255, 0.3);
-      border-radius: 6px;
+      padding: 8px 16px;
+      margin: 0 4px;
+      background: rgba(0, 247, 255, 0.06);
+      color: var(--light);
+      border: 1px solid rgba(0, 247, 255, 0.1);
+      border-radius: 8px;
       cursor: pointer;
       transition: all 0.3s ease;
     }
     
-    .page-buttons button:hover {
-      background: rgba(0, 247, 255, 0.2);
-      transform: translateY(-2px);
+    .page-buttons button:hover:not(:disabled) {
+      background: rgba(0, 247, 255, 0.12);
+      border-color: var(--primary);
     }
     
     .page-buttons button:disabled {
-      opacity: 0.5;
+      opacity: 0.3;
       cursor: not-allowed;
-      transform: none;
-    }
-    
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(5, 5, 16, 0.9);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      backdrop-filter: blur(5px);
-    }
-    
-    .modal-content {
-      background: rgba(10, 10, 26, 0.95);
-      padding: 30px;
-      border-radius: 16px;
-      width: 500px;
-      max-width: 90%;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(0, 247, 255, 0.2);
-      position: relative;
-      overflow: hidden;
-      animation: modalEnter 0.4s ease-out;
-    }
-    
-    @keyframes modalEnter {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    
-    .modal-content::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        135deg,
-        transparent 0%,
-        rgba(0, 247, 255, 0.05) 100%
-      );
-      pointer-events: none;
-    }
-    
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid rgba(0, 247, 255, 0.1);
-    }
-    
-    .modal-header h3 {
-      color: var(--primary);
-      font-weight: 300;
-      font-size: 1.5rem;
-      letter-spacing: 1px;
-    }
-    
-    .close-button {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: rgba(224, 224, 255, 0.5);
-      transition: all 0.3s ease;
-    }
-    
-    .close-button:hover {
-      color: var(--primary);
-      transform: rotate(90deg);
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--primary);
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-    
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 12px 15px;
-      background: rgba(5, 5, 16, 0.8);
-      border: 1px solid rgba(0, 247, 255, 0.3);
-      border-radius: 8px;
-      color: var(--light);
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
-    }
-    
-    .form-group input:focus,
-    .form-group select:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
-      outline: none;
-    }
-    
-    .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 15px;
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(0, 247, 255, 0.1);
-    }
-    
-    .save-button {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: var(--darker);
-      border: none;
-      padding: 12px 25px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .save-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0, 247, 255, 0.3);
-    }
-    
-    .cancel-button {
-      background: rgba(224, 224, 255, 0.1);
-      color: var(--light);
-      border: 1px solid rgba(224, 224, 255, 0.2);
-      padding: 12px 25px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .cancel-button:hover {
-      background: rgba(224, 224, 255, 0.2);
-      transform: translateY(-2px);
-    }
-    
-    .import-section {
-      background: rgba(5, 5, 16, 0.6);
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      margin-bottom: 30px;
-      border: 1px solid rgba(0, 247, 255, 0.1);
-    }
-    
-    .import-section h3 {
-      color: var(--primary);
-      margin-bottom: 20px;
-      font-weight: 300;
-      font-size: 1.3rem;
-    }
-    
-    .file-input-container {
-      margin-bottom: 20px;
-    }
-    
-    .file-input-container input[type="file"] {
-      width: 100%;
-      padding: 12px;
-      background: rgba(5, 5, 16, 0.8);
-      border: 1px dashed rgba(0, 247, 255, 0.3);
-      border-radius: 8px;
-      color: var(--light);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .file-input-container input[type="file"]:hover {
-      border-color: var(--primary);
-      background: rgba(0, 247, 255, 0.05);
-    }
-    
-    .import-button {
-      background: linear-gradient(135deg, var(--success), #00cc88);
-      color: var(--darker);
-      border: none;
-      padding: 12px 25px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 0 4px 15px rgba(0, 255, 157, 0.2);
-    }
-    
-    .import-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 255, 157, 0.3);
-    }
-    
-    .download-template {
-      display: inline-block;
-      margin-top: 15px;
-      color: var(--primary);
-      text-decoration: none;
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
-    }
-    
-    .download-template:hover {
-      color: var(--light);
-      text-shadow: 0 0 10px var(--primary);
-    }
-    
-    .file-format {
-      font-size: 0.8rem;
-      color: rgba(224, 224, 255, 0.6);
-      margin-top: 15px;
-      line-height: 1.5;
     }
     
     .history-section {
       margin-top: 40px;
-      background: rgba(5, 5, 16, 0.6);
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(0, 247, 255, 0.1);
+      background: rgba(5, 5, 16, 0.5);
+      padding: 24px;
+      border-radius: 14px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(0, 247, 255, 0.06);
     }
     
     .history-section h3 {
       color: var(--primary);
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       font-weight: 300;
-      font-size: 1.3rem;
-      letter-spacing: 1px;
+      font-size: 1.2rem;
+      letter-spacing: 0.5px;
     }
     
     .history-table {
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
-      background: rgba(5, 5, 16, 0.6);
+      background: rgba(5, 5, 16, 0.4);
       border-radius: 12px;
       overflow: hidden;
     }
     
     .history-table th {
-      background: linear-gradient(to right, rgba(123, 45, 255, 0.2), rgba(0, 247, 255, 0.2));
-      color: var(--primary);
-      font-weight: 500;
-      padding: 15px;
+      background: rgba(123, 45, 255, 0.06);
+      color: var(--gray);
+      font-weight: 600;
+      padding: 12px 16px;
       text-align: left;
       text-transform: uppercase;
-      font-size: 0.8rem;
-      letter-spacing: 1px;
-      border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+      font-size: 0.7rem;
+      letter-spacing: 0.8px;
+      border-bottom: 1px solid rgba(0, 247, 255, 0.06);
     }
     
     .history-table td {
-      padding: 15px;
+      padding: 12px 16px;
       text-align: left;
-      border-bottom: 1px solid rgba(0, 247, 255, 0.05);
+      border-bottom: 1px solid rgba(0, 247, 255, 0.04);
       color: var(--light);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     
     .history-table tr:last-child td {
@@ -795,44 +808,43 @@
     }
     
     .history-table tr:hover td {
-      background: rgba(0, 247, 255, 0.05);
+      background: rgba(0, 247, 255, 0.02);
     }
     
-    .recharge-section {
+    .recharge-section, .profile-section, .admin-panel-section, .recharge-requests-section {
       display: none;
-      background: rgba(5, 5, 16, 0.6);
+      background: rgba(5, 5, 16, 0.5);
       padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      margin-top: 30px;
-      border: 1px solid rgba(0, 247, 255, 0.1);
+      border-radius: 14px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(0, 247, 255, 0.06);
     }
     
-    .recharge-section h2 {
+    .recharge-section h2, .profile-section h2, .admin-panel-section h2 {
       color: var(--primary);
       margin-bottom: 25px;
       font-weight: 300;
-      font-size: 1.8rem;
-      letter-spacing: 1px;
+      font-size: 1.6rem;
+      letter-spacing: 0.5px;
     }
     
     .wallet-info {
-      background: rgba(0, 247, 255, 0.05);
+      background: rgba(0, 247, 255, 0.04);
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 12px;
       margin-bottom: 30px;
-      border: 1px solid rgba(0, 247, 255, 0.1);
+      border: 1px solid rgba(0, 247, 255, 0.06);
     }
     
     .wallet-info h3 {
       color: var(--primary);
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       font-weight: 300;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
     }
     
     .wallet-info p {
-      margin: 10px 0;
+      margin: 8px 0;
       color: var(--light);
       font-size: 0.9rem;
     }
@@ -842,62 +854,61 @@
       font-weight: 500;
     }
     
-    .recharge-form {
-      margin-top: 25px;
-    }
-    
     .recharge-form label {
       display: block;
-      margin-bottom: 10px;
-      color: var(--primary);
+      margin-bottom: 8px;
+      color: var(--gray);
       font-weight: 500;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     
     .recharge-form input {
       width: 100%;
-      padding: 15px;
-      background: rgba(5, 5, 16, 0.8);
-      border: 1px solid rgba(0, 247, 255, 0.3);
-      border-radius: 8px;
+      padding: 14px 18px;
+      background: rgba(5, 5, 16, 0.7);
+      border: 1px solid rgba(0, 247, 255, 0.1);
+      border-radius: 10px;
       color: var(--light);
       font-size: 1rem;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       transition: all 0.3s ease;
     }
     
     .recharge-form input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+      box-shadow: 0 0 0 3px rgba(0, 247, 255, 0.08);
       outline: none;
     }
     
     .recharge-button {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: var(--darker);
+      color: #fff;
       border: none;
-      padding: 15px 30px;
-      border-radius: 8px;
+      padding: 14px 30px;
+      border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 0 5px 15px rgba(0, 247, 255, 0.3);
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(0, 247, 255, 0.15);
     }
     
     .recharge-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0, 247, 255, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 247, 255, 0.25);
     }
     
     #paymentDetails {
       display: none;
       margin-top: 30px;
-      padding: 25px;
-      background: rgba(0, 247, 255, 0.05);
-      border-radius: 10px;
-      border: 1px solid rgba(0, 247, 255, 0.1);
-      animation: fadeIn 0.5s ease-out;
+      padding: 24px;
+      background: rgba(0, 247, 255, 0.04);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 247, 255, 0.06);
+      animation: fadeIn 0.4s ease-out;
     }
     
     @keyframes fadeIn {
@@ -907,13 +918,13 @@
     
     #paymentDetails h3 {
       color: var(--primary);
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       font-weight: 300;
-      font-size: 1.3rem;
+      font-size: 1.1rem;
     }
     
     #paymentDetails p {
-      margin: 10px 0;
+      margin: 8px 0;
       color: var(--light);
       font-size: 0.9rem;
     }
@@ -927,38 +938,32 @@
       color: var(--primary);
       font-family: 'Courier New', monospace;
       word-break: break-all;
-      background: rgba(0, 247, 255, 0.1);
-      padding: 10px;
+      background: rgba(0, 247, 255, 0.06);
+      padding: 8px 12px;
       border-radius: 6px;
       display: inline-block;
-      margin-top: 5px;
+      margin-top: 4px;
     }
     
     .receipt-section {
-      margin-top: 25px;
-      padding-top: 25px;
-      border-top: 1px solid rgba(0, 247, 255, 0.1);
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(0, 247, 255, 0.06);
     }
     
     .receipt-section h3 {
       color: var(--primary);
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       font-weight: 300;
-      font-size: 1.2rem;
-    }
-    
-    .receipt-section p {
-      margin-bottom: 15px;
-      color: var(--light);
-      font-size: 0.9rem;
+      font-size: 1rem;
     }
     
     #receiptFile {
       width: 100%;
       padding: 12px;
-      background: rgba(5, 5, 16, 0.8);
-      border: 1px dashed rgba(0, 247, 255, 0.3);
-      border-radius: 8px;
+      background: rgba(5, 5, 16, 0.7);
+      border: 1px dashed rgba(0, 247, 255, 0.15);
+      border-radius: 10px;
       color: var(--light);
       cursor: pointer;
       transition: all 0.3s ease;
@@ -966,447 +971,695 @@
     
     #receiptFile:hover {
       border-color: var(--primary);
-      background: rgba(0, 247, 255, 0.05);
     }
     
     .upload-btn {
       background: linear-gradient(135deg, var(--success), #00cc88);
       color: var(--darker);
       border: none;
-      padding: 12px 25px;
-      border-radius: 8px;
+      padding: 12px 24px;
+      border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 0 5px 15px rgba(0, 255, 157, 0.3);
-      margin-top: 15px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(0, 255, 157, 0.15);
+      margin-top: 12px;
     }
     
     .upload-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 255, 157, 0.4);
+      box-shadow: 0 6px 20px rgba(0, 255, 157, 0.25);
     }
     
     .upload-btn:disabled {
-      opacity: 0.7;
+      opacity: 0.6;
       cursor: not-allowed;
       transform: none !important;
     }
     
     .telegram-config {
-      margin-top: 40px;
-      padding: 25px;
-      background: rgba(123, 45, 255, 0.05);
+      margin-top: 30px;
+      padding: 24px;
+      background: rgba(123, 45, 255, 0.04);
       border-radius: 12px;
-      border: 1px solid rgba(123, 45, 255, 0.1);
+      border: 1px solid rgba(123, 45, 255, 0.08);
     }
     
     .telegram-config h3 {
       color: var(--primary);
       margin-top: 0;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       font-weight: 300;
-      font-size: 1.3rem;
-    }
-    
-    .telegram-config p {
-      margin-bottom: 20px;
-      color: var(--light);
-      font-size: 0.9rem;
+      font-size: 1.1rem;
     }
     
     .telegram-config input {
       width: 100%;
-      padding: 12px 15px;
-      background: rgba(5, 5, 16, 0.8);
-      border: 1px solid rgba(123, 45, 255, 0.3);
-      border-radius: 8px;
+      padding: 12px 16px;
+      background: rgba(5, 5, 16, 0.7);
+      border: 1px solid rgba(123, 45, 255, 0.1);
+      border-radius: 10px;
       color: var(--light);
       font-size: 0.9rem;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       transition: all 0.3s ease;
     }
     
     .telegram-config input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 10px rgba(123, 45, 255, 0.3);
+      box-shadow: 0 0 0 3px rgba(123, 45, 255, 0.08);
       outline: none;
     }
     
     .save-telegram {
       background: linear-gradient(135deg, var(--secondary), #5a1dff);
-      color: white;
+      color: #fff;
       border: none;
-      padding: 12px 25px;
-      border-radius: 8px;
+      padding: 12px 24px;
+      border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 0 5px 15px rgba(123, 45, 255, 0.3);
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(123, 45, 255, 0.15);
     }
     
     .save-telegram:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(123, 45, 255, 0.4);
-    }
-    
-    .profile-section {
-      display: none;
-      background: rgba(5, 5, 16, 0.6);
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(0, 247, 255, 0.1);
-    }
-    
-    .profile-section h2 {
-      color: var(--primary);
-      margin-bottom: 25px;
-      font-weight: 300;
-      font-size: 1.8rem;
-      letter-spacing: 1px;
-    }
-    
-    .profile-info {
-      margin-bottom: 30px;
+      box-shadow: 0 6px 20px rgba(123, 45, 255, 0.25);
     }
     
     .profile-info p {
-      margin: 15px 0;
+      margin: 14px 0;
       color: var(--light);
       font-size: 1rem;
       padding-bottom: 10px;
-      border-bottom: 1px solid rgba(0, 247, 255, 0.1);
+      border-bottom: 1px solid rgba(0, 247, 255, 0.05);
     }
     
     .profile-info strong {
       display: inline-block;
       width: 150px;
-      color: var(--primary);
+      color: var(--gray);
       font-weight: 500;
     }
     
     .loading {
       display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255, 255, 255, 0.3);
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.15);
       border-radius: 50%;
       border-top-color: var(--primary);
-      animation: spin 1s ease-in-out infinite;
-      margin-right: 10px;
+      animation: spin 0.8s linear infinite;
+      margin-right: 8px;
       vertical-align: middle;
     }
     
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-
-    /* New styles for recharge requests section */
-    .recharge-requests-section {
-      margin-top: 40px;
-      background: rgba(5, 5, 16, 0.6);
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(0, 247, 255, 0.1);
-      display: none;
-    }
-
-    .recharge-requests-section h3 {
-      color: var(--primary);
-      margin-bottom: 20px;
-      font-weight: 300;
-      font-size: 1.3rem;
-      letter-spacing: 1px;
-    }
-
+    
     .recharge-requests-table {
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
-      background: rgba(5, 5, 16, 0.6);
+      background: rgba(5, 5, 16, 0.4);
       border-radius: 12px;
       overflow: hidden;
     }
-
+    
     .recharge-requests-table th {
-      background: linear-gradient(to right, rgba(123, 45, 255, 0.2), rgba(0, 247, 255, 0.2));
-      color: var(--primary);
-      font-weight: 500;
-      padding: 15px;
+      background: rgba(123, 45, 255, 0.06);
+      color: var(--gray);
+      font-weight: 600;
+      padding: 12px 16px;
       text-align: left;
       text-transform: uppercase;
-      font-size: 0.8rem;
-      letter-spacing: 1px;
-      border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+      font-size: 0.7rem;
+      letter-spacing: 0.8px;
+      border-bottom: 1px solid rgba(0, 247, 255, 0.06);
     }
-
+    
     .recharge-requests-table td {
-      padding: 15px;
+      padding: 12px 16px;
       text-align: left;
-      border-bottom: 1px solid rgba(0, 247, 255, 0.05);
+      border-bottom: 1px solid rgba(0, 247, 255, 0.04);
       color: var(--light);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
-
+    
     .recharge-requests-table tr:last-child td {
       border-bottom: none;
     }
-
-    .recharge-requests-table tr:hover td {
-      background: rgba(0, 247, 255, 0.05);
-    }
-
+    
     .recharge-status-pending {
       color: var(--warning);
     }
-
+    
     .recharge-status-approved {
       color: var(--success);
     }
-
+    
     .recharge-status-rejected {
       color: var(--danger);
     }
-
+    
     .approve-recharge-btn {
-      background: linear-gradient(135deg, var(--success), #00cc88);
-      color: var(--darker);
+      background: rgba(0, 255, 157, 0.15);
+      color: var(--success);
       border: none;
-      padding: 8px 15px;
-      border-radius: 6px;
+      padding: 6px 14px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
       transition: all 0.3s ease;
-      margin-right: 5px;
+      margin-right: 4px;
     }
-
+    
+    .approve-recharge-btn:hover {
+      background: rgba(0, 255, 157, 0.25);
+    }
+    
     .reject-recharge-btn {
-      background: linear-gradient(135deg, var(--danger), #ff2d7b);
-      color: white;
+      background: rgba(255, 56, 96, 0.15);
+      color: var(--danger);
       border: none;
-      padding: 8px 15px;
-      border-radius: 6px;
+      padding: 6px 14px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
       transition: all 0.3s ease;
     }
-
-    /* Double Recharge Loader Styles */
-    #doubleRechargeLoader {
+    
+    .reject-recharge-btn:hover {
+      background: rgba(255, 56, 96, 0.25);
+    }
+    
+    .double-recharge-loader {
       display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(5, 5, 16, 0.95);
+      background: rgba(5, 5, 16, 0.92);
       z-index: 2000;
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      backdrop-filter: blur(10px);
     }
-
+    
     .double-recharge-content {
-      background: rgba(10, 10, 26, 0.95);
-      padding: 40px;
-      border-radius: 20px;
+      background: var(--card-bg);
+      padding: 44px 40px 36px;
+      border-radius: 24px;
       width: 90%;
-      max-width: 600px;
+      max-width: 480px;
       text-align: center;
-      box-shadow: 0 0 50px rgba(0, 247, 255, 0.3);
-      border: 2px solid var(--primary);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+      border: 1px solid var(--border-color);
       position: relative;
-      animation: pulseGlow 2s infinite alternate;
+      animation: pulse-glow 2s infinite alternate;
     }
-
-    @keyframes pulseGlow {
-      0% { box-shadow: 0 0 30px rgba(0, 247, 255, 0.3); }
-      100% { box-shadow: 0 0 50px rgba(0, 247, 255, 0.7); }
+    
+    .double-recharge-content::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent);
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
     }
-
+    
     .double-recharge-close {
       position: absolute;
-      top: 15px;
-      right: 15px;
+      top: 16px;
+      right: 20px;
       background: none;
       border: none;
-      color: var(--light);
-      font-size: 24px;
+      color: var(--gray);
+      font-size: 22px;
       cursor: pointer;
       transition: all 0.3s ease;
     }
-
+    
     .double-recharge-close:hover {
       color: var(--primary);
       transform: rotate(90deg);
     }
-
+    
     .double-recharge-title {
-      color: var(--primary);
-      font-size: 2rem;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      animation: neon-glow 3s ease-in-out infinite;
+      color: #fff;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
     }
-
+    
+    .double-recharge-title span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
     .double-recharge-subtitle {
-      color: var(--light);
-      font-size: 1.2rem;
-      margin-bottom: 30px;
+      color: var(--gray);
+      font-size: 1rem;
+      margin-bottom: 24px;
     }
-
+    
     .double-recharge-highlight {
       color: var(--success);
-      font-weight: bold;
-      font-size: 1.5rem;
+      font-weight: 700;
+      font-size: 1.4rem;
     }
-
+    
     .double-recharge-date {
       color: var(--warning);
-      font-weight: bold;
-      margin: 20px 0;
-      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 16px 0;
+      font-size: 1rem;
     }
-
-    .double-recharge-loader {
-      width: 80px;
-      height: 80px;
-      margin: 30px auto;
-      border: 8px solid rgba(0, 247, 255, 0.2);
-      border-top: 8px solid var(--primary);
+    
+    .double-recharge-loader-spinner {
+      width: 60px;
+      height: 60px;
+      margin: 20px auto;
+      border: 4px solid rgba(0, 247, 255, 0.1);
+      border-top: 4px solid var(--primary);
       border-radius: 50%;
-      animation: spin 1.5s linear infinite;
+      animation: spin 1.2s linear infinite;
     }
-
+    
     .double-recharge-button {
       background: linear-gradient(135deg, var(--success), #00cc88);
       color: var(--darker);
       border: none;
-      padding: 15px 40px;
+      padding: 14px 36px;
       border-radius: 50px;
-      font-weight: 600;
-      font-size: 1.1rem;
+      font-weight: 700;
+      font-size: 1rem;
       cursor: pointer;
       transition: all 0.3s ease;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 0 5px 20px rgba(0, 255, 157, 0.4);
-      margin-top: 20px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 20px rgba(0, 255, 157, 0.2);
+      margin-top: 16px;
     }
-
+    
     .double-recharge-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0, 255, 157, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 255, 157, 0.3);
     }
-
+    
     .double-recharge-note {
-      color: rgba(224, 224, 255, 0.7);
-      font-size: 0.9rem;
-      margin-top: 30px;
+      color: var(--gray);
+      font-size: 0.8rem;
+      margin-top: 20px;
       font-style: italic;
     }
     
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(5, 5, 16, 0.85);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(8px);
+    }
+    
+    .modal-content {
+      background: var(--card-bg);
+      padding: 36px 32px 32px;
+      border-radius: 20px;
+      width: 480px;
+      max-width: 92%;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-color);
+      position: relative;
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    .modal-content::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent);
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .modal-header h3 {
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.3rem;
+    }
+    
+    .modal-header .close-button {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: var(--gray);
+      transition: all 0.3s ease;
+    }
+    
+    .modal-header .close-button:hover {
+      color: var(--primary);
+      transform: rotate(90deg);
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--gray);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(5, 5, 16, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--light);
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 247, 255, 0.08);
+      outline: none;
+    }
+    
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    .save-button {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .save-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 247, 255, 0.2);
+    }
+    
+    .cancel-button {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--light);
+      border: 1px solid var(--border-color);
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .cancel-button:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .import-section {
+      background: rgba(5, 5, 16, 0.5);
+      padding: 24px;
+      border-radius: 14px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+      margin-bottom: 30px;
+      border: 1px solid rgba(0, 247, 255, 0.06);
+    }
+    
+    .import-section h3 {
+      color: var(--primary);
+      margin-bottom: 16px;
+      font-weight: 300;
+      font-size: 1.1rem;
+    }
+    
+    .file-input-container input[type="file"] {
+      width: 100%;
+      padding: 12px;
+      background: rgba(5, 5, 16, 0.7);
+      border: 1px dashed rgba(0, 247, 255, 0.15);
+      border-radius: 10px;
+      color: var(--light);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .file-input-container input[type="file"]:hover {
+      border-color: var(--primary);
+    }
+    
+    .import-button {
+      background: linear-gradient(135deg, var(--success), #00cc88);
+      color: var(--darker);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(0, 255, 157, 0.15);
+    }
+    
+    .import-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 255, 157, 0.25);
+    }
+    
+    .download-template {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+    }
+    
+    .download-template:hover {
+      color: #fff;
+    }
+    
+    .file-format {
+      font-size: 0.75rem;
+      color: var(--gray);
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+    
+    #adminMessage {
+      margin-top: 12px;
+      font-size: 0.9rem;
+    }
+    
     @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-      }
-      
       .sidebar {
         width: 100%;
         height: auto;
+        position: relative;
         padding: 10px 0;
       }
       
-      .sidebar-item {
-        padding: 12px 20px;
+      .sidebar-brand {
+        padding: 0 20px 16px;
       }
       
       .main-content {
+        margin-left: 0;
         padding: 20px;
+      }
+      
+      .auth-card {
+        padding: 32px 24px 28px;
+        margin: 16px;
+        border-radius: 20px;
       }
       
       .header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 15px;
+        gap: 12px;
       }
       
       .filter-row {
         flex-direction: column;
-        gap: 15px;
+        gap: 12px;
       }
       
       .filter-group {
         width: 100%;
       }
       
-      .cards-table, .history-table {
+      .cards-table, .history-table, .recharge-requests-table {
         display: block;
         overflow-x: auto;
       }
-
+      
       .double-recharge-content {
-        padding: 30px 20px;
+        padding: 32px 24px 28px;
+        margin: 16px;
       }
-
+      
       .double-recharge-title {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
       }
-
-      .double-recharge-subtitle {
-        font-size: 1rem;
+      
+      .auth-form .form-row {
+        flex-direction: column;
+        gap: 0;
       }
     }
   </style>
 </head>
 <body>
   <!-- Double Recharge Loader -->
-  <div id="doubleRechargeLoader">
+  <div id="doubleRechargeLoader" class="double-recharge-loader">
     <div class="double-recharge-content">
       <button class="double-recharge-close" id="closeDoubleRecharge">&times;</button>
-      <h2 class="double-recharge-title">OFERTA ESPECIAL</h2>
+      <h2 class="double-recharge-title">💎 <span>OFERTA ESPECIAL</span></h2>
       <p class="double-recharge-subtitle">Recarga tu wallet y recibe el <span class="double-recharge-highlight">DOBLE</span> de lo recargado</p>
       
-      <div class="double-recharge-loader"></div>
+      <div class="double-recharge-loader-spinner"></div>
       
-      <p class="double-recharge-date">Válido hasta el 30 de Diciembre 2025</p>
+      <p class="double-recharge-date">📅 Válido hasta el 30 de Diciembre 2025</p>
       
-      <p>Recarga mínima: <span class="double-recharge-highlight">$30 USD</span></p>
-      <p>Recarga $50 y obtén $100 en créditos</p>
-      <p>Recarga $100 y obtén $200 en créditos</p>
+      <p style="color: var(--light); margin: 4px 0;">Recarga mínima: <span class="double-recharge-highlight">$30 USD</span></p>
+      <p style="color: var(--light); margin: 4px 0;">Recarga $50 y obtén $100 en créditos</p>
+      <p style="color: var(--light); margin: 4px 0;">Recarga $100 y obtén $200 en créditos</p>
       
-      <button class="double-recharge-button" id="continueToRecharge">Deseo Recarga Doble</button>
+      <button class="double-recharge-button" id="continueToRecharge">🚀 Deseo Recarga Doble</button>
       
       <p class="double-recharge-note">* Oferta válida solo para recargas de $30 USD o más</p>
     </div>
   </div>
 
+  <!-- AUTH SECTION - PROFESSIONAL -->
   <div id="auth-section" class="auth-section animate__animated animate__fadeIn">
-    <h2>Iniciar Sesión</h2>
-    <form id="authForm" class="auth-form">
-      <input type="email" id="email" placeholder="Correo electrónico" required>
-      <input type="password" id="password" placeholder="Contraseña" required>
-      <button type="submit" class="go-button">Ingresar</button>
-    </form>
-    <p id="auth-message"></p>
-    <p class="toggle-auth" id="toggleAuth">¿No tienes cuenta? Regístrate</p>
+    <div class="auth-card">
+      <div class="brand">
+        <span class="logo-icon">VERCEL</span>
+        <span class="logo-sub">Cards Market</span>
+        <h2 id="authTitle">Bienvenido</h2>
+        <p id="authSubtitle">Inicia sesión para acceder a tu cuenta</p>
+      </div>
+      
+      <form id="authForm" class="auth-form">
+        <!-- Username / Email -->
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input type="email" id="email" placeholder="tu@email.com" required>
+        </div>
+        
+        <!-- Password -->
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" id="password" placeholder="••••••••" required>
+        </div>
+        
+        <!-- Password confirmation (solo registro) -->
+        <div class="form-group" id="passwordConfirmGroup" style="display: none;">
+          <label>Confirmar Contraseña</label>
+          <input type="password" id="passwordConfirm" placeholder="••••••••">
+        </div>
+        
+        <!-- Options row -->
+        <div class="form-options">
+          <label>
+            <input type="checkbox" id="rememberMe"> Recordarme
+          </label>
+          <a href="#" id="forgotPassword">¿Olvidaste tu contraseña?</a>
+        </div>
+        
+        <!-- Captcha -->
+        <div class="captcha-row">
+          <span class="captcha-box" id="captchaDisplay">9 + 1</span>
+          <input type="text" id="captchaInput" placeholder="Resultado" autocomplete="off">
+          <button type="button" class="refresh-captcha" id="refreshCaptcha">⟳</button>
+        </div>
+        
+        <!-- Submit Button -->
+        <button type="submit" class="btn-primary" id="authSubmitBtn">Iniciar Sesión</button>
+        
+        <!-- Divider -->
+        <div class="divider">
+          <span>o</span>
+        </div>
+        
+        <!-- Switch between login/register -->
+        <div class="auth-switch">
+          <span id="authSwitchText">¿No tienes cuenta?</span>
+          <a id="toggleAuthLink">Regístrate</a>
+        </div>
+      </form>
+      
+      <p id="auth-message"></p>
+    </div>
   </div>
 
+  <!-- APP CONTAINER -->
   <div id="app-container" class="container" style="display: none;">
     <div class="sidebar">
+      <div class="sidebar-brand">
+        <span>VERCEL</span>
+        <small>Cards Market</small>
+      </div>
+      
       <div class="sidebar-item active" id="buyCardsButton">
-        <span class="sidebar-icon">®</span>
+        <span class="sidebar-icon">🃏</span>
         <span>Comprar Tarjetas</span>
       </div>
       <div class="sidebar-item" id="rechargeButton">
-        <span class="sidebar-icon">$</span>
+        <span class="sidebar-icon">💰</span>
         <span>Recargar Wallet</span>
       </div>
       <div class="sidebar-item" id="profileButton">
@@ -1419,37 +1672,37 @@
       </div>
       <div class="sidebar-item" id="rechargeRequestsButton" style="display: none;">
         <span class="sidebar-icon">📋</span>
-        <span>Solicitudes de Recarga</span>
+        <span>Solicitudes</span>
       </div>
-      <div class="sidebar-item" id="logoutButton">
-        <span class="sidebar-icon">×</span>
+      <div class="sidebar-item" id="logoutButton" style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 16px; border-radius: 0;">
+        <span class="sidebar-icon">🚪</span>
         <span>Cerrar Sesión</span>
       </div>
     </div>
     
     <div class="main-content">
-      <!-- Sección principal de tarjetas -->
+      <!-- MAIN CARDS SECTION -->
       <div id="mainCardsSection">
         <div class="header">
-          <h2>Quantum Card Market</h2>
+          <h2>🃏 Cards Market <span class="vercel-badge">▼ VERCEL</span></h2>
           <div>
             <span class="credits-display">
               <span class="credits-icon">$</span>
               <span id="userCredits">0.00</span>
             </span>
-            <button class="go-button" id="addCardButton" style="margin-left: 10px; display: none;">+ Add Card</button>
+            <button class="go-button" id="addCardButton" style="margin-left: 12px; display: none;">+ Add Card</button>
           </div>
         </div>
         
         <div class="import-section" id="importSection" style="display: none;">
-          <h3>Importar Tarjetas desde TXT</h3>
+          <h3>📂 Importar Tarjetas desde TXT</h3>
           <div class="file-input-container">
             <input type="file" id="txtFileInput" accept=".txt">
           </div>
           <button class="import-button" id="importButton">Importar Tarjetas</button>
-          <a href="#" class="download-template" id="downloadTemplate">Descargar plantilla</a>
+          <a href="#" class="download-template" id="downloadTemplate">📄 Descargar plantilla</a>
           <div class="file-format">
-            Formato requerido: Tipo|Número|Fecha Exp|CVV|Nombre|País|Zip|Precio<br>
+            Formato: Tipo|Número|Fecha Exp|CVV|Nombre|País|Zip|Precio<br>
             Ejemplo: VISA|4111111111111111|12/2025|123|John Doe|US|90210|1.50
           </div>
         </div>
@@ -1457,73 +1710,71 @@
         <div class="search-section">
           <div class="filter-row">
             <div class="filter-group">
-              <label>Bin:</label>
-              <input type="text" id="filterBin" placeholder="e.g. 4330774">
+              <label>🔍 Bin</label>
+              <input type="text" id="filterBin" placeholder="Ej: 4330774">
             </div>
             <div class="filter-group">
-              <label>Country:</label>
+              <label>🌍 País</label>
               <select id="filterCountry">
                 <option>All</option>
               </select>
             </div>
             <div class="filter-group">
-              <label>Price Range:</label>
+              <label>💰 Rango de Precio</label>
               <div class="price-filter">
                 <input type="number" id="minPrice" placeholder="Min" min="1" max="50">
-                <span>to</span>
+                <span style="color: var(--gray);">—</span>
                 <input type="number" id="maxPrice" placeholder="Max" min="1" max="50">
               </div>
             </div>
           </div>
-        </div>
-        
-        <div class="filter-row" style="margin-bottom: 15px;">
-          <div class="filter-group">
-            <label>State:</label>
-            <select id="filterState">
-              <option>All</option>
-              <option>Active</option>
-              <option>Expired</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label>Cards per page:</label>
-            <select id="cardsPerPage">
-              <option>10</option>
-              <option>25</option>
-              <option>50</option>
-            </select>
+          <div class="filter-row" style="margin-bottom: 0;">
+            <div class="filter-group">
+              <label>📌 Estado</label>
+              <select id="filterState">
+                <option>All</option>
+                <option>Active</option>
+                <option>Expired</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label>📄 Tarjetas por página</label>
+              <select id="cardsPerPage">
+                <option>10</option>
+                <option>25</option>
+                <option>50</option>
+              </select>
+            </div>
           </div>
         </div>
           
         <table class="cards-table">
           <thead>
             <tr>
-              <th>Type</th>
-              <th>Number</th>
+              <th>Tipo</th>
+              <th>Número</th>
               <th>Exp Date</th>
-              <th>Country</th>
-              <th>Price</th>
-              <th>State</th>
-              <th>Action</th>
+              <th>País</th>
+              <th>Precio</th>
+              <th>Estado</th>
+              <th>Acción</th>
             </tr>
           </thead>
           <tbody id="cardsTableBody">
-            <!-- Cards will be loaded here -->
+            <!-- Cards loaded here -->
           </tbody>
         </table>
         
         <div class="pagination">
           <div class="page-info" id="pageInfo"></div>
           <div class="page-buttons">
-            <button id="prevPage" disabled>Previous</button>
-            <button id="nextPage" disabled>Next</button>
+            <button id="prevPage" disabled>← Anterior</button>
+            <button id="nextPage" disabled>Siguiente →</button>
           </div>
         </div>
 
-        <!-- Sección de Historial de Compras -->
         <div class="history-section">
-          <h3>Transaction History</h3>
+          <h3>📜 Historial de Compras</h3>
           <table class="history-table">
             <thead>
               <tr>
@@ -1538,59 +1789,58 @@
               </tr>
             </thead>
             <tbody id="historyTableBody">
-              <!-- Historial será cargado aquí -->
+              <!-- History loaded here -->
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Sección de Recarga -->
+      <!-- RECHARGE SECTION -->
       <div id="rechargeSection" class="recharge-section">
-        <h2>Wallet Recharge</h2>
+        <h2>💰 Recargar Wallet</h2>
         
         <div class="wallet-info">
-          <h3>Payment Information</h3>
+          <h3>💳 Información de Pago</h3>
           <p><strong>Wallet:</strong> 0xa2be813e1d7ef9e95b4248d38692f10a2cb0fb94</p>
-          <p><strong>Red:</strong> (BEP20)</p>
-          <p><strong>Monto mínimo:</strong> $30 USD</p>
+          <p><strong>Red:</strong> BEP20 (BSC)</p>
+          <p><strong>Monto mínimo:</strong> $10 USD</p>
         </div>
         
         <div class="recharge-form">
-          <label>Amount (USD):</label>
+          <label>Monto (USD)</label>
           <input type="number" id="rechargeAmount" placeholder="30.00" min="10" step="0.01">
           
-          <button class="recharge-button" id="confirmRecharge">Solicitud de Compra</button>
+          <button class="recharge-button" id="confirmRecharge">📤 Solicitar Recarga</button>
         </div>
         
-        <div id="paymentDetails" style="display: none;">
-          <h3>Payment Details</h3>
-          <p>Please send exactly: <span id="amountToSend">30.00</span> USDT</p>
-          <p>to the following address:</p>
+        <div id="paymentDetails">
+          <h3>📋 Detalles de Pago</h3>
+          <p>Envía exactamente: <span id="amountToSend">30.00</span> USDT</p>
+          <p>a la siguiente dirección:</p>
           <p><strong id="walletAddress">0xa2be813e1d7ef9e95b4248d38692f10a2cb0fb94</strong></p>
           
-          <div class="receipt-section" id="receiptSection">
-            <h3>Confirm Payment</h3>
-            <p>Envia Comprobante de pago, Para validar tu pago:</p>
+          <div class="receipt-section">
+            <h3>📎 Confirmar Pago</h3>
+            <p>Sube el comprobante de tu transferencia:</p>
             <input type="file" id="receiptFile" accept="image/*,.pdf">
             <button class="upload-btn" id="sendReceipt">
-              <span id="sendReceiptText">Enviar Comprobante</span>
+              <span id="sendReceiptText">📤 Enviar Comprobante</span>
             </button>
           </div>
         </div>
 
-        <!-- Configuración de Telegram (solo para admin) -->
         <div class="telegram-config" id="telegramConfig" style="display: none;">
-          <h3>Telegram Configuration</h3>
-          <p>Configure Telegram settings for receipt notifications</p>
-          <input type="text" id="telegramBotToken" placeholder="Telegram Bot Token">
-          <input type="text" id="telegramChatId" placeholder="Telegram Chat ID">
-          <button class="save-telegram" id="saveTelegramConfig">Save Configuration</button>
+          <h3>🤖 Configuración de Telegram</h3>
+          <p>Configura el bot de Telegram para notificaciones</p>
+          <input type="text" id="telegramBotToken" placeholder="Token del Bot">
+          <input type="text" id="telegramChatId" placeholder="Chat ID">
+          <button class="save-telegram" id="saveTelegramConfig">💾 Guardar Configuración</button>
         </div>
       </div>
 
-      <!-- Sección de Perfil -->
+      <!-- PROFILE SECTION -->
       <div id="profileSection" class="profile-section">
-        <h2>My Profile</h2>
+        <h2>👤 Mi Perfil</h2>
         
         <div class="profile-info">
           <p><strong>Email:</strong> <span id="profileEmail"></span></p>
@@ -1600,36 +1850,36 @@
         </div>
       </div>
 
-      <!-- Sección de Administración -->
-      <div id="adminPanelSection" class="profile-section">
-        <h2>Panel de Administración</h2>
+      <!-- ADMIN PANEL -->
+      <div id="adminPanelSection" class="admin-panel-section">
+        <h2>⚙️ Panel de Administración</h2>
         
         <div class="search-section">
           <div class="filter-group">
-            <label>Buscar Usuario:</label>
+            <label>🔍 Buscar Usuario</label>
             <input type="text" id="adminSearchUser" placeholder="Email del usuario">
           </div>
-          <button class="go-button" id="adminSearchButton">Buscar</button>
+          <button class="go-button" id="adminSearchButton" style="margin-top: 8px;">Buscar</button>
         </div>
         
         <div id="userInfoSection" style="display: none; margin-top: 20px;">
           <div class="profile-info">
             <p><strong>Email:</strong> <span id="adminUserEmail"></span></p>
-            <p><strong>Créditos Actuales:</strong> $<span id="adminUserCredits"></span></p>
-            <p><strong>ID:</strong> <span id="adminUserId"></span></p>
+            <p><strong>Créditos:</strong> $<span id="adminUserCredits"></span></p>
+            <p><strong>ID:</strong> <span id="adminUserId" style="font-size: 0.8rem; color: var(--gray);"></span></p>
           </div>
           
-          <div class="form-group" style="margin-top: 20px;">
-            <label>Acción:</label>
+          <div class="form-group" style="margin-top: 16px;">
+            <label>Acción</label>
             <select id="adminActionType">
-              <option value="add">Agregar Créditos</option>
-              <option value="set">Establecer Créditos</option>
-              <option value="subtract">Restar Créditos</option>
+              <option value="add">➕ Agregar Créditos</option>
+              <option value="set">🎯 Establecer Créditos</option>
+              <option value="subtract">➖ Restar Créditos</option>
             </select>
           </div>
           
           <div class="form-group">
-            <label>Cantidad:</label>
+            <label>Cantidad</label>
             <input type="number" id="adminCreditAmount" placeholder="30.00" min="0" step="0.01">
           </div>
           
@@ -1638,9 +1888,9 @@
         </div>
       </div>
 
-      <!-- Nueva sección para solicitudes de recarga -->
+      <!-- RECHARGE REQUESTS -->
       <div id="rechargeRequestsSection" class="recharge-requests-section">
-        <h3>Solicitudes de Recarga Recientes</h3>
+        <h3>📋 Solicitudes de Recarga</h3>
         <table class="recharge-requests-table">
           <thead>
             <tr>
@@ -1653,83 +1903,83 @@
             </tr>
           </thead>
           <tbody id="rechargeRequestsTableBody">
-            <!-- Las solicitudes de recarga se cargarán aquí -->
+            <!-- Requests loaded here -->
           </tbody>
         </table>
       </div>
     </div>
   </div>
     
-  <!-- Add/Edit Card Modal -->
+  <!-- CARD MODAL -->
   <div class="modal" id="cardModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 id="modalTitle">Add New Card</h3>
+        <h3 id="modalTitle">Agregar Tarjeta</h3>
         <button class="close-button" id="closeModal">&times;</button>
       </div>
       <form id="cardForm">
         <input type="hidden" id="cardId">
         <div class="form-group">
-          <label>Type:</label>
+          <label>Tipo</label>
           <select id="modalType" required>
-            <option value="">Select Type</option>
+            <option value="">Seleccionar</option>
             <option value="VISA">VISA</option>
             <option value="MasterCard">MasterCard</option>
             <option value="American Express">American Express</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Card Number:</label>
-          <input type="text" id="modalNumber" required placeholder="Enter card number">
+          <label>Número de Tarjeta</label>
+          <input type="text" id="modalNumber" required placeholder="4111111111111111">
         </div>
         <div class="form-group">
-          <label>Expiration Date:</label>
+          <label>Fecha Expiración</label>
           <input type="text" id="modalExpDate" required placeholder="MM/YYYY">
         </div>
         <div class="form-group">
-          <label>CVV:</label>
-          <input type="text" id="modalCvv" required placeholder="Enter CVV">
+          <label>CVV</label>
+          <input type="text" id="modalCvv" required placeholder="123">
         </div>
         <div class="form-group">
-          <label>Cardholder Name:</label>
-          <input type="text" id="modalName" required placeholder="Enter name">
+          <label>Titular</label>
+          <input type="text" id="modalName" required placeholder="John Doe">
         </div>
         <div class="form-group">
-          <label>Country:</label>
+          <label>País</label>
           <select id="modalCountry" required>
-            <option value="">Select Country</option>
+            <option value="">Seleccionar</option>
             <option value="United States">United States</option>
             <option value="Canada">Canada</option>
             <option value="UK">UK</option>
+            <option value="Spain">Spain</option>
+            <option value="Mexico">Mexico</option>
           </select>
         </div>
         <div class="form-group">
-          <label>ZIP Code:</label>
-          <input type="text" id="modalZip" required placeholder="Enter ZIP code">
+          <label>Código Postal</label>
+          <input type="text" id="modalZip" required placeholder="90210">
         </div>
         <div class="form-group">
-          <label>Price ($):</label>
+          <label>Precio ($)</label>
           <input type="number" id="modalPrice" required placeholder="1.00" step="0.01" min="1" max="50">
         </div>
         <div class="modal-footer">
-          <button type="button" class="cancel-button" id="cancelModal">Cancel</button>
-          <button type="submit" class="save-button">Save</button>
+          <button type="button" class="cancel-button" id="cancelModal">Cancelar</button>
+          <button type="submit" class="save-button">💾 Guardar</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Firebase SDK -->
   <script type="module">
-    // Firebase imports
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { 
       getAuth, 
       createUserWithEmailAndPassword, 
       signInWithEmailAndPassword, 
       signOut,
       onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { 
       getFirestore, 
       collection, 
@@ -1748,20 +1998,18 @@
       writeBatch,
       orderBy,
       limit
-    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // Firebase configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyCbAICRiZiKgMhW73DFwD75LTO2K05ABKY",
-      authDomain: "shopersatan.firebaseapp.com",
-      projectId: "shopersatan",
-      storageBucket: "shopersatan.appspot.com",
-      messagingSenderId: "514655940895",
-      appId: "1:514655940895:web:f99487e57fac4645f4802a",
-      measurementId: "G-9MWBLF29W8"
+      apiKey: "AIzaSyBAdxCKv5z8RVLo10nGOqi1ckdw2mmtqNs",
+      authDomain: "rifapp-6f03c.firebaseapp.com",
+      projectId: "rifapp-6f03c",
+      storageBucket: "rifapp-6f03c.firebasestorage.app",
+      messagingSenderId: "584015702451",
+      appId: "1:584015702451:web:4191078037634cc63a43c6",
+      measurementId: "G-GGX8B2C2ZE"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
@@ -1771,12 +2019,25 @@
     const rechargeCollection = collection(db, "rechargeRequests");
     const configCollection = collection(db, "config");
 
-    // DOM elements
+    // DOM Elements
     const authSection = document.getElementById("auth-section");
     const appContainer = document.getElementById("app-container");
     const authForm = document.getElementById("authForm");
     const authMessage = document.getElementById("auth-message");
-    const toggleAuth = document.getElementById("toggleAuth");
+    const toggleAuthLink = document.getElementById("toggleAuthLink");
+    const authSwitchText = document.getElementById("authSwitchText");
+    const authTitle = document.getElementById("authTitle");
+    const authSubtitle = document.getElementById("authSubtitle");
+    const authSubmitBtn = document.getElementById("authSubmitBtn");
+    const passwordConfirmGroup = document.getElementById("passwordConfirmGroup");
+    const passwordConfirm = document.getElementById("passwordConfirm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const rememberMe = document.getElementById("rememberMe");
+    const forgotPassword = document.getElementById("forgotPassword");
+    const captchaDisplay = document.getElementById("captchaDisplay");
+    const captchaInput = document.getElementById("captchaInput");
+    const refreshCaptcha = document.getElementById("refreshCaptcha");
     const logoutButton = document.getElementById("logoutButton");
     const buyCardsButton = document.getElementById("buyCardsButton");
     const profileButton = document.getElementById("profileButton");
@@ -1808,7 +2069,6 @@
     const minPrice = document.getElementById("minPrice");
     const maxPrice = document.getElementById("maxPrice");
 
-    // New elements for recharge
     const mainCardsSection = document.getElementById("mainCardsSection");
     const rechargeSection = document.getElementById("rechargeSection");
     const rechargeAmount = document.getElementById("rechargeAmount");
@@ -1825,14 +2085,12 @@
     const telegramChatId = document.getElementById("telegramChatId");
     const saveTelegramConfig = document.getElementById("saveTelegramConfig");
 
-    // Profile section elements
     const profileSection = document.getElementById("profileSection");
     const profileEmail = document.getElementById("profileEmail");
     const profileCredits = document.getElementById("profileCredits");
     const profileJoinDate = document.getElementById("profileJoinDate");
     const profileRole = document.getElementById("profileRole");
 
-    // Admin panel elements
     const adminPanelSection = document.getElementById("adminPanelSection");
     const adminSearchUser = document.getElementById("adminSearchUser");
     const adminSearchButton = document.getElementById("adminSearchButton");
@@ -1845,27 +2103,17 @@
     const adminApplyAction = document.getElementById("adminApplyAction");
     const adminMessage = document.getElementById("adminMessage");
 
-    // Recharge requests elements
     const rechargeRequestsSection = document.getElementById("rechargeRequestsSection");
     const rechargeRequestsTableBody = document.getElementById("rechargeRequestsTableBody");
 
-    // Double recharge elements
     const doubleRechargeLoader = document.getElementById("doubleRechargeLoader");
     const closeDoubleRecharge = document.getElementById("closeDoubleRecharge");
     const continueToRecharge = document.getElementById("continueToRecharge");
 
-    // Telegram configuration
-    let telegramConfigData = {
-      botToken: '',
-      chatId: ''
-    };
-
-    // Auth state
+    let telegramConfigData = { botToken: '', chatId: '' };
     let isLogin = true;
     let currentUser = null;
     let currentUserData = null;
-
-    // Pagination
     let currentPage = 1;
     let cardsPerPage = parseInt(cardsPerPageSelect.value);
     let unsubscribeCards;
@@ -1873,77 +2121,110 @@
     let unsubscribeUser;
     let unsubscribeConfig;
     let unsubscribeRechargeRequests;
-
-    // Countries
     let allCountries = new Set(['All']);
+    let captchaAnswer = 0;
 
-    // Show double recharge loader
-    function showDoubleRechargeLoader() {
-      doubleRechargeLoader.style.display = 'flex';
+    // Captcha
+    function generateCaptcha() {
+      const num1 = Math.floor(Math.random() * 9) + 1;
+      const num2 = Math.floor(Math.random() * 9) + 1;
+      captchaDisplay.textContent = `${num1} + ${num2}`;
+      captchaAnswer = num1 + num2;
+    }
+    
+    refreshCaptcha.addEventListener('click', generateCaptcha);
+    generateCaptcha();
+
+    function toggleAuthMode(loginMode) {
+      isLogin = loginMode;
+      if (isLogin) {
+        authTitle.textContent = 'Bienvenido';
+        authSubtitle.textContent = 'Inicia sesión para acceder a tu cuenta';
+        authSubmitBtn.textContent = 'Iniciar Sesión';
+        authSwitchText.textContent = '¿No tienes cuenta?';
+        toggleAuthLink.textContent = 'Regístrate';
+        passwordConfirmGroup.style.display = 'none';
+        passwordConfirm.removeAttribute('required');
+        forgotPassword.style.display = 'inline';
+      } else {
+        authTitle.textContent = 'Crear Cuenta';
+        authSubtitle.textContent = 'Regístrate para comenzar a comprar';
+        authSubmitBtn.textContent = 'Registrarse';
+        authSwitchText.textContent = '¿Ya tienes cuenta?';
+        toggleAuthLink.textContent = 'Inicia sesión';
+        passwordConfirmGroup.style.display = 'block';
+        passwordConfirm.setAttribute('required', 'required');
+        forgotPassword.style.display = 'none';
+      }
+      authMessage.textContent = '';
     }
 
-    // Hide double recharge loader
-    function hideDoubleRechargeLoader() {
-      doubleRechargeLoader.style.display = 'none';
-    }
-
-    // Close double recharge loader
-    closeDoubleRecharge.addEventListener('click', hideDoubleRechargeLoader);
-
-    // Continue to recharge page
-    continueToRecharge.addEventListener('click', () => {
-      hideDoubleRechargeLoader();
-      mainCardsSection.style.display = "none";
-      rechargeSection.style.display = "block";
-      profileSection.style.display = "none";
-      adminPanelSection.style.display = "none";
-      rechargeRequestsSection.style.display = "none";
-      
-      document.querySelectorAll('.sidebar-item').forEach(item => {
-        item.classList.remove('active');
-      });
-      rechargeButton.classList.add('active');
+    toggleAuthLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleAuthMode(!isLogin);
     });
 
-    // Toggle between login and register
-    toggleAuth.addEventListener("click", () => {
-      isLogin = !isLogin;
-      document.querySelector("#auth-section h2").textContent = isLogin ? "Iniciar Sesión" : "Registro";
-      document.querySelector("#authForm button").textContent = isLogin ? "Ingresar" : "Registrarse";
-      toggleAuth.textContent = isLogin ? "¿No tienes cuenta? Regístrate" : "¿Ya tienes cuenta? Inicia sesión";
-      authMessage.textContent = "";
+    forgotPassword.addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('🔐 Por favor contacta con soporte para restablecer tu contraseña.');
     });
 
-    // Auth form submission
     authForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const captchaResult = captchaInput.value.trim();
+      
+      if (parseInt(captchaResult) !== captchaAnswer) {
+        authMessage.textContent = '❌ Código de verificación incorrecto';
+        authMessage.className = '';
+        generateCaptcha();
+        captchaInput.value = '';
+        return;
+      }
+      
+      if (!isLogin) {
+        const confirmPass = passwordConfirm.value;
+        if (password !== confirmPass) {
+          authMessage.textContent = '❌ Las contraseñas no coinciden';
+          authMessage.className = '';
+          return;
+        }
+        if (password.length < 6) {
+          authMessage.textContent = '❌ La contraseña debe tener al menos 6 caracteres';
+          authMessage.className = '';
+          return;
+        }
+      }
 
       try {
+        authSubmitBtn.disabled = true;
+        authSubmitBtn.innerHTML = '<span class="loading"></span> Cargando...';
+        
         if (isLogin) {
           await signInWithEmailAndPassword(auth, email, password);
         } else {
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-          // Create user document with initial credits
           await setDoc(doc(db, "users", userCredential.user.uid), {
             email: email,
-            credits: 0,
+            credits: 30.00,
             isAdmin: false,
             createdAt: serverTimestamp()
           });
         }
       } catch (err) {
-        authMessage.textContent = err.message;
+        authMessage.textContent = '❌ ' + err.message;
+        authMessage.className = '';
+        authSubmitBtn.disabled = false;
+        authSubmitBtn.innerHTML = isLogin ? 'Iniciar Sesión' : 'Registrarse';
       }
     });
 
-    // Logout
     logoutButton.addEventListener("click", () => {
       signOut(auth);
     });
 
-    // Toggle between sections
     buyCardsButton.addEventListener("click", showCardsSection);
     
     rechargeButton.addEventListener("click", () => {
@@ -1966,7 +2247,6 @@
         profileEmail.textContent = currentUser.email;
         profileCredits.textContent = currentUserData?.credits?.toFixed(2) || '0.00';
         profileRole.textContent = currentUserData?.isAdmin ? 'Administrador' : 'Usuario';
-        
         if (currentUserData?.createdAt?.toDate) {
           profileJoinDate.textContent = currentUserData.createdAt.toDate().toLocaleDateString();
         } else {
@@ -1975,7 +2255,6 @@
       }
     });
 
-    // Admin panel button click
     adminPanelButton.addEventListener("click", () => {
       mainCardsSection.style.display = "none";
       rechargeSection.style.display = "none";
@@ -1987,12 +2266,10 @@
         item.classList.remove('active');
       });
       adminPanelButton.classList.add('active');
-      
       adminSearchUser.value = '';
       userInfoSection.style.display = "none";
     });
 
-    // Recharge requests button click
     rechargeRequestsButton.addEventListener("click", () => {
       mainCardsSection.style.display = "none";
       rechargeSection.style.display = "none";
@@ -2004,11 +2281,9 @@
         item.classList.remove('active');
       });
       rechargeRequestsButton.classList.add('active');
-      
       loadRechargeRequests();
     });
 
-    // Show cards section
     function showCardsSection() {
       mainCardsSection.style.display = "block";
       rechargeSection.style.display = "none";
@@ -2022,7 +2297,30 @@
       buyCardsButton.classList.add('active');
     }
 
-    // Auth state change handler
+    function showDoubleRechargeLoader() {
+      doubleRechargeLoader.style.display = 'flex';
+    }
+
+    function hideDoubleRechargeLoader() {
+      doubleRechargeLoader.style.display = 'none';
+    }
+
+    closeDoubleRecharge.addEventListener('click', hideDoubleRechargeLoader);
+
+    continueToRecharge.addEventListener('click', () => {
+      hideDoubleRechargeLoader();
+      mainCardsSection.style.display = "none";
+      rechargeSection.style.display = "block";
+      profileSection.style.display = "none";
+      adminPanelSection.style.display = "none";
+      rechargeRequestsSection.style.display = "none";
+      
+      document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      rechargeButton.classList.add('active');
+    });
+
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         currentUser = user;
@@ -2033,22 +2331,24 @@
         loadTelegramConfig();
         loadCards();
         loadPurchaseHistory();
-        
         showCardsSection();
       } else {
         currentUser = null;
         currentUserData = null;
-        authSection.style.display = "block";
+        authSection.style.display = "flex";
         appContainer.style.display = "none";
         if (unsubscribeCards) unsubscribeCards();
         if (unsubscribeHistory) unsubscribeHistory();
         if (unsubscribeUser) unsubscribeUser();
         if (unsubscribeConfig) unsubscribeConfig();
         if (unsubscribeRechargeRequests) unsubscribeRechargeRequests();
+        
+        // Reset auth form
+        authSubmitBtn.disabled = false;
+        authSubmitBtn.innerHTML = isLogin ? 'Iniciar Sesión' : 'Registrarse';
       }
     });
 
-    // Load Telegram configuration
     function loadTelegramConfig() {
       if (!currentUser) return;
       
@@ -2058,19 +2358,16 @@
           telegramConfigData = doc.data();
           telegramBotToken.value = telegramConfigData.botToken || '';
           telegramChatId.value = telegramConfigData.chatId || '';
-          
           telegramConfig.style.display = currentUserData?.isAdmin ? 'block' : 'none';
         }
       });
     }
 
-    // Save Telegram configuration
     saveTelegramConfig.addEventListener('click', async () => {
       if (!currentUserData?.isAdmin) {
-        alert('Solo los administradores pueden configurar esto');
+        alert('Solo administradores pueden configurar esto');
         return;
       }
-      
       try {
         await setDoc(doc(db, "config", "telegram"), {
           botToken: telegramBotToken.value,
@@ -2078,17 +2375,14 @@
           updatedAt: serverTimestamp(),
           updatedBy: currentUser.uid
         });
-        
         telegramConfigData.botToken = telegramBotToken.value;
         telegramConfigData.chatId = telegramChatId.value;
-        alert('Configuración de Telegram guardada correctamente');
+        alert('✅ Configuración de Telegram guardada');
       } catch (error) {
-        console.error('Error al guardar configuración:', error);
-        alert('Error al guardar la configuración');
+        alert('❌ Error al guardar: ' + error.message);
       }
     });
 
-    // Update admin visibility
     function updateAdminVisibility() {
       if (currentUserData?.isAdmin) {
         adminPanelButton.style.display = 'flex';
@@ -2102,7 +2396,6 @@
       }
     }
 
-    // Load user data
     async function loadUserData() {
       if (!currentUser) return;
       
@@ -2111,7 +2404,6 @@
         if (doc.exists()) {
           currentUserData = doc.data();
           userCreditsDisplay.textContent = currentUserData.credits.toFixed(2);
-          
           addCardButton.style.display = currentUserData.isAdmin ? "inline-block" : "none";
           importSection.style.display = currentUserData.isAdmin ? "block" : "none";
           telegramConfig.style.display = currentUserData.isAdmin ? 'block' : 'none';
@@ -2127,7 +2419,6 @@
       });
     }
 
-    // Load cards from Firestore
     function loadCards() {
       if (!currentUser) return;
       
@@ -2135,15 +2426,12 @@
       unsubscribeCards = onSnapshot(q, (snapshot) => {
         const cards = [];
         allCountries = new Set(['All']);
-        
         const currentSelectedCountry = filterCountry.value;
         
         snapshot.forEach(doc => {
           const cardData = { id: doc.id, ...doc.data() };
           cards.push(cardData);
-          if (cardData.country) {
-            allCountries.add(cardData.country);
-          }
+          if (cardData.country) allCountries.add(cardData.country);
         });
         
         filterCountry.innerHTML = '';
@@ -2159,12 +2447,10 @@
         } else {
           filterCountry.value = 'All';
         }
-        
         renderCards(cards);
       });
     }
 
-    // Load recharge requests
     function loadRechargeRequests() {
       if (!currentUser || !currentUserData?.isAdmin) return;
       
@@ -2178,7 +2464,6 @@
       });
     }
 
-    // Render recharge requests to the table
     function renderRechargeRequests(requests) {
       rechargeRequestsTableBody.innerHTML = '';
       
@@ -2188,16 +2473,12 @@
         const formattedDate = date.toLocaleString();
         
         let statusClass = '';
-        if (request.status === 'pending') {
-          statusClass = 'recharge-status-pending';
-        } else if (request.status === 'approved') {
-          statusClass = 'recharge-status-approved';
-        } else if (request.status === 'rejected') {
-          statusClass = 'recharge-status-rejected';
-        }
+        if (request.status === 'pending') statusClass = 'recharge-status-pending';
+        else if (request.status === 'approved') statusClass = 'recharge-status-approved';
+        else if (request.status === 'rejected') statusClass = 'recharge-status-rejected';
         
         row.innerHTML = `
-          <td>${request.userId}</td>
+          <td>${request.userId?.substring(0, 8) || 'N/A'}</td>
           <td>${request.email}</td>
           <td>$${request.amount?.toFixed(2) || '0.00'}</td>
           <td>${formattedDate}</td>
@@ -2212,7 +2493,6 @@
         rechargeRequestsTableBody.appendChild(row);
       });
 
-      // Add event listeners to approve buttons
       document.querySelectorAll('.approve-recharge-btn').forEach(button => {
         button.addEventListener('click', async (e) => {
           const requestId = e.target.getAttribute('data-id');
@@ -2221,55 +2501,37 @@
           
           try {
             const batch = writeBatch(db);
-            
-            // Update the request status
             const requestRef = doc(db, "rechargeRequests", requestId);
-            batch.update(requestRef, {
-              status: 'approved',
-              processedAt: serverTimestamp(),
-              processedBy: currentUser.uid
-            });
-            
-            // Add credits to user
+            batch.update(requestRef, { status: 'approved', processedAt: serverTimestamp(), processedBy: currentUser.uid });
             const userRef = doc(db, "users", userId);
-            batch.update(userRef, {
-              credits: increment(amount)
-            });
-            
+            batch.update(userRef, { credits: increment(amount) });
             await batch.commit();
-            
-            alert(`Recarga aprobada y $${amount.toFixed(2)} créditos añadidos al usuario`);
+            alert(`✅ Recarga aprobada. $${amount.toFixed(2)} créditos añadidos.`);
           } catch (error) {
-            console.error('Error al aprobar recarga:', error);
-            alert('Error al aprobar la recarga: ' + error.message);
+            alert('❌ Error: ' + error.message);
           }
         });
       });
 
-      // Add event listeners to reject buttons
       document.querySelectorAll('.reject-recharge-btn').forEach(button => {
         button.addEventListener('click', async (e) => {
           const requestId = e.target.getAttribute('data-id');
-          
-          if (confirm('¿Estás seguro de que deseas rechazar esta solicitud de recarga?')) {
+          if (confirm('¿Rechazar esta solicitud?')) {
             try {
               await updateDoc(doc(db, "rechargeRequests", requestId), {
                 status: 'rejected',
                 processedAt: serverTimestamp(),
                 processedBy: currentUser.uid
               });
-              
-              alert('Solicitud de recarga rechazada');
+              alert('✅ Solicitud rechazada');
             } catch (error) {
-              console.error('Error al rechazar recarga:', error);
-              alert('Error al rechazar la recarga: ' + error.message);
+              alert('❌ Error: ' + error.message);
             }
           }
         });
       });
     }
 
-    // Load purchase history
     function loadPurchaseHistory() {
       if (!currentUser) return;
       
@@ -2283,7 +2545,6 @@
       });
     }
 
-    // Render cards to the table
     function renderCards(cards) {
       cardsTableBody.innerHTML = '';
       
@@ -2295,19 +2556,14 @@
       const maxPriceValue = parseFloat(maxPrice.value) || 50;
       
       if (binFilter) {
-        filteredCards = filteredCards.filter(card => 
-          card.number.toLowerCase().includes(binFilter)
-        );
+        filteredCards = filteredCards.filter(card => card.number.toLowerCase().includes(binFilter));
       }
-      
       if (countryFilter !== "All") {
         filteredCards = filteredCards.filter(card => card.country === countryFilter);
       }
-      
       if (stateFilter !== "All") {
         filteredCards = filteredCards.filter(card => card.state === stateFilter);
       }
-      
       filteredCards = filteredCards.filter(card => {
         const price = card.price || 0.5;
         return price >= minPriceValue && price <= maxPriceValue;
@@ -2319,17 +2575,13 @@
       const endIndex = Math.min(startIndex + cardsPerPage, totalCards);
       const paginatedCards = filteredCards.slice(startIndex, endIndex);
       
-      pageInfo.textContent = `Showing ${startIndex + 1} to ${endIndex} of ${totalCards} entries`;
-      
+      pageInfo.textContent = `Mostrando ${startIndex + 1} a ${endIndex} de ${totalCards} entradas`;
       prevPageButton.disabled = currentPage === 1;
       nextPageButton.disabled = currentPage === totalPages || totalPages === 0;
       
       paginatedCards.forEach(card => {
         const row = document.createElement('tr');
-        const displayedNumber = card.number.length > 6 
-          ? card.number.substring(0, 6) + '******' 
-          : card.number;
-        
+        const displayedNumber = card.number.length > 6 ? card.number.substring(0, 6) + '******' : card.number;
         const cardPrice = card.price || (Math.random() * 49 + 1).toFixed(2);
         
         row.innerHTML = `
@@ -2340,10 +2592,10 @@
           <td>$${parseFloat(cardPrice).toFixed(2)}</td>
           <td>${card.state}</td>
           <td>
-            <button class="action-button show-card-button" data-id="${card.id}" data-price="${cardPrice}">Buy</button>
+            <button class="action-button show-card-button" data-id="${card.id}" data-price="${cardPrice}">Comprar</button>
             ${currentUserData?.isAdmin ? `
-              <button class="action-button edit-button" data-id="${card.id}">Edit</button>
-              <button class="action-button delete-button" data-id="${card.id}">Delete</button>
+              <button class="action-button edit-button" data-id="${card.id}">✎</button>
+              <button class="action-button delete-button" data-id="${card.id}">✕</button>
             ` : ''}
           </td>
         `;
@@ -2371,42 +2623,30 @@
             const cardPrice = parseFloat(e.target.getAttribute('data-price'));
             
             if (currentUserData.credits < cardPrice) {
-              alert(`Créditos insuficientes. Necesitas $${cardPrice.toFixed(2)} (Tienes $${currentUserData.credits.toFixed(2)})`);
+              alert(`❌ Créditos insuficientes. Necesitas $${cardPrice.toFixed(2)} (Tienes $${currentUserData.credits.toFixed(2)})`);
               return;
             }
             
-            if (!confirm(`¿Confirmas la compra de esta tarjeta por $${cardPrice.toFixed(2)}?`)) {
-              return;
-            }
+            if (!confirm(`¿Confirmas la compra por $${cardPrice.toFixed(2)}?`)) return;
 
             const cardDoc = await getDoc(doc(db, "cards", cardId));
-            if (!cardDoc.exists()) {
-              throw new Error("La tarjeta no existe o ya fue comprada");
-            }
+            if (!cardDoc.exists()) throw new Error("La tarjeta ya fue comprada");
             
             const cardData = cardDoc.data();
-            const fullNumber = cardData.number;
-            const cvv = cardData.cvv;
-            const expDate = cardData.expDate;
-            const cardType = cardData.type;
-            const country = cardData.country;
-
             const batch = writeBatch(db);
             
             const userRef = doc(db, "users", currentUser.uid);
-            batch.update(userRef, {
-              credits: increment(-cardPrice)
-            });
+            batch.update(userRef, { credits: increment(-cardPrice) });
             
             const historyRef = doc(collection(db, "purchaseHistory"));
             batch.set(historyRef, {
               userId: currentUser.uid,
               cardId: cardId,
-              type: cardType,
-              number: fullNumber,
-              cvv: cvv,
-              expDate: expDate,
-              country: country,
+              type: cardData.type,
+              number: cardData.number,
+              cvv: cardData.cvv,
+              expDate: cardData.expDate,
+              country: cardData.country,
               price: cardPrice,
               state: "Purchased",
               purchaseDate: serverTimestamp()
@@ -2416,18 +2656,15 @@
             batch.delete(cardRef);
             
             await batch.commit();
-            
             alert(`✅ Compra exitosa! Tarjeta adquirida por $${cardPrice.toFixed(2)}`);
             
           } catch (error) {
-            console.error("Error detallado en la compra:", error);
-            alert(`❌ Error en la compra: ${error.message || "Por favor intenta nuevamente. Si persiste, contacta al soporte."}`);
+            alert(`❌ Error: ${error.message}`);
           }
         });
       });
     }
 
-    // Render purchase history
     function renderPurchaseHistory(history) {
       historyTableBody.innerHTML = '';
       
@@ -2456,20 +2693,12 @@
       });
     }
 
-    // Recharge functionality
     confirmRecharge.addEventListener('click', () => {
       const amount = parseFloat(rechargeAmount.value);
-      
-      if (isNaN(amount)) {
-        alert('Por favor ingresa un monto válido');
+      if (isNaN(amount) || amount < 10) {
+        alert('❌ Ingresa un monto válido (mínimo $10 USD)');
         return;
       }
-      
-      if (amount < 10) {
-        alert('El monto mínimo de recarga es $10 USD');
-        return;
-      }
-      
       amountToSend.textContent = amount.toFixed(2);
       paymentDetails.style.display = 'block';
       receiptSection.style.display = 'block';
@@ -2478,19 +2707,14 @@
     async function sendToTelegramBot(email, amount, fileBase64, fileType) {
       try {
         if (!telegramConfigData.botToken || !telegramConfigData.chatId) {
-          console.log('Configuración de Telegram incompleta. No se enviará notificación.');
+          console.log('Telegram no configurado');
           return;
         }
 
-        const caption = `📌 *Nueva solicitud de recarga* 📌\n\n` +
-                       `✉️ *Email:* ${email}\n` +
-                       `💰 *Monto:* $${amount.toFixed(2)} USD\n` +
-                       `🕒 *Fecha:* ${new Date().toLocaleString()}\n\n` +
-                       `_ID Usuario: ${currentUser.uid}_`;
+        const caption = `📌 *Nueva solicitud de recarga*\n\n✉️ *Email:* ${email}\n💰 *Monto:* $${amount.toFixed(2)} USD\n🕒 *Fecha:* ${new Date().toLocaleString()}`;
 
         let endpoint = `https://api.telegram.org/bot${telegramConfigData.botToken}/sendDocument`;
         let fileField = 'document';
-        
         if (fileType.startsWith('image/')) {
           endpoint = `https://api.telegram.org/bot${telegramConfigData.botToken}/sendPhoto`;
           fileField = 'photo';
@@ -2498,17 +2722,13 @@
 
         const byteCharacters = atob(fileBase64);
         const byteArrays = [];
-        
         for (let offset = 0; offset < byteCharacters.length; offset += 512) {
           const slice = byteCharacters.slice(offset, offset + 512);
           const byteNumbers = new Array(slice.length);
-          
           for (let i = 0; i < slice.length; i++) {
             byteNumbers[i] = slice.charCodeAt(i);
           }
-          
-          const byteArray = new Uint8Array(byteNumbers);
-          byteArrays.push(byteArray);
+          byteArrays.push(new Uint8Array(byteNumbers));
         }
         
         const blob = new Blob(byteArrays, { type: fileType });
@@ -2520,23 +2740,12 @@
         formData.append('parse_mode', 'Markdown');
         formData.append(fileField, blob, fileName);
 
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          body: formData
-        });
-
+        const response = await fetch(endpoint, { method: 'POST', body: formData });
         const result = await response.json();
-        
-        if (!result.ok) {
-          console.error('Error en la respuesta de Telegram:', result);
-          throw new Error(result.description || 'Error al enviar a Telegram');
-        }
-
-        console.log('Comprobante enviado a Telegram correctamente');
+        if (!result.ok) throw new Error(result.description || 'Error al enviar');
         return true;
-        
       } catch (error) {
-        console.error('Error detallado en sendToTelegramBot:', error);
+        console.error('Telegram error:', error);
         throw error;
       }
     }
@@ -2546,12 +2755,7 @@
       const amount = parseFloat(rechargeAmount.value);
       
       if (!file) {
-        alert('Por favor selecciona un comprobante');
-        return;
-      }
-      
-      if (!currentUser) {
-        alert('No hay usuario autenticado');
+        alert('❌ Selecciona un comprobante');
         return;
       }
       
@@ -2579,42 +2783,31 @@
               await sendToTelegramBot(currentUser.email, amount, base64File, fileType);
             }
             
-            alert('✅ Comprobante enviado correctamente. Tu recarga será procesada en breve.');
-            
+            alert('✅ Comprobante enviado. Tu recarga será procesada.');
           } catch (error) {
-            console.error('Error al procesar:', error);
-            alert('❌ Error al enviar comprobante: ' + (error.message || 'Por favor intenta nuevamente'));
+            alert('❌ Error: ' + error.message);
           } finally {
             sendReceipt.disabled = false;
-            sendReceiptText.textContent = 'Enviar Comprobante';
-            
+            sendReceiptText.textContent = '📤 Enviar Comprobante';
             receiptFile.value = '';
             paymentDetails.style.display = 'none';
             receiptSection.style.display = 'none';
             rechargeAmount.value = '';
           }
         };
-        
-        reader.onerror = () => {
-          throw new Error('Error al leer el archivo');
-        };
-        
         reader.readAsDataURL(file);
-        
       } catch (error) {
-        console.error('Error en el evento click:', error);
-        alert('❌ Error: ' + (error.message || 'Ocurrió un error inesperado'));
-        
+        alert('❌ Error: ' + error.message);
         sendReceipt.disabled = false;
-        sendReceiptText.textContent = 'Enviar Comprobante';
+        sendReceiptText.textContent = '📤 Enviar Comprobante';
       }
     });
 
-    // Search user for admin
     adminSearchButton.addEventListener('click', async () => {
       const email = adminSearchUser.value.trim();
       if (!email) {
-        showAdminMessage('Por favor ingresa un email', 'error');
+        adminMessage.textContent = '❌ Ingresa un email';
+        adminMessage.style.color = 'var(--danger)';
         return;
       }
       
@@ -2626,50 +2819,41 @@
         const querySnapshot = await getDocs(q);
         
         if (querySnapshot.empty) {
-          showAdminMessage('Usuario no encontrado', 'error');
+          adminMessage.textContent = '❌ Usuario no encontrado';
+          adminMessage.style.color = 'var(--danger)';
           userInfoSection.style.display = 'none';
           return;
         }
         
         const userDoc = querySnapshot.docs[0];
         const userData = userDoc.data();
-        
         adminUserEmail.textContent = userData.email;
         adminUserCredits.textContent = userData.credits?.toFixed(2) || '0.00';
         adminUserId.textContent = userDoc.id;
         userInfoSection.style.display = 'block';
-        adminMessage.textContent = '';
-        
-        if (currentUserData?.isAdmin) {
-          showAdminMessage('Usuario encontrado. Puedes modificar sus créditos.', 'success');
-        }
-        
+        adminMessage.textContent = '✅ Usuario encontrado';
+        adminMessage.style.color = 'var(--success)';
       } catch (error) {
-        console.error('Error searching user:', error);
-        showAdminMessage('Error al buscar usuario', 'error');
+        adminMessage.textContent = '❌ Error: ' + error.message;
+        adminMessage.style.color = 'var(--danger)';
       } finally {
         adminSearchButton.disabled = false;
         adminSearchButton.textContent = 'Buscar';
       }
     });
 
-    // Función para mostrar mensajes en el panel admin
-    function showAdminMessage(message, type) {
-      adminMessage.textContent = message;
-      adminMessage.style.color = type === 'error' ? 'var(--danger)' : 'var(--success)';
-    }
-
-    // Apply admin action
     adminApplyAction.addEventListener('click', async () => {
       const userId = adminUserId.textContent;
       if (!userId) {
-        showAdminMessage('Primero busca un usuario', 'error');
+        adminMessage.textContent = '❌ Primero busca un usuario';
+        adminMessage.style.color = 'var(--danger)';
         return;
       }
       
       const amount = parseFloat(adminCreditAmount.value);
       if (isNaN(amount) || amount < 0) {
-        showAdminMessage('Ingresa una cantidad válida', 'error');
+        adminMessage.textContent = '❌ Ingresa una cantidad válida';
+        adminMessage.style.color = 'var(--danger)';
         return;
       }
       
@@ -2680,69 +2864,47 @@
         adminApplyAction.disabled = true;
         adminApplyAction.innerHTML = '<span class="loading"></span> Procesando...';
         
-        if (!currentUserData?.isAdmin) {
-          throw new Error('Solo los administradores pueden realizar esta acción');
-        }
-        
-        let message = '';
         if (action === 'add') {
-          await updateDoc(userRef, {
-            credits: increment(amount)
-          });
-          message = `✅ Se agregaron $${amount.toFixed(2)} créditos al usuario`;
-        } 
-        else if (action === 'subtract') {
+          await updateDoc(userRef, { credits: increment(amount) });
+          adminMessage.textContent = `✅ Agregados $${amount.toFixed(2)} créditos`;
+        } else if (action === 'subtract') {
           const userDoc = await getDoc(userRef);
           const currentCredits = userDoc.data()?.credits || 0;
-          if (currentCredits < amount) {
-            throw new Error('No se puede restar más créditos de los que tiene el usuario');
-          }
-          
-          await updateDoc(userRef, {
-            credits: increment(-amount)
-          });
-          message = `✅ Se restaron $${amount.toFixed(2)} créditos al usuario`;
+          if (currentCredits < amount) throw new Error('Créditos insuficientes');
+          await updateDoc(userRef, { credits: increment(-amount) });
+          adminMessage.textContent = `✅ Restados $${amount.toFixed(2)} créditos`;
+        } else {
+          await updateDoc(userRef, { credits: amount });
+          adminMessage.textContent = `✅ Establecidos $${amount.toFixed(2)} créditos`;
         }
-        else {
-          await updateDoc(userRef, {
-            credits: amount
-          });
-          message = `✅ Se establecieron $${amount.toFixed(2)} créditos al usuario`;
-        }
-        
-        showAdminMessage(message, 'success');
+        adminMessage.style.color = 'var(--success)';
         
         const userDoc = await getDoc(userRef);
         if (userDoc.exists()) {
-          const userData = userDoc.data();
-          adminUserCredits.textContent = userData.credits?.toFixed(2) || '0.00';
+          adminUserCredits.textContent = userDoc.data().credits?.toFixed(2) || '0.00';
         }
-        
       } catch (error) {
-        console.error('Error updating credits:', error);
-        showAdminMessage(`❌ Error: ${error.message}`, 'error');
+        adminMessage.textContent = '❌ ' + error.message;
+        adminMessage.style.color = 'var(--danger)';
       } finally {
         adminApplyAction.disabled = false;
         adminApplyAction.textContent = 'Aplicar Cambios';
       }
     });
 
-    // Add new card
     addCardButton.addEventListener('click', () => {
-      modalTitle.textContent = 'Add New Card';
+      modalTitle.textContent = 'Agregar Tarjeta';
       cardForm.reset();
       cardIdInput.value = '';
       document.getElementById('modalPrice').value = (Math.random() * 49 + 1).toFixed(2);
       cardModal.style.display = 'flex';
     });
 
-    // Edit card
     async function editCard(id) {
       const cardDoc = await getDoc(doc(db, "cards", id));
-      
       if (cardDoc.exists()) {
         const card = cardDoc.data();
-        modalTitle.textContent = 'Edit Card';
+        modalTitle.textContent = 'Editar Tarjeta';
         cardIdInput.value = id;
         document.getElementById('modalType').value = card.type;
         document.getElementById('modalNumber').value = card.number;
@@ -2756,14 +2918,12 @@
       }
     }
 
-    // Delete card
     async function deleteCard(id) {
-      if (confirm('Are you sure you want to delete this card?')) {
+      if (confirm('¿Eliminar esta tarjeta?')) {
         await deleteDoc(doc(db, "cards", id));
       }
     }
 
-    // Save card (add or update)
     cardForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -2790,43 +2950,29 @@
         }
         cardModal.style.display = 'none';
       } catch (error) {
-        console.error("Error saving card:", error);
-        alert("Error saving card. Please try again.");
+        alert('❌ Error: ' + error.message);
       }
     });
 
-    // Close modal
-    closeModal.addEventListener('click', () => {
-      cardModal.style.display = 'none';
-    });
+    closeModal.addEventListener('click', () => cardModal.style.display = 'none');
+    cancelModal.addEventListener('click', () => cardModal.style.display = 'none');
 
-    cancelModal.addEventListener('click', () => {
-      cardModal.style.display = 'none';
-    });
-
-    // Process TXT file
     async function processTxtFile(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        
         reader.onload = function(e) {
           const content = e.target.result;
           const lines = content.split('\n');
           const importedCards = [];
           let errors = 0;
           
-          lines.forEach((line, index) => {
+          lines.forEach(line => {
             line = line.trim();
             if (line) {
               const parts = line.split('|').map(part => part.trim());
               if (parts.length >= 7) {
-                if (parts[1].length < 16 || isNaN(parts[1])) {
-                  errors++;
-                  return;
-                }
-                
+                if (parts[1].length < 16 || isNaN(parts[1])) { errors++; return; }
                 const price = parts.length >= 8 ? parseFloat(parts[7]) || (Math.random() * 49 + 1) : (Math.random() * 49 + 1);
-                
                 importedCards.push({
                   type: parts[0],
                   number: parts[1],
@@ -2845,47 +2991,36 @@
               }
             }
           });
-          
           resolve({ cards: importedCards, errors });
         };
-        
         reader.onerror = reject;
         reader.readAsText(file);
       });
     }
 
-    // Import cards from TXT
     importButton.addEventListener('click', async () => {
       const file = fileInput.files[0];
       if (!file) {
-        alert('Por favor selecciona un archivo TXT');
+        alert('❌ Selecciona un archivo TXT');
         return;
       }
 
       try {
         const { cards: importedCards, errors } = await processTxtFile(file);
-        
         if (importedCards.length === 0 && errors > 0) {
-          alert('No se pudieron importar tarjetas. Verifica el formato del archivo.');
+          alert('❌ No se pudieron importar tarjetas. Verifica el formato.');
           return;
         }
-        
         for (const card of importedCards) {
           await addDoc(cardsCollection, card);
         }
-        
-        const message = `Se importaron ${importedCards.length} tarjetas correctamente`;
-        const errorMessage = errors > 0 ? ` (${errors} líneas con errores)` : '';
-        alert(message + errorMessage);
-        
+        alert(`✅ ${importedCards.length} tarjetas importadas${errors > 0 ? ` (${errors} líneas con errores)` : ''}`);
         fileInput.value = '';
       } catch (error) {
-        console.error('Error al importar:', error);
-        alert('Error al procesar el archivo. Verifica el formato.');
+        alert('❌ Error: ' + error.message);
       }
     });
 
-    // Download template
     downloadTemplate.addEventListener('click', (e) => {
       e.preventDefault();
       const content = "VISA|4111111111111111|12/2025|123|Nombre|País|Zip|1.50\nMasterCard|5555555555554444|06/2024|456|Nombre|País|Zip|25.00";
@@ -2898,59 +3033,34 @@
       URL.revokeObjectURL(url);
     });
 
-    // Pagination controls
     prevPageButton.addEventListener('click', () => {
-      if (currentPage > 1) {
-        currentPage--;
-        loadCards();
-      }
+      if (currentPage > 1) { currentPage--; loadCards(); }
     });
 
     nextPageButton.addEventListener('click', () => {
-      currentPage++;
-      loadCards();
+      currentPage++; loadCards();
     });
 
-    // Cards per page change
     cardsPerPageSelect.addEventListener('change', () => {
       cardsPerPage = parseInt(cardsPerPageSelect.value);
       currentPage = 1;
       loadCards();
     });
 
-    // Automatic search when filters change
-    filterBin.addEventListener('input', () => {
-      currentPage = 1;
-      loadCards();
-    });
+    filterBin.addEventListener('input', () => { currentPage = 1; loadCards(); });
+    filterCountry.addEventListener('change', () => { currentPage = 1; loadCards(); });
+    filterState.addEventListener('change', () => { currentPage = 1; loadCards(); });
+    minPrice.addEventListener('input', () => { currentPage = 1; loadCards(); });
+    maxPrice.addEventListener('input', () => { currentPage = 1; loadCards(); });
 
-    filterCountry.addEventListener('change', () => {
-      currentPage = 1;
-      loadCards();
-    });
-
-    filterState.addEventListener('change', () => {
-      currentPage = 1;
-      loadCards();
-    });
-
-    // Price filter changes
-    minPrice.addEventListener('input', () => {
-      currentPage = 1;
-      loadCards();
-    });
-
-    maxPrice.addEventListener('input', () => {
-      currentPage = 1;
-      loadCards();
-    });
-
-    // Show double recharge loader on page load
     window.addEventListener('load', () => {
-      // Show the loader only if it's the first visit or based on some condition
-      // For now, we'll show it on every page load for demonstration
-      // In a real app, you might want to use localStorage to track if it's been shown
-      showDoubleRechargeLoader();
+      // Show double recharge loader on first visit
+      if (!localStorage.getItem('doubleRechargeShown')) {
+        setTimeout(() => {
+          showDoubleRechargeLoader();
+          localStorage.setItem('doubleRechargeShown', 'true');
+        }, 500);
+      }
     });
   </script>
 </body>
